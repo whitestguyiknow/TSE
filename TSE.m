@@ -14,8 +14,8 @@ clear all;
 setup();
 
 EURUSD = loadData('EURUSD_SHORT.csv');
-EURUSD_DS = preprocessTable(EURUSD);
-EURUSD_DS = tcompressMat(EURUSD_DS,1,'ask','spread');
+EURUSD_DStmp = preprocessTable(EURUSD);
+EURUSD_DS = tcompressMat(EURUSD_DStmp,1,'bid');
 
     
 
