@@ -3,6 +3,7 @@ function [tcompDS] = tcompressMat(D, dt, varargin)
     disp('compressing matrix..');
     nvarargin = length(varargin);
     variableNames = D.Properties.VarNames;
+    
     if(~iscellstr(varargin))
         error('optional arguments must be of type char');
     end
@@ -34,7 +35,7 @@ function [tcompDS] = tcompressMat(D, dt, varargin)
             min_Mat(i,:) = tmp_min;
             tmp_max = -C; 
             tmp_min = C;
-            t = t+dt;
+            t = d(i)+dt;
         end
     end
     M=[M(idx==1,:), max_Mat(idx==1,:), min_Mat(idx==1,:)];
