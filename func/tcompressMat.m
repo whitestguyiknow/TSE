@@ -3,7 +3,6 @@ function [tcompDS] = tcompressMat(D, dt, varargin)
     disp('compressing matrix..');
     nvarargin = length(varargin);
     variableNames = D.Properties.VarNames;
-    
     if(~iscellstr(varargin))
         error('optional arguments must be of type char');
     end
