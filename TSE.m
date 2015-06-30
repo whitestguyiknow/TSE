@@ -3,7 +3,7 @@
 %                    
 % Authors:          Daniel Waelchli, Mike Schwitalla
 % Date:             June 2015
-% Version:          1.0
+% Version:          1.01
 %
 % Description:      main engine, function collection in ./func/
 %                   data in ./dat/
