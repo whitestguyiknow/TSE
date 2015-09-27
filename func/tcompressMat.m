@@ -15,7 +15,7 @@ function [tcompDS] = tcompressMat(D, dt, varargin)
     
     l=length(D.time);
     d=(D.time-D.time(1))*86400/60;
-    idx = zeros(l,1); idx(1)=1;
+    idxOpen = false(l,1); idxOpen(1)=true;
     t = dt;
     M = double(D);
     C = 99999*ones(1,nvarargin);
@@ -29,22 +29,35 @@ function [tcompDS] = tcompressMat(D, dt, varargin)
         tmp_max(M(i,colIdx)>tmp_max) = M(i,colIdx(M(i,colIdx)>tmp_max));
         tmp_min(M(i,colIdx)<tmp_min) = M(i,colIdx(M(i,colIdx)<tmp_min));
         if(d(i)>=t)
-            idx(i)=1;
+            idxOpen(i)=true;
             max_Mat(i,:) = tmp_max;
             min_Mat(i,:) = tmp_min;
             tmp_max = -C;
             tmp_min = C;
-            t = d(i)+dt;
+            t = t+dt;
         end
     end
-    M=[M(idx==1,:), max_Mat(idx==1,:), min_Mat(idx==1,:)];
+    
+idxClose = [idxOpen(2:end);false];
+
+Mopen = M(idxOpen,:);
+Mopen = Mopen(1:end-1,:);
+
+Mclose = M(idxClose,2:end);
+
+Mmax = max_Mat(idxOpen,:);
+Mmax = Mmax(2:end,:);
+Mmin = min_Mat(idxOpen,:);
+Mmin = Mmin(2:end,:);
+M=[Mopen, Mclose, Mmax, Mmin];
     
     newVariables = cell(1,nvarargin*2);
     for i=1:nvarargin
-        newVariables{i} = strcat('max_',varargin{i});
-        newVariables{i+nvarargin} = strcat('min_',varargin{i});
+        newVariables{i} = strcat('HIGH_',varargin{i});
+        newVariables{i+nvarargin} = strcat('LOW_',varargin{i});
     end
-    variableNames = [variableNames,newVariables];
+    variableNames = [{'time', 'bid_open','ask_open','spread_open',...
+        'bid_close','ask_close','spread_close'},newVariables];
     tcompDS = mat2dataset(M,'VarNames',variableNames);
     disp('DONE!'); 
 end
