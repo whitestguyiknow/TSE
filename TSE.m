@@ -13,6 +13,7 @@
 clear all;
 setup();
 
+
 EURUSD = loadData('EURUSD_SHORTER.csv');
 EURUSD_DStmp = preprocessTable(EURUSD);
 EURUSD_DS = tcompressMat(EURUSD_DStmp,1,'bid');

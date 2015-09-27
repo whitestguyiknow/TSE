@@ -32,7 +32,7 @@ function [tcompDS] = tcompressMat(D, dt, varargin)
             idx(i)=1;
             max_Mat(i,:) = tmp_max;
             min_Mat(i,:) = tmp_min;
-            tmp_max = -C; 
+            tmp_max = -C;
             tmp_min = C;
             t = d(i)+dt;
         end
