@@ -1,0 +1,18 @@
+DANI:
+
+- Median in  Funktion
+- erster datenpunkt min/max not zero
+- Save compress files in "dat/" folder
+!!!! Dani es ladet die timestamps ned richtig. Siehe TSE.
+
+Deadline Sa
+
+Mike:
+
+-Plotting
+-Erstellen Indikatorvektor, exit/entry, 
+-erstellen Indikatoren
+
+Zukünftig:
+- Cross assets
+- renditematrix
