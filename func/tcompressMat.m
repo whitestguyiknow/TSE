@@ -24,7 +24,9 @@ function [tcompDS] = tcompressMat(D, dt, varargin)
     
     max_Mat = zeros(l,nvarargin);
     min_Mat = max_Mat;
+    med_Mat = max_Mat;
     
+    lastFrameIdx = 1;
     for i=2:l
         tmp_max(M(i,colIdx)>tmp_max) = M(i,colIdx(M(i,colIdx)>tmp_max));
         tmp_min(M(i,colIdx)<tmp_min) = M(i,colIdx(M(i,colIdx)<tmp_min));
@@ -32,8 +34,10 @@ function [tcompDS] = tcompressMat(D, dt, varargin)
             idxOpen(i)=true;
             max_Mat(i,:) = tmp_max;
             min_Mat(i,:) = tmp_min;
+            med_Mat(i,:) = median(M(lastFrameIdx:i,colIdx),1);
             tmp_max = -C;
             tmp_min = C;
+            lastFrameIdx = i;
             t = t+dt;
         end
     end
@@ -49,12 +53,15 @@ Mmax = max_Mat(idxOpen,:);
 Mmax = Mmax(2:end,:);
 Mmin = min_Mat(idxOpen,:);
 Mmin = Mmin(2:end,:);
-M=[Mopen, Mclose, Mmax, Mmin];
+Mmed = med_Mat(idxOpen,:);
+Mmed = Mmed(2:end,:);
+M=[Mopen, Mclose, Mmax, Mmin, Mmed];
     
     newVariables = cell(1,nvarargin*2);
     for i=1:nvarargin
         newVariables{i} = strcat('HIGH_',varargin{i});
         newVariables{i+nvarargin} = strcat('LOW_',varargin{i});
+        newVariables{i+2*nvarargin} = strcat('MED_',varargin{i});
     end
     variableNames = [{'time', 'bid_open','ask_open','spread_open',...
         'bid_close','ask_close','spread_close'},newVariables];
