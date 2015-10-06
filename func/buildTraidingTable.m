@@ -42,12 +42,12 @@ for i = 1:2:l/2
     end
 end
 
-bruttoPnL = (exitPrice-entryPrice)*position;
-bruttoPnLUSD = bruttoPnL*usdKurs(tradeIdx);
-commissionUSD = abs(position)*comission;
+bruttoPnL = (exitPrice-entryPrice).*position;
+bruttoPnLUSD = bruttoPnL.*usdKurs(tradeIdx);
+commissionUSD = abs(position).*comission;
 nettoPnLUSD = bruttoPnLUSD - comissionUSD;
 duration = exitTime - entryTime;
-
+nettoPnLPerComm = nettoPnLUSD./commissionUSD;
 equity = cumsum(nettoPnLUSD);
 
 for i = 1:2:l/2
@@ -57,12 +57,12 @@ for i = 1:2:l/2
 end
 
 cnames = {'EntryTime','EntryPrice','Position','ExitTime','ExitPrice',...
-    'BruttoPnL','USDKurs','BruttoPnLUSD','Commssion','NettoPnLUSD','Duration',...
-    'LowPrice','HighPrice','Equity'};
+    'BruttoPnL','USDKurs','BruttoPnLUSD','Commssion','NettoPnLUSD',...
+    'NettoPnLPerCommission','Duration','LowPrice','HighPrice','Equity'};
 
 traidingTable = table(entryTime,entryPrice,position,exitTime,exitPrice,...
-    bruttoPnL,usdKurs,bruttoPnLUSD,commissionUSD,nettoPnLUSD,duration,...
-    lowPrice,highPrice,equity,'VariableNames',cnames);
+    bruttoPnL,usdKurs,bruttoPnLUSD,commissionUSD,nettoPnLUSD,nettoPnLPerComm,...
+    duration,lowPrice,highPrice,equity,'VariableNames',cnames);
 
 end
 
