@@ -6,7 +6,8 @@ function [ M ] = getExampleTrades(N,timeSeries)
     i = 1:L;
     idx = datasample(i,N,'Replace',false);
     idx = sort(idx);
-    action=[ones(1,ceil(N*0.5)); -ones(1,floor(N*0.5))];
-    M = [timeSeries(idx), action(:)];
+    action=[ones(1,ceil(N*0.5)); -ones(1,ceil(N*0.5))];
+    action=action(:);
+    M = [timeSeries(idx), action(1:N)];
 end
 
