@@ -23,3 +23,11 @@ Mike:
 Zuk?nftig:
 - Cross assets
 - renditematrix
+
+
+***********************************23.12.**********************
+
+Dani:
+-change time format
+-comission only once paid
+-dailyTradingtable (new function) with dailyPnL, Equity, relativeEquity (return) [%]

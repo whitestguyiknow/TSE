@@ -1,5 +1,5 @@
 function [] = setup()
     format long;
-    addpath('func','dat');
+    addpath('func','dat','indicators');
 end
 
