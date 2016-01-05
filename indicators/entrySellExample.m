@@ -1,4 +1,4 @@
-function [b] = entrySellExample(DS,i,dt)
-    b = (DS.ask_open(i-dt)>DS.ask_open(i));
+function [b] = entrySellExample(DS,DScompr,i,dt)
+    b = (DScompr.ask_open(i-dt)>DScompr.ask_open(i));
 end
 

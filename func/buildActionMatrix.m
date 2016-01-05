@@ -1,4 +1,4 @@
-function [Time, Action] = buildActionMatrix(DS,DScompr, dtInit, fEntryBuy, fExitBuy, fEntrySell, fExitSell)
+function [Time, Action] = buildActionMatrix(DS, DScompr1, DScompr2, dtInit, fEntryBuy, fExitBuy, fEntrySell, fExitSell)
     % Parameters:
     % DS, created with function tcompressMat
     % dtInit, time-leap, must be greater than all lookback timespans in f's
@@ -15,7 +15,7 @@ function [Time, Action] = buildActionMatrix(DS,DScompr, dtInit, fEntryBuy, fExit
     %assert(isfield(DScompr,'bid_close'));
     %assert(isfield(DScompr,'ask_close'));
     
-    N = length(DScompr.time);
+    N = length(DS.time);
 
     Action = zeros(N,1);    % vector storing actions: buy = 1, sell = -1
     Time = zeros(N,1);      % vector storing tradign times
@@ -26,9 +26,12 @@ function [Time, Action] = buildActionMatrix(DS,DScompr, dtInit, fEntryBuy, fExit
     
     for i=dtInit:N
         
+        k = find(DScompr1.time>DS.time(i),1) -1;
+        l = find(DScompr2.time>DS.time(i),1) -1;
+        
         % go flat - sell 
-        if(control == 1 && fExitBuy(DS,DScompr,i,buyPrice))
-            Time(i) = DScompr.time(i);
+        if(control == 1 & fExitBuy(DS,i,DScompr1,k,DScompr2,l,buyPrice))
+            Time(i) = DS.time(i);
             Action(i) = -1;
             control = 0;
             buyPrice = -1;
@@ -36,8 +39,8 @@ function [Time, Action] = buildActionMatrix(DS,DScompr, dtInit, fEntryBuy, fExit
         end
         
         % go flat - buy 
-        if(control == -1 && fExitSell(DS,DScompr,i,sellPrice))
-            Time(i) = DScompr.time(i);
+        if((control == -1) & fExitSell(DS,i,DScompr1,k,DScompr2,l,sellPrice))
+            Time(i) = DS.time(i);
             Action(i) = 1;
             control = 0;
             sellPrice = -1;
@@ -45,20 +48,20 @@ function [Time, Action] = buildActionMatrix(DS,DScompr, dtInit, fEntryBuy, fExit
         end
         
         % go long
-        if(control == 0 && fEntryBuy(DScompr,i) && ~fExitBuy(DS,DScompr,i,buyPrice) && ~fEntrySell(DScompr,i))
-            Time(i) = DScompr.time(i);
+        if(control == 0 & fEntryBuy(DS,i,DScompr1,k,DScompr2,l) && ~fExitBuy(DS,i,DScompr1,k,DScompr2,l,buyPrice) && ~fEntrySell(DS,i,DScompr1,k,DScompr2,l))
+            Time(i) = DS.time(i);
             Action(i) = 1;
             control = 1;
-            buyPrice = DScompr.ask_open(i+1);
+            buyPrice = DS.ask(i+1);
             continue;
         end
         
         % go short
-        if(control == 0 && fEntrySell(DScompr,i) && ~fExitSell(DS,DScompr,i,sellPrice) && ~fEntryBuy(DScompr,i))
-            Time(i) = DScompr.time(i);
+        if(control == 0 & fEntrySell(DS,i,DScompr1,k,DScompr2,l) & ~fExitSell(DS,i,DScompr1,k,DScompr2,l,sellPrice) & ~fEntryBuy(DS,i,DScompr1,k,DScompr2,l))
+            Time(i) = DS.time(i);
             Action(i) = -1;
             control = -1;
-            sellPrice = DScompr.bid_open(i+1);
+            sellPrice = DS.bid(i+1);
             continue;
         end
 
@@ -66,10 +69,10 @@ function [Time, Action] = buildActionMatrix(DS,DScompr, dtInit, fEntryBuy, fExit
     
     % go flat (if needed)
     if(control == 1)
-        Time(end) = DScompr.time(end);
+        Time(end) = DScompr1.time(end);
         Action(end) = -1;
     elseif (control == -1)
-        Time(end) = DScompr.time(end);
+        Time(end) = DScompr1.time(end);
         Action(end) = 1;
     end
     
