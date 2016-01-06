@@ -28,6 +28,10 @@ Zuk?nftig:
 ***********************************23.12.**********************
 
 Dani:
--change time format -- use datestr(datenumber) and second(datenumber)
--comission only once paid
--dailyTradingtable (new function) with dailyPnL, Equity, relativeEquity (return) [%]
+-change time format -- use datestr(datenumber), datevec(datenumber) and second(datenumber)
+
+***********************************06.01.**********************
+
+- zeiten anpassen in tcompress, so dass keine verzoegerung entsteht
+- comission only once paid
+- dailyTradingtable (new function) with dailyPnL, Equity, relativeEquity (return) [%]
