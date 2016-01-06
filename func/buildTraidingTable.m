@@ -1,4 +1,5 @@
 function [tradingTable] = buildTraidingTable(time,bid,ask,usdKurs,comission,tradeTime,position)
+time = datenum(time);
 l = length(position);
 N = length(time);
 m = l/2;
@@ -59,7 +60,9 @@ bruttoPnL = exitPrice.*entryPosition+entryPrice.*exitPosition;
 bruttoPnLUSD = bruttoPnL.*usdKurs(tradeIdx(2:2:end));
 comissionUSD = 2*abs(position(2:2:end)).*comission;
 nettoPnLUSD = bruttoPnLUSD - comissionUSD;
-duration = exitTime - entryTime;
+entryTimeVec = datevec(entryTime);
+exitTimeVec = datevec(exitTime);
+duration = etime(exitTimeVec,entryTimeVec);
 nettoPnLPerComm = nettoPnLUSD./comissionUSD;
 equity = cumsum(nettoPnLUSD);
 
@@ -75,7 +78,7 @@ cnames = {'EntryTime','EntryPrice','Position','ExitTime','ExitPrice',...
     'BruttoPnL','USDKurs','BruttoPnLUSD','Commssion','NettoPnLUSD',...
     'NettoPnLPerCommission','Duration','LowPrice','HighPrice','Equity'};
 
-tradingTable = table(entryTime,entryPrice,position(1:2:end-1),exitTime,exitPrice,...
+tradingTable = table(entryTimeVec,entryPrice,position(1:2:end-1),exitTimeVec,exitPrice,...
     bruttoPnL,usdrate(2:2:end),bruttoPnLUSD,comissionUSD,nettoPnLUSD,nettoPnLPerComm,...
     duration,lowPrice,highPrice,equity,'VariableNames',cnames);
 

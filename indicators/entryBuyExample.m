@@ -1,4 +1,4 @@
-function [b] = entryBuyExample(DS,DScompr,i,dt)
-    b = (DScompr.ask_open(i-dt)<=DScompr.ask_open(i));
+function [b] = entryBuyExample(DS,i,DScompr,k,dt)
+    b = (DScompr.ask_open(k-dt)<=DScompr.ask_open(k));
 end
 

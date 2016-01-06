@@ -15,6 +15,10 @@ function [Time, Action] = buildActionMatrix(DS, DScompr1, DScompr2, dtInit, fEnt
     %assert(isfield(DScompr,'bid_close'));
     %assert(isfield(DScompr,'ask_close'));
     
+    DS.time = datenum(DS.time);
+    DScompr1.time = datenum(DScompr1.time);
+    DScompr2.time = datenum(DScompr2.time);
+    
     N = length(DS.time);
 
     Action = zeros(N,1);    % vector storing actions: buy = 1, sell = -1
@@ -48,7 +52,7 @@ function [Time, Action] = buildActionMatrix(DS, DScompr1, DScompr2, dtInit, fEnt
         end
         
         % go long
-        if(control == 0 & fEntryBuy(DS,i,DScompr1,k,DScompr2,l) && ~fExitBuy(DS,i,DScompr1,k,DScompr2,l,buyPrice) && ~fEntrySell(DS,i,DScompr1,k,DScompr2,l))
+        if(control == 0 & fEntryBuy(DS,i,DScompr1,k,DScompr2,l) & ~fExitBuy(DS,i,DScompr1,k,DScompr2,l,buyPrice) & ~fEntrySell(DS,i,DScompr1,k,DScompr2,l))
             Time(i) = DS.time(i);
             Action(i) = 1;
             control = 1;
@@ -84,7 +88,6 @@ function [Time, Action] = buildActionMatrix(DS, DScompr1, DScompr2, dtInit, fEnt
     assert(mod(length(Action),2)==0);
     assert(length(Time)==length(Action)); 
     assert(all(Action(1:2:end-1)+Action(2:2:end))==0);
-  
-    
+   
 end
 

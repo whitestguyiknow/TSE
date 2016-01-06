@@ -1,6 +1,7 @@
 function [tcompDS] = tcompressMat(D, dt, varargin)
     % dt [mins]
     disp('compressing matrix..');
+    D.time = datenum(D.time);
     nvarargin = length(varargin);
     variableNames = D.Properties.VarNames;
     if(~iscellstr(varargin))
@@ -66,5 +67,6 @@ M=[Mopen, Mclose, Mmax, Mmin, Mmed];
     variableNames = [{'time', 'bid_open','ask_open','spread_open',...
         'bid_close','ask_close','spread_close'},newVariables];
     tcompDS = mat2dataset(M,'VarNames',variableNames);
+    tcompDS.time = datevec(tcompDS.time);
     disp('DONE!'); 
 end

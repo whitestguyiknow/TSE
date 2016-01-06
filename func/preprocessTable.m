@@ -10,5 +10,6 @@ function [preDS] = preprocessTable(dataTable)
       
     preDS = dataset({M 'time','bid','ask','spread'});
     preDS((preDS.spread<0),:) = []; %remove negative spreads;
+    preDS.time = datevec(preDS.time);
     disp('DONE!');
 end 

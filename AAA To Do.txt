@@ -28,6 +28,6 @@ Zuk?nftig:
 ***********************************23.12.**********************
 
 Dani:
--change time format
+-change time format -- use datestr(datenumber) and second(datenumber)
 -comission only once paid
 -dailyTradingtable (new function) with dailyPnL, Equity, relativeEquity (return) [%]

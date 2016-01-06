@@ -1,4 +1,4 @@
-function [b] = exitSellExample(DS,DScompr,i,buyPrice)
-    b = (DScompr.ask_open(i-1)<DScompr.ask_open(i));
+function [b] = exitSellExample(DS,i,DScompr,k,buyPrice)
+    b = (DScompr.ask_open(k-1)<DScompr.ask_open(k));
 end
 
