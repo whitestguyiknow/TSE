@@ -1,5 +1,6 @@
 function [preDS] = preprocessTable(dataTable)
-    disp('preprocessing table..'); 
+    disp('preprocessing table..');
+    tic;
     TF = ismissing(dataTable,{'' '.' 'NA' NaN});
     dataTable = dataTable(~any(TF,2),:);
     
@@ -12,4 +13,5 @@ function [preDS] = preprocessTable(dataTable)
     preDS((preDS.spread<0),:) = []; %remove negative spreads;
     preDS.time = datevec(preDS.time);
     disp('DONE!');
+    toc;
 end 

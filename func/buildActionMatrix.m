@@ -8,6 +8,9 @@ function [Time, Action] = buildActionMatrix(DS, DScompr1, DScompr2, dtInit, fEnt
     % fEntrySell, function handle taking dataTable and i as input
     % fExitSell, function handle taking dataTable, i and buyprice as input
 
+    disp('building action matrix..');
+    tic;
+    
     % Assertions:
     %assert(isfield(DScompr,'time'));
     %assert(isfield(DScompr,'bid_open'));
@@ -30,10 +33,19 @@ function [Time, Action] = buildActionMatrix(DS, DScompr1, DScompr2, dtInit, fEnt
     % parameter for fExitBuy (stoploss/takeprofit)
     % parameter for fExitSell (stoploss/takeprofit)
     
+    k = 1;
+    l = 1;
     for i=dtInit:N
         
-        k = find(DScompr1.time>DS.time(i),1) -1;
-        l = find(DScompr2.time>DS.time(i),1) -1;
+        ktmp = find(DScompr1.time(k:end)>DS.time(i),1)-1;
+        if(~isempty(ktmp))
+            k = k+ktmp - 1;
+        end
+        
+        ltmp = find(DScompr1.time(l:end)>DS.time(i),1)-1;
+        if(~isempty(ltmp))
+            l = l+ltmp -1;
+        end
         
         % go flat - sell 
         if(control == 1 & fExitBuy(DS,i,DScompr1,k,DScompr2,l,infoStructure))
@@ -90,6 +102,8 @@ function [Time, Action] = buildActionMatrix(DS, DScompr1, DScompr2, dtInit, fEnt
     assert(mod(length(Action),2)==0);
     assert(length(Time)==length(Action)); 
     assert(all(Action(1:2:end-1)+Action(2:2:end))==0);
-   
+
+    disp('DONE!'); 
+    toc;
 end
 

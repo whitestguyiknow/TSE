@@ -16,8 +16,8 @@ setup();
 
 EURUSD = loadData('EURUSD_tick.csv');
 EURUSD_DS = preprocessTable(EURUSD);
-EURUSDcompr_DS1 = tcompressMat(EURUSD_DS,15,'bid');
-EURUSDcompr_DS2 = tcompressMat(EURUSD_DS,60,'bid');
+EURUSDcompr_DS1 = tcompressMat(EURUSD_DS,1,'bid');
+EURUSDcompr_DS2 = tcompressMat(EURUSD_DS,2,'bid');
 
 usdkurs = ones(length(EURUSD_DS.time),1);
 comission = 0;
