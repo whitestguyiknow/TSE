@@ -5,14 +5,15 @@
 % Date:             June 2015
 % Version:          1.01
 %
-% Description:      main engine, function collection in ./func/
+% Description:      main engine, 
+%                   function collection in ./func/
+%                   indicator functions in ./indicators/
 %                   data in ./dat/
 %                   
 %                   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %clear all;
 setup();
-
 
 EURUSD = loadData('EURUSD_tick.csv');
 EURUSD_DS = preprocessTable(EURUSD);
