@@ -14,13 +14,13 @@
 setup();
 
 
-EURUSD = loadData('EURUSD_SHORTER.csv');
+EURUSD = loadData('EURUSD_tick.csv');
 EURUSD_DS = preprocessTable(EURUSD);
 EURUSDcompr_DS1 = tcompressMat(EURUSD_DS,15,'bid');
 EURUSDcompr_DS2 = tcompressMat(EURUSD_DS,60,'bid');
 
 usdkurs = ones(length(EURUSD_DS.time),1);
-comission = 100;
+comission = 0;
 
 fBuyEntry = @(DS,i,DScompr1,k,DScompr2,l) entryBuyExample(DS,i,DScompr1,k,1);
 fSellEntry = @(DS,i,DScompr1,k,DScompr2,l) entrySellExample(DS,i,DScompr1,k,1);
