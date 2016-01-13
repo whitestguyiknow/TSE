@@ -66,6 +66,7 @@ M=[Mopen, Mclose, Mmax, Mmin, Mmed];
         newVariables{i+nvarargin} = strcat('LOW_',varargin{i});
         newVariables{i+2*nvarargin} = strcat('MED_',varargin{i});
     end
+    
     variableNames = [{'time', 'bid_open','ask_open','spread_open',...
         'bid_close','ask_close','spread_close'},newVariables];
     tcompDS = mat2dataset(M,'VarNames',variableNames);
