@@ -29,57 +29,64 @@ function [Time, Action] = buildActionMatrix(DS, DScompr1, DScompr2, dtInit, fEnt
     
     control = 0;            % control variable: are we long (1)? short(-1)?
     
-    infoStructure = struct('buyPrice',nan,'sellPrice',nan);
     % parameter for fExitBuy (stoploss/takeprofit)
     % parameter for fExitSell (stoploss/takeprofit)
     
     k = 1;
     l = 1;
+    
+    p=0;
+    frac = N/100;
     for i=dtInit:N
         
-        ktmp = find(DScompr1.time(k:end)>DS.time(i),1)-1;
-        if(~isempty(ktmp))
-            k = k+ktmp - 1;
+        if(i>p*frac)
+            disp([num2str(p), '% ..']);
+            p = p+1;    %buggy if N small
         end
         
-        ltmp = find(DScompr1.time(l:end)>DS.time(i),1)-1;
-        if(~isempty(ltmp))
-            l = l+ltmp -1;
+        knext = findPrevious(DScompr1.time,DS.time(i),k);
+        if(~isempty(knext))
+            k = knext;
+        end
+        
+        lnext = findPrevious(DScompr1.time,DS.time(i),l);
+        if(~isempty(lnext))
+            l = lnext;
         end
         
         % go flat - sell 
-        if(control == 1 & fExitBuy(DS,i,DScompr1,k,DScompr2,l,infoStructure))
+        if(control == 1 & fExitBuy(DS,i,DScompr1,k,DScompr2,l))
             Time(i) = DS.time(i);
             Action(i) = -1;
             control = 0;
-            infoStructure.buyPrice = nan;
             continue;
         end
         
         % go flat - buy 
-        if((control == -1) & fExitSell(DS,i,DScompr1,k,DScompr2,l,infoStructure))
+        if((control == -1) & fExitSell(DS,i,DScompr1,k,DScompr2,l))
             Time(i) = DS.time(i);
             Action(i) = 1;
             control = 0;
-            infoStructure.sellPrice = nan;
             continue;
         end
         
         % go long
-        if(control == 0 & fEntryBuy(DS,i,DScompr1,k,DScompr2,l) & ~fExitBuy(DS,i,DScompr1,k,DScompr2,l,infoStructure) & ~fEntrySell(DS,i,DScompr1,k,DScompr2,l))
+        if(control == 0 & fEntryBuy(DS,i,DScompr1,k,DScompr2,l) ... 
+                & ~fExitBuy(DS,i,DScompr1,k,DScompr2,l) & ~fEntrySell(DS,i,DScompr1,k,DScompr2,l))
             Time(i) = DS.time(i);
             Action(i) = 1;
             control = 1;
-            infoStructure.buyPrice = DS.ask(i+1);
+            IndicatorStruct.buyPrice = DS.ask_open(i); %check correctness if open or close 
             continue;
         end
         
         % go short
-        if(control == 0 & fEntrySell(DS,i,DScompr1,k,DScompr2,l) & ~fExitSell(DS,i,DScompr1,k,DScompr2,l,infoStructure) & ~fEntryBuy(DS,i,DScompr1,k,DScompr2,l))
+        if(control == 0 & fEntrySell(DS,i,DScompr1,k,DScompr2,l) ... 
+                & ~fExitSell(DS,i,DScompr1,k,DScompr2,l) & ~fEntryBuy(DS,i,DScompr1,k,DScompr2,l))
             Time(i) = DS.time(i);
             Action(i) = -1;
             control = -1;
-            infoStructure.sellPrice = DS.bid(i+1);
+            IndicatorStruct.sellPrice = DS.bid_open(i); %check correctness if open or close
             continue;
         end
 

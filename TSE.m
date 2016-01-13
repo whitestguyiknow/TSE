@@ -12,30 +12,38 @@
 %                   
 %                   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%clear all;
+
+% setup
 setup();
 
-EURUSD = loadData('EURUSD_tick.csv');
-EURUSD_DS = preprocessTable(EURUSD);
-EURUSDcompr_DS1 = tcompressMat(EURUSD_DS,1,'bid');
-EURUSDcompr_DS2 = tcompressMat(EURUSD_DS,2,'bid');
+% generate data
+EURUSD_raw = loadData('EURUSD_tick.csv');
+EURUSD_pre = preprocessTable(EURUSD_raw);
+EURUSD_t1 = tcompressMat(EURUSD_pre,1,'bid');
+EURUSD_t2 = tcompressMat(EURUSD_pre,60,'bid');
 
-usdkurs = ones(length(EURUSD_DS.time),1);
-comission = 0;
+% append indicator values
 
+
+% artificial exchange rate
+usdkurs = ones(length(EURUSD_pre.time),1);
+comission = 0.5*8/100000;
+
+% function handles to indicators
 fBuyEntry = @(DS,i,DScompr1,k,DScompr2,l) entryBuyExample(DS,i,DScompr1,k,1);
 fSellEntry = @(DS,i,DScompr1,k,DScompr2,l) entrySellExample(DS,i,DScompr1,k,1);
-fBuyExit = @(DS,i,DScompr1,k,DScompr2,l,buyPrice) exitBuyExample(DS,i,DScompr1,k,buyPrice);
-fSellExit = @(DS,i,DScompr1,k,DScompr2,l,sellPrice) exitSellExample(DS,i,DScompr1,k,sellPrice);
+fBuyExit = @(DS,i,DScompr1,k,DScompr2,l) exitBuyExample(DS,i,DScompr1,k);
+fSellExit = @(DS,i,DScompr1,k,DScompr2,l) exitSellExample(DS,i,DScompr1,k);
 
-[Time, Action] = buildActionMatrix(EURUSD_DS,EURUSDcompr_DS1,EURUSDcompr_DS2,250,fBuyEntry,fBuyExit,fSellEntry,fSellExit);
+% initialize global indicator struct
+setIndicatorStruct();
 
-%[exampleTradingTime, examplePosition] = getExampleTrades(10,EURUSDcompr_DS.time);
-%tradingTable = buildTraidingTable(EURUSD_DS.time,EURUSD_DS.bid,EURUSD_DS.ask,...
-%    usdkurs,comission,exampleTradingTime,examplePosition);
+% action matrix and time
+[Time, Action] = buildActionMatrix(EURUSD_t1,EURUSD_t2,EURUSD_t2,100,fBuyEntry,fBuyExit,fSellEntry,fSellExit);
 
-tradingTable = buildTraidingTable(EURUSD_DS.time,EURUSD_DS.bid,EURUSD_DS.ask,...
-    usdkurs,comission,Time,Action);
+% generate trades
+tradingTable = buildTradingTable(EURUSD_pre.time,EURUSD_pre.bid,EURUSD_pre.ask,...
+    usdkurs,comission,Time,Action*100000);
 
     
 

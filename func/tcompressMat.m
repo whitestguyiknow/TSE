@@ -1,5 +1,6 @@
 function [tcompDS] = tcompressMat(D, dt, varargin)
     % dt [mins]
+    
     disp('compressing matrix..');
     tic;
     D.time = datenum(D.time);
@@ -72,3 +73,4 @@ M=[Mopen, Mclose, Mmax, Mmin, Mmed];
     disp('DONE!'); 
     toc;
 end
+
