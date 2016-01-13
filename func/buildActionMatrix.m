@@ -1,4 +1,4 @@
-function [Time, Action] = buildActionMatrix(DS, DScompr1, DScompr2, dtInit, fEntryBuy, fExitBuy, fEntrySell, fExitSell)
+function [Time, Action] = buildActionMatrix(DS1, DS2, DS3, dtInit, fEntryBuy, fExitBuy, fEntrySell, fExitSell)
     % Parameters:
     % DS, created with function tcompressMat
     % dtInit, time-leap, must be greater than all lookback timespans in f's
@@ -18,15 +18,16 @@ function [Time, Action] = buildActionMatrix(DS, DScompr1, DScompr2, dtInit, fEnt
     %assert(isfield(DScompr,'bid_close'));
     %assert(isfield(DScompr,'ask_close'));
     
-    DS.time = datenum(DS.time);
-    DScompr1.time = datenum(DScompr1.time);
-    DScompr2.time = datenum(DScompr2.time);
+    DS1.time = datenum(DS1.time);
+    DS2.time = datenum(DS2.time);
+    DS3.time = datenum(DS3.time);
     
-    N = length(DS.time);
+    N = length(DS1.time);
 
     Action = zeros(N,1);    % vector storing actions: buy = 1, sell = -1
     Time = zeros(N,1);      % vector storing tradign times
     
+    global IndicatorStruct;
     control = 0;            % control variable: are we long (1)? short(-1)?
     
     % parameter for fExitBuy (stoploss/takeprofit)
@@ -44,49 +45,51 @@ function [Time, Action] = buildActionMatrix(DS, DScompr1, DScompr2, dtInit, fEnt
             p = p+1;    %buggy if N small
         end
         
-        knext = findPrevious(DScompr1.time,DS.time(i),k);
+        knext = findPrevious(DS2.time,DS1.time(i),k);
         if(~isempty(knext))
             k = knext;
         end
         
-        lnext = findPrevious(DScompr1.time,DS.time(i),l);
+        lnext = findPrevious(DS2.time,DS1.time(i),l);
         if(~isempty(lnext))
             l = lnext;
         end
         
         % go flat - sell 
-        if(control == 1 & fExitBuy(DS,i,DScompr1,k,DScompr2,l))
-            Time(i) = DS.time(i);
+        if(control == 1 & fExitBuy(DS1,i,DS2,k,DS3,l))
+            Time(i) = DS1.time(i);
             Action(i) = -1;
             control = 0;
+            IndicatorStruct.trailingSDEV_upper = 0;
             continue;
         end
         
         % go flat - buy 
-        if((control == -1) & fExitSell(DS,i,DScompr1,k,DScompr2,l))
-            Time(i) = DS.time(i);
+        if((control == -1) & fExitSell(DS1,i,DS2,k,DS3,l))
+            Time(i) = DS1.time(i);
             Action(i) = 1;
             control = 0;
+            IndicatorStruct.trailingSDEV_lower = 0;
             continue;
         end
         
         % go long
-        if(control == 0 & fEntryBuy(DS,i,DScompr1,k,DScompr2,l) ... 
-                & ~fExitBuy(DS,i,DScompr1,k,DScompr2,l) & ~fEntrySell(DS,i,DScompr1,k,DScompr2,l))
-            Time(i) = DS.time(i);
+        if(control == 0 & fEntryBuy(DS1,i,DS2,k,DS3,l) ... 
+                & ~fExitBuy(DS1,i,DS2,k,DS3,l) & ~fEntrySell(DS1,i,DS2,k,DS3,l))
+            Time(i) = DS1.time(i);
             Action(i) = 1;
             control = 1;
-            IndicatorStruct.buyPrice = DS.ask_open(i); %check correctness if open or close 
+            IndicatorStruct.buyPrice = DS1.ask_open(i); %check correctness if open or close 
             continue;
         end
         
         % go short
-        if(control == 0 & fEntrySell(DS,i,DScompr1,k,DScompr2,l) ... 
-                & ~fExitSell(DS,i,DScompr1,k,DScompr2,l) & ~fEntryBuy(DS,i,DScompr1,k,DScompr2,l))
-            Time(i) = DS.time(i);
+        if(control == 0 & fEntrySell(DS1,i,DS2,k,DS3,l) ... 
+                & ~fExitSell(DS1,i,DS2,k,DS3,l) & ~fEntryBuy(DS1,i,DS2,k,DS3,l))
+            Time(i) = DS1.time(i);
             Action(i) = -1;
             control = -1;
-            IndicatorStruct.sellPrice = DS.bid_open(i); %check correctness if open or close
+            IndicatorStruct.sellPrice = DS1.bid_open(i); %check correctness if open or close
             continue;
         end
 
@@ -94,10 +97,10 @@ function [Time, Action] = buildActionMatrix(DS, DScompr1, DScompr2, dtInit, fEnt
     
     % go flat (if needed)
     if(control == 1)
-        Time(end) = DScompr1.time(end);
+        Time(end) = DS2.time(end);
         Action(end) = -1;
     elseif (control == -1)
-        Time(end) = DScompr1.time(end);
+        Time(end) = DS2.time(end);
         Action(end) = 1;
     end
     

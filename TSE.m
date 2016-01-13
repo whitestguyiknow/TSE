@@ -19,7 +19,7 @@ setup();
 % generate data
 EURUSD_raw = loadData('EURUSD_tick.csv');
 EURUSD_pre = preprocessTable(EURUSD_raw);
-EURUSD_t1 = tcompressMat(EURUSD_pre,1,'bid');
+EURUSD_t1 = tcompressMat(EURUSD_pre,15,'bid');
 EURUSD_t2 = tcompressMat(EURUSD_pre,60,'bid');
 
 % append indicator values
@@ -29,11 +29,12 @@ EURUSD_t2 = tcompressMat(EURUSD_pre,60,'bid');
 usdkurs = ones(length(EURUSD_pre.time),1);
 comission = 0.5*8/100000;
 
+deltaRSI = 0.15;
 % function handles to indicators
-fBuyEntry = @(DS,i,DScompr1,k,DScompr2,l) entryBuyExample(DS,i,DScompr1,k,1);
-fSellEntry = @(DS,i,DScompr1,k,DScompr2,l) entrySellExample(DS,i,DScompr1,k,1);
-fBuyExit = @(DS,i,DScompr1,k,DScompr2,l) exitBuyExample(DS,i,DScompr1,k);
-fSellExit = @(DS,i,DScompr1,k,DScompr2,l) exitSellExample(DS,i,DScompr1,k);
+fBuyEntry = @(DS1,i,DS2,k,DS3,l) entryBuyRSI(DS1,i,DS2,k,14,30,deltaRSI);
+fSellEntry = @(DS1,i,DS2,k,DS3,l) entrySellRSI(DS1,i,DS2,k,14,30,deltaRSI);
+fBuyExit = @(DS1,i,DS2,k,DS3,l) exitBuyTrailingSDEV(DS1,i,DS2,k,50);
+fSellExit = @(DS1,i,DS2,k,DS3,l) exitSellTrailingSDEV(DS1,i,DS2,k,50);
 
 % initialize global indicator struct
 setIndicatorStruct();
@@ -44,6 +45,7 @@ setIndicatorStruct();
 % generate trades
 tradingTable = buildTradingTable(EURUSD_pre.time,EURUSD_pre.bid,EURUSD_pre.ask,...
     usdkurs,comission,Time,Action*100000);
+
 
     
 
