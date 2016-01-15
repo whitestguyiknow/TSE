@@ -17,7 +17,7 @@ function [b] = entryBuyRSI(DS1,i,DS2,k,t1,t2,deltaRSI)
     end
     RSI_t2 = sum_up_t2/(sum_up_t2+sum_down_t2);
     
-    b=(RSI_t2-RSI_t1)>deltaRSI;
+    b=(RSI_t1<0.3 && (RSI_t2-RSI_t1)<deltaRSI);
 end
 
 

@@ -33,7 +33,7 @@ function [tradingTable] = buildTradingTable(time,bid,ask,usdKurs,comission,trade
     for i = 1:2:l
 
         t = tradeTime(i);
-        j = find(time(j:end)>=t,1,'first')+j-1;
+        j = findPrevious(time,t,j);
         tradeIdx(i) = j;
         entryTime(idx) = time(j);
         entryPosition(idx) = position(i);

@@ -28,7 +28,6 @@ function [Time, Action] = buildActionMatrix(DS1, DS2, DS3, dtInit, fEntryBuy, fE
     Time = zeros(N,1);      % vector storing tradign times
     
     global IndicatorStruct;
-    control = 0;            % control variable: are we long (1)? short(-1)?
     
     % parameter for fExitBuy (stoploss/takeprofit)
     % parameter for fExitSell (stoploss/takeprofit)
@@ -56,39 +55,41 @@ function [Time, Action] = buildActionMatrix(DS1, DS2, DS3, dtInit, fEntryBuy, fE
         end
         
         % go flat - sell 
-        if(control == 1 & fExitBuy(DS1,i,DS2,k,DS3,l))
+        if(IndicatorStruct.control == 1 && fExitBuy(DS1,i,DS2,k,DS3,l))
             Time(i) = DS1.time(i);
             Action(i) = -1;
-            control = 0;
+            IndicatorStruct.control = 0;
             IndicatorStruct.trailingSDEV_upper = 0;
-            continue;
-        end
-        
-        % go flat - buy 
-        if((control == -1) & fExitSell(DS1,i,DS2,k,DS3,l))
-            Time(i) = DS1.time(i);
-            Action(i) = 1;
-            control = 0;
             IndicatorStruct.trailingSDEV_lower = 0;
             continue;
         end
         
-        % go long
-        if(control == 0 & fEntryBuy(DS1,i,DS2,k,DS3,l) ... 
-                & ~fExitBuy(DS1,i,DS2,k,DS3,l) & ~fEntrySell(DS1,i,DS2,k,DS3,l))
+        % go flat - buy 
+        if(IndicatorStruct.control == -1 && fExitSell(DS1,i,DS2,k,DS3,l))
             Time(i) = DS1.time(i);
             Action(i) = 1;
-            control = 1;
+            IndicatorStruct.control = 0;
+            IndicatorStruct.trailingSDEV_upper = 0;
+            IndicatorStruct.trailingSDEV_lower = 0;
+            continue;
+        end
+        
+        % go long - buy
+        if(IndicatorStruct.control == 0 && fEntryBuy(DS1,i,DS2,k,DS3,l) ... 
+                && ~fExitBuy(DS1,i,DS2,k,DS3,l) && ~fEntrySell(DS1,i,DS2,k,DS3,l))
+            Time(i) = DS1.time(i);
+            Action(i) = 1;
+            IndicatorStruct.control = 1;
             IndicatorStruct.buyPrice = DS1.ask_open(i); %check correctness if open or close 
             continue;
         end
         
-        % go short
-        if(control == 0 & fEntrySell(DS1,i,DS2,k,DS3,l) ... 
-                & ~fExitSell(DS1,i,DS2,k,DS3,l) & ~fEntryBuy(DS1,i,DS2,k,DS3,l))
+        % go short - sell
+        if(IndicatorStruct.control == 0 && fEntrySell(DS1,i,DS2,k,DS3,l) ... 
+                && ~fExitSell(DS1,i,DS2,k,DS3,l) && ~fEntryBuy(DS1,i,DS2,k,DS3,l))
             Time(i) = DS1.time(i);
             Action(i) = -1;
-            control = -1;
+            IndicatorStruct.control = -1;
             IndicatorStruct.sellPrice = DS1.bid_open(i); %check correctness if open or close
             continue;
         end
@@ -96,11 +97,11 @@ function [Time, Action] = buildActionMatrix(DS1, DS2, DS3, dtInit, fEntryBuy, fE
     end
     
     % go flat (if needed)
-    if(control == 1)
-        Time(end) = DS2.time(end);
+    if(IndicatorStruct.control == 1)
+        Time(end) = DS1.time(end);
         Action(end) = -1;
-    elseif (control == -1)
-        Time(end) = DS2.time(end);
+    elseif (IndicatorStruct.control == -1)
+        Time(end) = DS1.time(end);
         Action(end) = 1;
     end
     
