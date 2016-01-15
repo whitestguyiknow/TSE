@@ -1,8 +1,5 @@
-function [b] = exitBuyTrailingSDEV(DS1,i,DS2,k,dt)
+function [b] = exitBuyTrailingSDEV(DS1,i,DS2,k)
     global IndicatorStruct;
-    sdev = std(DS1.bid_close(i-dt:i));
-    b = (DS1.bid_close(i)>IndicatorStruct.trailingSDEV_upper);
-    if (DS1.bid_close(i)-sdev)>IndicatorStruct.trailingSDEV_upper
-        IndicatorStruct.trailingSDEV_lower = DS1.bid_close(i)-sdev;
-    end
+    b = (DS1.HIGH_ask(i)>IndicatorStruct.trailingSDEV_upper)...
+        || (DS1.LOW_ask(i)<IndicatorStruct.trailingSDEV_lower);
 end

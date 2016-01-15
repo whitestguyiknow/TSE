@@ -54,13 +54,14 @@ function [Time, Action] = buildActionMatrix(DS1, DS2, DS3, dtInit, fEntryBuy, fE
             l = lnext;
         end
         
+        % update IndicatorStruct
+        updateIndicatorStruct(DS1,i,IndicatorStruct.control);
+        
         % go flat - sell 
         if(IndicatorStruct.control == 1 && fExitBuy(DS1,i,DS2,k,DS3,l))
             Time(i) = DS1.time(i);
             Action(i) = -1;
-            IndicatorStruct.control = 0;
-            IndicatorStruct.trailingSDEV_upper = 0;
-            IndicatorStruct.trailingSDEV_lower = 0;
+            updateIndicatorStruct(DS1,i,0)
             continue;
         end
         
@@ -68,29 +69,27 @@ function [Time, Action] = buildActionMatrix(DS1, DS2, DS3, dtInit, fEntryBuy, fE
         if(IndicatorStruct.control == -1 && fExitSell(DS1,i,DS2,k,DS3,l))
             Time(i) = DS1.time(i);
             Action(i) = 1;
-            IndicatorStruct.control = 0;
-            IndicatorStruct.trailingSDEV_upper = 0;
-            IndicatorStruct.trailingSDEV_lower = 0;
+            updateIndicatorStruct(DS1,i,0)
             continue;
         end
         
         % go long - buy
         if(IndicatorStruct.control == 0 && fEntryBuy(DS1,i,DS2,k,DS3,l) ... 
-                && ~fExitBuy(DS1,i,DS2,k,DS3,l) && ~fEntrySell(DS1,i,DS2,k,DS3,l))
+                && ~fEntrySell(DS1,i,DS2,k,DS3,l))
             Time(i) = DS1.time(i);
             Action(i) = 1;
-            IndicatorStruct.control = 1;
             IndicatorStruct.buyPrice = DS1.ask_open(i); %check correctness if open or close 
+            updateIndicatorStruct(DS1,i,1)
             continue;
         end
-        
+            
         % go short - sell
         if(IndicatorStruct.control == 0 && fEntrySell(DS1,i,DS2,k,DS3,l) ... 
-                && ~fExitSell(DS1,i,DS2,k,DS3,l) && ~fEntryBuy(DS1,i,DS2,k,DS3,l))
+                && ~fEntryBuy(DS1,i,DS2,k,DS3,l))
             Time(i) = DS1.time(i);
             Action(i) = -1;
-            IndicatorStruct.control = -1;
             IndicatorStruct.sellPrice = DS1.bid_open(i); %check correctness if open or close
+            updateIndicatorStruct(DS1,i,-1)
             continue;
         end
 

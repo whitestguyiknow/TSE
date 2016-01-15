@@ -8,6 +8,7 @@
 % Description:      main engine, 
 %                   function collection in ./func/
 %                   indicator functions in ./indicators/
+%                   optimizer in ./DE/
 %                   data in ./dat/
 %                   
 %                   
@@ -16,37 +17,62 @@
 % setup
 setup();
 
-% generate data
-EURUSD_raw = loadData('EURUSD_tick.csv');
-EURUSD_pre = preprocessTable(EURUSD_raw);
-EURUSD_t1 = tcompressMat(EURUSD_pre,15,'bid');
-EURUSD_t2 = tcompressMat(EURUSD_pre,60,'bid');
+load = true;
+tInit = 100;
 
-% append indicator values
-
+if(~load)
+    % load & process data
+    EURUSD_raw = loadData('EURUSD_tick.csv');
+    EURUSD_pre = preprocessTable(EURUSD_raw);
+    EURUSD_t1 = tcompressMat(EURUSD_pre,5,'bid','ask');
+    EURUSD_t2 = tcompressMat(EURUSD_pre,60,'bid','ask');
+    
+    % function handles to precomputed indicators
+    fBuyRSI = @(DS,i,t) BuyRSI(DS,i,t);
+    fSellRSI = @(DS,i,t) SellRSI(DS,i,t);
+    fSdev = @(DS,i,t) sdev(DS,i,t);
+    
+    % append indicator values
+    EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'buyRSI_14',fBuyRSI,14);
+    EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'buyRSI_30',fBuyRSI,30);
+    EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'sellRSI_14',fSellRSI,14);
+    EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'sellRSI_30',fSellRSI,30);
+    EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'sdev',fSdev,50);
+    
+    EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'buyRSI_14',fBuyRSI,14);
+    EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'buyRSI_30',fBuyRSI,30);
+    EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'sellRSI_14',fSellRSI,14);
+    EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'sellRSI_30',fSellRSI,30);
+    EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'sdev',fSdev,50);
+    
+    % save dataset
+    export(EURUSD_t1,'file','./dat/EURUSD_t1.dat')
+    export(EURUSD_t2,'file','./dat/EURUSD_t2.dat')
+end
 
 % artificial exchange rate
 usdkurs = ones(length(EURUSD_pre.time),1);
 comission = 0.5*8/100000;
 
-deltaRSI = 0.15;
 % function handles to indicators
-fBuyEntry = @(DS1,i,DS2,k,DS3,l) entryBuyRSI(DS1,i,DS2,k,14,30,deltaRSI);
-fSellEntry = @(DS1,i,DS2,k,DS3,l) entrySellRSI(DS1,i,DS2,k,14,30,deltaRSI);
-fBuyExit = @(DS1,i,DS2,k,DS3,l) exitBuyTrailingSDEV(DS1,i,DS2,k,50);
-fSellExit = @(DS1,i,DS2,k,DS3,l) exitSellTrailingSDEV(DS1,i,DS2,k,50);
+fBuyEntry = @(DS1,i,DS2,k,DS3,l) entryBuyRSI(DS1,i,DS2,k,deltaRSI);
+fSellEntry = @(DS1,i,DS2,k,DS3,l) entrySellRSI(DS1,i,DS2,k,deltaRSI);
+fBuyExit = @(DS1,i,DS2,k,DS3,l) exitBuyTrailingSDEV(DS1,i,DS2,k);
+fSellExit = @(DS1,i,DS2,k,DS3,l) exitSellTrailingSDEV(DS1,i,DS2,k);
 
 % initialize global indicator struct
 setIndicatorStruct();
 
 % action matrix and time
-[Time, Action] = buildActionMatrix(EURUSD_t1,EURUSD_t2,EURUSD_t2,100,fBuyEntry,fBuyExit,fSellEntry,fSellExit);
+deltaRSI = 0.15;
+[Time, Action] = buildActionMatrix(EURUSD_t1,EURUSD_t2,EURUSD_t2,tInit,fBuyEntry,fBuyExit,fSellEntry,fSellExit);
 
 % generate trades
 tradingTable = buildTradingTable(EURUSD_pre.time,EURUSD_pre.bid,EURUSD_pre.ask,...
     usdkurs,comission,Time,Action*100000);
 
-
+% summary
+% dailyTT = buildDailyTradingTable(tradingTable)
     
 
 

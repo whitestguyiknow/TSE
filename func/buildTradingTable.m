@@ -18,10 +18,13 @@ function [tradingTable] = buildTradingTable(time,bid,ask,usdKurs,comission,trade
     assert(mod(l,2)==0);
 
     entryTime   = zeros(m,1);
+    entryTimeVec = zeros(m,6);
     entryPrice  = zeros(m,1);
     entryPosition    = zeros(m,1);
     exitPosition    = zeros(m,1);
     exitTime    = zeros(m,1);
+    exitTimeVec = zeros(m,6);
+    duration    = zeros(m,1);
     exitPrice   = zeros(m,1);
     lowPrice    = zeros(m,1);
     highPrice   = zeros(m,1);
@@ -48,6 +51,9 @@ function [tradingTable] = buildTradingTable(time,bid,ask,usdKurs,comission,trade
         j = find(time>=t,1,'first');
         tradeIdx(i+1) = j;
         exitTime(idx) = time(j);
+        entryTimeVec(idx,:) = datevec(entryTime(idx));
+        exitTimeVec(idx,:) = datevec(exitTime(idx));
+        duration(idx) = etime(exitTimeVec(idx,:),entryTimeVec(idx,:));
         exitPosition(idx) = position(i+1);
         if(position(i+1)>0)
             exitPrice(idx)=ask(j);
@@ -62,9 +68,9 @@ function [tradingTable] = buildTradingTable(time,bid,ask,usdKurs,comission,trade
     bruttoPnLUSD = bruttoPnL.*usdKurs(tradeIdx(2:2:end));
     comissionUSD = 2*abs(position(2:2:end)).*comission;
     nettoPnLUSD = bruttoPnLUSD - comissionUSD;
-    entryTimeVec = datevec(entryTime);
-    exitTimeVec = datevec(exitTime);
-    duration = etime(exitTimeVec,entryTimeVec);
+    %entryTimeVec = datevec(entryTime);
+    %exitTimeVec = datevec(exitTime);
+    %duration = etime(exitTimeVec,entryTimeVec);
     nettoPnLPerComm = nettoPnLUSD./comissionUSD;
     equity = cumsum(nettoPnLUSD);
 
