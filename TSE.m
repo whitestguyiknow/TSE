@@ -1,17 +1,17 @@
- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Title:            TRADER SYSTEM ENGINE
-%                    
+%
 % Authors:          Daniel Waelchli, Mike Schwitalla
 % Date:             June 2015
 % Version:          1.01
 %
-% Description:      main engine, 
+% Description:      main engine,
 %                   function collection in ./func/
 %                   indicator functions in ./indicators/
 %                   optimizer in ./DE/
 %                   data in ./dat/
-%                   
-%                   
+%
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % setup
@@ -72,7 +72,7 @@ tradingTable = buildTradingTable(EURUSD_pre.time,EURUSD_pre.bid,EURUSD_pre.ask,.
     usdkurs,comission,Time,Action*100000);
 
 % summary
-% dailyTT = buildDailyTradingTable(tradingTable)
-    
+dailyTT = buildDailyTradingTable(tradingTable);
+
 
 
