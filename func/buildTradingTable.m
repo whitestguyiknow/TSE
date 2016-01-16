@@ -1,8 +1,13 @@
-function [tradingTable] = buildTradingTable(time,bid,ask,usdKurs,comission,tradeTime,position)
+function [tradingTable] = buildTradingTable(DSpre,usdKurs,comission,tradeTime,position)
 % comission [2 * comission per 100'000]
 
 disp('building trading table..');
 tic;
+
+% exctract values
+time = DSpre.time;
+bid  = DSpre.bid;
+ask  = DSpre.ask;
 
 % convert time for calculations
 time = datenum(time);

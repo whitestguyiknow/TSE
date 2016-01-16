@@ -2,13 +2,14 @@
 % Title:            TRADER SYSTEM ENGINE
 %
 % Authors:          Daniel Waelchli, Mike Schwitalla
-% Date:             June 2015
-% Version:          1.01
+% Date:             January 2016
+% Version:          2.00
 %
 % Description:      main engine,
 %                   function collection in ./func/
 %                   indicator functions in ./indicators/
 %                   optimizer in ./DE/
+%                   objective functions in ./obj/
 %                   data in ./dat/
 %
 %
@@ -17,14 +18,17 @@
 % setup
 setup();
 
+% tasks
 load = true;
+optim = false;
+
 tInit = 100;
 
 if(~load)
     % load & process data
     EURUSD_raw = loadData('EURUSD_tick.csv');
     EURUSD_pre = preprocessTable(EURUSD_raw);
-    EURUSD_t1 = tcompressMat(EURUSD_pre,5,'bid','ask');
+    EURUSD_t1 = tcompressMat(EURUSD_pre,15,'bid','ask');
     EURUSD_t2 = tcompressMat(EURUSD_pre,60,'bid','ask');
     
     % function handles to precomputed indicators
@@ -55,6 +59,7 @@ usdkurs = ones(length(EURUSD_pre.time),1);
 comission = 0.5*8/100000;
 
 % function handles to indicators
+deltaRSI = 0.15;
 fBuyEntry = @(DS1,i,DS2,k,DS3,l) entryBuyRSI(DS1,i,DS2,k,deltaRSI);
 fSellEntry = @(DS1,i,DS2,k,DS3,l) entrySellRSI(DS1,i,DS2,k,deltaRSI);
 fBuyExit = @(DS1,i,DS2,k,DS3,l) exitBuyTrailingSDEV(DS1,i,DS2,k);
@@ -64,15 +69,17 @@ fSellExit = @(DS1,i,DS2,k,DS3,l) exitSellTrailingSDEV(DS1,i,DS2,k);
 setIndicatorStruct();
 
 % action matrix and time
-deltaRSI = 0.15;
 [Time, Action] = buildActionMatrix(EURUSD_t1,EURUSD_t2,EURUSD_t2,tInit,fBuyEntry,fBuyExit,fSellEntry,fSellExit);
 
 % generate trades
-tradingTable = buildTradingTable(EURUSD_pre.time,EURUSD_pre.bid,EURUSD_pre.ask,...
-    usdkurs,comission,Time,Action*100000);
+tradingTable = buildTradingTable(EURUSD_pre, usdkurs,comission,Time,Action*100000);
 
 % summary
 dailyTT = buildDailyTradingTable(tradingTable);
 
+% sharpe-ratio
+sharpe = sharpeRatio(dailyTT);
 
 
+    
+    

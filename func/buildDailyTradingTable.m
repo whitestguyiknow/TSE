@@ -17,11 +17,11 @@ for i = 2:length(tradingTable.ExitTime)
     % check if exit times is at another day
     if(tradingTable.ExitTime(i,3)~=day) %TODO: maybe some trades are getting lost here, check
         % update new trading day
-        dates(idx,:)     = tradingTable.ExitTime(i-1,1:3);
+        dates(idx,:)   = tradingTable.ExitTime(i-1,1:3);
         equity(idx)    = tradingTable.Equity(i-1);
         cumTrades(idx) = i;
         idx = idx+1;
-        day = tradingTable.EntryTime(i+1,3);
+        day = tradingTable.EntryTime(i,3);
     end
 end
 
