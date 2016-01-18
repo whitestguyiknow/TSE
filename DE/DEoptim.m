@@ -1,5 +1,8 @@
 function [fObj,par] = DEoptim(func,optimStruct,varargin)
 
+% print progress?
+echo = true;
+
 rng(optimStruct.seed);
 nDim    = length(varargin);
 nAgents = optimStruct.nAgents;
@@ -34,6 +37,7 @@ agents = 1:nAgents;
 bounds = zeros(nDim,2);
 lower = zeros(nDim,1);
 b = zeros(nDim,1);
+fObj = zeros(nAgents,1);
 
 % extract parameter bounds
 for i = 1:nDim
@@ -46,19 +50,26 @@ CRmat = repmat(CR,nAgents,nDim);
 
 % randomly initialize parameterset
 if (load_Par)
-    par = loaded_Par(end-nAgents:end,dims);
-    fObj = loaded_Par(end-nAgents:end,end);
+    par = loaded_Par(end-nAgents+1:end,dims);
+    fObj = loaded_Par(end-nAgents+1:end,end);
 else
     par = repmat(lower',nAgents,1) + rand(nAgents,nDim).*repmat(b',nAgents,1);
-    fObj = func(par); 
+    for i = 1:nAgents
+        fObj(i) = func(par(i)); 
+    end   
 end
 % initialize dimension selection 
 selection = repmat(agents,1,nAgents);
 selection(1:nAgents+1:nAgents*nAgents)=[];
 selection = reshape(selection,nAgents-1,nAgents)';
 
+% params for progress
+p=0;
+frac = maxIter*nAgents/100;
+
 % optimization
 for k=1:maxIter
+     
     % preparing random selection
     r = rand(nAgents,nDim);
     R = randi(dims,nAgents,1);
@@ -76,6 +87,13 @@ for k=1:maxIter
     % process agents
     % TODO: parallelize
     for i=1:nAgents
+        
+        % print progress
+        if(echo && ((k-1)*nAgents+i)>p*frac)
+            disp([num2str(p), '% ..']);
+            p = p+1;    %buggy if N small
+        end
+        
         abc = datasample(selection(i,:),3,'Replace',false);
         I = cDim(i,:)==1;
         new_Par(i,I) = par(abc(1),I)+F*(par(abc(2),I)-par(abc(3),I));
