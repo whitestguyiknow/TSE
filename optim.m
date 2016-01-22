@@ -1,4 +1,4 @@
-function [sharpe] = optim(DSpre,DS1,DS2,deltaRSI )
+function [sharpe] = optim(DSpre,DS1,DS2,deltaRSI)
 
 % warm up time
 tInit = 100;
@@ -7,11 +7,13 @@ tInit = 100;
 usdkurs = ones(length(DSpre.time),1);
 comission = 0.5*8/100000;
 
+%% SECTION TO INTERCHANGE INDICATORS
 % function handles to indicators
 fBuyEntry = @(DS1,i,DS2,k,DS3,l) entryBuyRSI(DS1,i,DS2,k,deltaRSI);
 fSellEntry = @(DS1,i,DS2,k,DS3,l) entrySellRSI(DS1,i,DS2,k,deltaRSI);
 fBuyExit = @(DS1,i,DS2,k,DS3,l) exitBuyTrailingSDEV(DS1,i,DS2,k);
 fSellExit = @(DS1,i,DS2,k,DS3,l) exitSellTrailingSDEV(DS1,i,DS2,k);
+%%
 
 % initialize global indicator struct
 setIndicatorStruct();

@@ -53,12 +53,12 @@ export(EURUSD_t2,'file','./dat/EURUSD_t2.dat')
 end
 
 % optim parameter
-nAgents = 10;
+nPopoulation = 10;
 maxIter = 25;
 CR = 0.5;
 F = 1.5;
 seed = 8392;
-optimStruct = generateOptimStruct(nAgents,maxIter,CR,F,seed);
+optimStruct = generateOptimStruct(nPopoulation,maxIter,CR,F,seed);
 
 % optimization
 if(opt)
