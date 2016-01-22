@@ -19,7 +19,7 @@
 setup();
 
 % tasks
-load = true;
+load = false;
 opt = true;
 
 if(~load)
@@ -57,7 +57,7 @@ nAgents = 10;
 maxIter = 25;
 CR = 0.5;
 F = 1.5;
-seed = 123;
+seed = 8392;
 optimStruct = generateOptimStruct(nAgents,maxIter,CR,F,seed);
 
 % optimization
