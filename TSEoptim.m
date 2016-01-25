@@ -22,6 +22,8 @@ setup();
 load = false;
 opt = true;
 
+tInit = 100;
+
 if(~load)
 % load & process data
 EURUSD_raw = loadData('EURUSD_tick.csv');
@@ -66,5 +68,15 @@ if(opt)
     f = @(x) -optim(EURUSD_pre,EURUSD_t1,EURUSD_t2,x); %x: deltaRSI
     [obj,par] = DEoptim(f,optimStruct,[0.1,0.5],'firstRSIoptim.csv');
 end
+
+
+%oben Plot Equity line in of sample vs out of sample and print optimised in of
+%sample and print out of sample sharpe ratio
+
+
+%mitte Kernel density estimate of insample and out of sample return
+%distribution
+%unten gross Trading hours dependency boxplots hourly returns 1:24 hours
+
 
     

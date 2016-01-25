@@ -35,3 +35,15 @@ Dani:
 - zeiten anpassen in tcompress, so dass keine verzoegerung entsteht
 - comission only once paid
 - dailyTradingtable (new function) with dailyPnL, Equity, relativeEquity (return) [%]
+**************************23.1.2016 ******* Mike
+Bugs: 
+Error using dlmread (line 139)  beim laden der preprocess data!
+
+Fehler in den Daten: Wochendende ist ganz komisch siehe .dat in excel beispiel 22.6.2014 -> extrem viele Datenpunkte jeweils am Sonntag 21:00 Uhr
+Fehler in TSEoptim. Undefined function or variable 'deltaRSI'. Wo ist delta RSI definiert
+
+Fragen: Beispiel möglich, wo mehrere Variablen opimiert werden. Bsp RSI System ohne Delta aber RSI.DS(X)<=50 && RSI.DS2(Y) >=30 buy und dann noch tp (trailingprofit) und tsl (trailingstoploss optimieren). Somit wären 4 paras zu optimieren.
+
+To Do's Ideen
+
+Direkt plot siehe TSEoptim unten
