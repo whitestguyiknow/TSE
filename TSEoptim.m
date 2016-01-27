@@ -19,7 +19,7 @@
 setup();
 
 % tasks
-load = false;
+load = true;
 opt = true;
 
 tInit = 100;
