@@ -5,8 +5,11 @@ function [s] = sharpeRatio(dailyTradingTable)
 % Important: Independent of Duration (First day -> last day)
 % TODO: taking into account duration (check)
 
-s = mean(dailyTradingTable.Return)/std(dailyTradingTable.Return);
-
+if(isempty(dailyTradingTable))
+    s=-99;
+else
+    s = mean(dailyTradingTable.Return)/std(dailyTradingTable.Return);
+end
 
 end
 

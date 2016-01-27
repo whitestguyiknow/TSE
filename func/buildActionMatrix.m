@@ -111,7 +111,7 @@ Action(Action == 0) = [];
 % Final Assertions:
 assert(mod(length(Action),2)==0);
 assert(length(Time)==length(Action));
-assert(all(Action(1:2:end-1)+Action(2:2:end))==0);
+assert(isempty(Action) || all(Action(1:2:end-1)+Action(2:2:end))==0);
 
 disp('DONE!');
 toc;

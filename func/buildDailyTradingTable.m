@@ -3,6 +3,10 @@ function [dailyTradingTable] = buildDailyTradingTable(tradingTable)
 disp('building daily trading table..');
 tic;
 
+if(isempty(tradingTable))
+    dailyTradingTable = [];
+    return 
+end
 tradingIntervall = tradingTable.ExitTime(end,:) - tradingTable.EntryTime(1,:);
 M = 365*tradingIntervall(1)+30*tradingIntervall(2)+tradingIntervall(3);
 
