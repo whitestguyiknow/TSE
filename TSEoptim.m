@@ -26,10 +26,9 @@ tInit = 100;
 
 if(~load)
 % load & process data
-EURUSD_raw = loadData('EURUSD_tick.csv');
-EURUSD_pre = preprocessTable(EURUSD_raw);
-EURUSD_t1 = tcompressMat(EURUSD_pre,15,'bid','ask');
-EURUSD_t2 = tcompressMat(EURUSD_pre,60,'bid','ask');
+EURUSD_pre = loadData('EURUSD_tick.csv');
+EURUSD_t1 = compress(EURUSD_pre,15,'bid','ask');
+EURUSD_t2 = compress(EURUSD_pre,60,'bid','ask');
 
 % function handles to precomputed indicators
 fBuyRSI = @(DS,i,t) BuyRSI(DS,i,t);

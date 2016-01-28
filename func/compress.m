@@ -1,13 +1,19 @@
-function [tcompDS] = tcompressMat(D, dt, varargin)
-% compress dataset into intervalls of length dt
-% dt [mins]
-% Important: dt will be the base value for all further computations on tcompDS
+function [tcompDS] = compress(DS, dt, varargin)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Function: compressing dataset into frames of duration dt [mins]   
+% created by Daniel, December 2015
+%
+% Last update: 2016 Jan 28, by Daniel
+%   2016-01-28: (Daniel)
+%       1. restructuring
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 disp('compressing matrix..');
 tic;
-D.time = datenum(D.time);
+DS.time = datenum(DS.time);
 nvarargin = length(varargin);
-variableNames = D.Properties.VarNames;
+variableNames = DS.Properties.VarNames;
 if(~iscellstr(varargin))
     error('optional arguments must be of type char');
 end
@@ -18,11 +24,11 @@ if (~isempty(varargin))
     end
 end
 
-l=length(D.time);
-d=(D.time-D.time(1))*86400/60; %[sec]
+l=length(DS.time);
+d=(DS.time-DS.time(1))*86400/60; %[sec]
 idxOpen = false(l,1); idxOpen(1)=true;
 t = dt;
-M = double(D);
+M = double(DS);
 C = 99999*ones(1,nvarargin);
 tmp_max = -C;
 tmp_min = +C;
