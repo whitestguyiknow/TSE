@@ -55,11 +55,12 @@ end
 
 % optim parameter
 nPopoulation = 10;
-maxIter = 25;
-CR = 0.5;
+maxIter = 100;
+CR = 0.7;
 F = 1.5;
+N_cpu = 2;
 seed = 8392;
-optimStruct = generateOptimStruct(nPopoulation,maxIter,CR,F,seed);
+optimStruct = generateOptimStruct(nPopoulation,maxIter,CR,F,seed,N_cpu);
 
 % optimization
 if(opt)
