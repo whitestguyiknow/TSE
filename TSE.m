@@ -16,24 +16,22 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % setup
+clear all;
 setup();
 
 % tasks
-load = false;
 opt = true;
 
 tInit = 100;
 
 % try load
 try
-    fprintf('a\n')
     clear EURUSD
     EURUSD = load('./dat/EURUSD.mat');
+    EURUSD_pre = EURUSD.EURUSD_pre;
     EURUSD_t1 = EURUSD.EURUSD_t1;
     EURUSD_t2 = EURUSD.EURUSD_t2;
-    fprintf('b\n')
 catch
-    fprintf('c\n')
     % load & process data
     EURUSD_pre = loadDataCsv('EURUSD_tick.csv');
     EURUSD_t1 = compress(EURUSD_pre,15,'bid','ask');
@@ -66,7 +64,7 @@ usdkurs = ones(length(EURUSD_pre.time),1);
 comission = 0.5*8/100000;
 
 % function handles to indicators
-deltaRSI = -0.048447;
+deltaRSI = 0.14473;
 fBuyEntry = @(DS1,i,DS2,k,DS3,l) entryBuyRSI(DS1,i,DS2,k,deltaRSI);
 fSellEntry = @(DS1,i,DS2,k,DS3,l) entrySellRSI(DS1,i,DS2,k,deltaRSI);
 fBuyExit = @(DS1,i,DS2,k,DS3,l) exitBuyTrailingSDEV(DS1,i,DS2,k);
