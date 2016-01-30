@@ -45,21 +45,24 @@ agents = 1:nAgents;
 
 bounds = zeros(nDim,2);
 lower = zeros(nDim,1);
+upper = zeros(nDim,1);
 b = zeros(nDim,1);
 fObj = zeros(nAgents,1);
 
 parallel = start_cores(optimStruct.N_cpu);
 if parallel
-    fprintf('running optimization using %d cpus',optimStruct.N_cpu);
+    fprintf('running optimization using %d cpus\n',optimStruct.N_cpu);
 else
-    fprintf('running optimization serial');
+    fprintf('running optimization serial\n');
 end
 
 % extract parameter bounds
 for i = 1:nDim
     bounds(i,:) = varargin{i};
     lower(i) = min(bounds(i,:));
-    b(i) = abs(bounds(i,2)-bounds(i,1));
+    upper(i) = max(bounds(i,:));
+    b(i) = upper(i)-lower(i,1);
+    assert(b(i)>0,'upper bound - lower bound must be greater than 0');
 end
 
 CRmat = repmat(CR,nAgents,nDim);
@@ -118,7 +121,7 @@ for k=1:maxIter
         for i =1:nAgents
             abc = datasample(selection(i,:),3,'Replace',false);
             Idx = cDim(i,:)==1;
-            new_Par(i,Idx) = par(abc(1),Idx)+F*(par(abc(2),Idx)-par(abc(3),Idx));
+            new_Par(i,Idx) = min(max(par(abc(1),Idx)+F*(par(abc(2),Idx)-par(abc(3),Idx)),lower(Idx)),upper(Idx));
         end
         parfor i=1:nAgents
             new_fObj(i) = func(new_Par(i,:));

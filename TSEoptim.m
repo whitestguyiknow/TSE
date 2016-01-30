@@ -66,7 +66,7 @@ optimStruct = generateOptimStruct(nPopoulation,maxIter,CR,F,seed,N_cpu);
 if(opt)
     % objective function -sharpe, minimize neg sharpe -> maximiye sharp
     f = @(x) -optim(EURUSD_pre,EURUSD_t1,EURUSD_t2,x); %x: deltaRSI
-    [obj,par] = DEoptim(f,optimStruct,[0.1,0.5],'firstRSIoptim.csv');
+    [obj,par] = DEoptim(f,optimStruct,[-1,1],'2ndRSIoptim.csv');
 end
 
 
