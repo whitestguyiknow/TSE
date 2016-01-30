@@ -26,11 +26,11 @@ if(~isempty(varargin) && ischar(varargin{nDim}))
     fileName = ['./dat/',varargin{nDim}];
     write_Par = true;
     nDim = nDim-1;
-    if (exist(fileName, 'file'))
+    try
         % load from previous run
         loaded_Par = dlmread(fileName, ',', 3, 0);
         load_Par = true;
-    else
+    catch
         % print new file
         file = fopen(fileName,'wt');
         fprintf(file,'func %s\n', func2str(func));
