@@ -16,20 +16,31 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % setup
+clear all;
 setup();
 
 % tasks
+<<<<<<< HEAD
 load = false;
 optim = false;
+=======
+opt = true;
+>>>>>>> a104f5700dcac60596e918cfefd6b6edd80347f5
 
 tInit = 100;
 
-if(~load)
+% try load
+try
+    clear EURUSD
+    EURUSD = load('./dat/EURUSD.mat');
+    EURUSD_pre = EURUSD.EURUSD_pre;
+    EURUSD_t1 = EURUSD.EURUSD_t1;
+    EURUSD_t2 = EURUSD.EURUSD_t2;
+catch
     % load & process data
-    EURUSD_raw = loadData('EURUSD_tick.csv');
-    EURUSD_pre = preprocessTable(EURUSD_raw);
-    EURUSD_t1 = tcompressMat(EURUSD_pre,15,'bid','ask');
-    EURUSD_t2 = tcompressMat(EURUSD_pre,60,'bid','ask');
+    EURUSD_pre = loadDataCsv('EURUSD_tick.csv');
+    EURUSD_t1 = compress(EURUSD_pre,15,'bid','ask');
+    EURUSD_t2 = compress(EURUSD_pre,60,'bid','ask');
     
     % function handles to precomputed indicators
     fBuyRSI = @(DS,i,t) BuyRSI(DS,i,t);
@@ -50,8 +61,7 @@ if(~load)
     EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'sdev',fSdev,50);
     
     % save dataset
-    export(EURUSD_t1,'file','./dat/EURUSD_t1.dat')
-    export(EURUSD_t2,'file','./dat/EURUSD_t2.dat')
+    save './dat/EURUSD.mat' EURUSD_t1 EURUSD_t2
 end
 
 % artificial exchange rate
@@ -59,7 +69,11 @@ usdkurs = ones(length(EURUSD_pre.time),1);
 comission = 0.5*8/100000;
 
 % function handles to indicators
+<<<<<<< HEAD
 deltaRSI = -0.068352;
+=======
+deltaRSI = 0.14473;
+>>>>>>> a104f5700dcac60596e918cfefd6b6edd80347f5
 fBuyEntry = @(DS1,i,DS2,k,DS3,l) entryBuyRSI(DS1,i,DS2,k,deltaRSI);
 fSellEntry = @(DS1,i,DS2,k,DS3,l) entrySellRSI(DS1,i,DS2,k,deltaRSI);
 fBuyExit = @(DS1,i,DS2,k,DS3,l) exitBuyTrailingSDEV(DS1,i,DS2,k);
