@@ -19,7 +19,7 @@
 setup();
 
 % tasks
-load = true;
+load = false;
 optim = false;
 
 tInit = 100;
@@ -59,7 +59,7 @@ usdkurs = ones(length(EURUSD_pre.time),1);
 comission = 0.5*8/100000;
 
 % function handles to indicators
-deltaRSI = 0.15;
+deltaRSI = -0.068352;
 fBuyEntry = @(DS1,i,DS2,k,DS3,l) entryBuyRSI(DS1,i,DS2,k,deltaRSI);
 fSellEntry = @(DS1,i,DS2,k,DS3,l) entrySellRSI(DS1,i,DS2,k,deltaRSI);
 fBuyExit = @(DS1,i,DS2,k,DS3,l) exitBuyTrailingSDEV(DS1,i,DS2,k);

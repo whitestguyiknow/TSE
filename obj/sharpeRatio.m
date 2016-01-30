@@ -8,7 +8,7 @@ function [s] = sharpeRatio(dailyTradingTable)
 if(isempty(dailyTradingTable))
     s=-99;
 else
-    s = mean(dailyTradingTable.Return)/std(dailyTradingTable.Return);
+    s = mean(dailyTradingTable.Return)/std(dailyTradingTable.Return)*sqrt(252);
 end
 
 end
