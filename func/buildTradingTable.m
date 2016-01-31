@@ -77,12 +77,21 @@ for i = 1:2:l
     idx = idx+1;
 end
 
-bruttoPnL = exitPrice.*entryPosition+entryPrice.*exitPosition;
+bruttoPnL = exitPrice.*entryPosition+entryPrice.*exitPosition; %Bruttorendite = (exitPrice-entryprice)/EntryPrice
 bruttoPnLUSD = bruttoPnL.*usdKurs(tradeIdx(2:2:end));
+<<<<<<< HEAD
 comissionUSD = 2*abs(position(2:2:end)).*comission;
 nettoPnLUSD = bruttoPnLUSD - comissionUSD;
 nettoPnLPerComm = nettoPnLUSD./comissionUSD;
 equity = cumsum(nettoPnLUSD)+100000; %%TODO: flexible position
+=======
+comissionUSD = 2*abs(position(2:2:end)).*comission; %Commision muss relativ gerechnet werden 0.00004 pro Seite
+nettoPnLUSD = bruttoPnLUSD - comissionUSD; % netto return
+nettoPnLPerComm = nettoPnLUSD./comissionUSD; %return per commision
+equity = cumsum(nettoPnLUSD); %
+%need an intraday return like: r(i)= (equity(i)-equity(i-1))/equity(i-1)
+%Please insert
+>>>>>>> e45eaefb665a39081c0b164f3c51cea0524b69bb
 
 % calculate low and high Prices during positioning
 idx = 1;

@@ -10,6 +10,8 @@
 %                   indicator functions in ./indicators/
 %                   optimizer in ./DE/
 %                   objective functions in ./obj/
+%                   plot functions in ./plotfunc/
+%                   saved plots in ./plot/
 %                   data in ./dat/
 %
 %
@@ -64,7 +66,7 @@ nPopoulation = 10;
 maxIter = 100;
 CR = 0.7;
 F = 1.5;
-N_cpu = 2;
+N_cpu = 3;
 seed = 8392;
 optimStruct = generateOptimStruct(nPopoulation,maxIter,CR,F,seed,N_cpu);
 
