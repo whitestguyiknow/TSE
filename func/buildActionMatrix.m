@@ -58,7 +58,7 @@ for i=dtInit:N
     updateIndicatorStruct(DS1,i,IndicatorStruct.control);
     
     % go flat - sell
-    if(IndicatorStruct.control == 1 && fExitBuy(DS1,i,DS2,k,DS3,l))
+    if(IndicatorStruct.control == 1 && fExitBuy(DS1,i,DS2,k))
         Time(i) = DS1.time(i);
         Action(i) = -1;
         updateIndicatorStruct(DS1,i,0)
@@ -66,7 +66,7 @@ for i=dtInit:N
     end
     
     % go flat - buy
-    if(IndicatorStruct.control == -1 && fExitSell(DS1,i,DS2,k,DS3,l))
+    if(IndicatorStruct.control == -1 && fExitSell(DS1,i,DS2,k))
         Time(i) = DS1.time(i);
         Action(i) = 1;
         updateIndicatorStruct(DS1,i,0)
