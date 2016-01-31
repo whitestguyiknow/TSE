@@ -1,5 +1,14 @@
-function [dailyTradingTable] = buildDailyTradingTable(tradingTable)
-% summarize trades within each day
+function [dailyTradingTable] = buildDailyTradingTable(tradingTable,equityInit)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Function: summarize trades within each day 
+% created by Daniel, December 2015
+%
+% Last update: 2016 Jan 31, by Daniel
+%   2016-01-31: (Daniel)
+%       1. insert equity init for return calculation; restructuring
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 
 disp('building daily trading table..');
 tic;
 
@@ -40,7 +49,7 @@ nTrades = nTrades(I);
 equity = equity(I);
 
 % calculate daily returns
-r = [(equity(1)-100000)./100000; (equity(2:end)-equity(1:end-1))./abs(equity(1:end-1))];
+r = [(equity(1)-equityInit)./equityInit; (equity(2:end)-equity(1:end-1))./abs(equity(1:end-1))];
 
 cnames = {'Date','nTrades','Equity','Return'};
 dailyTradingTable = table(dates,nTrades,equity,r,...

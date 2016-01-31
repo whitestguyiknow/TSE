@@ -1,7 +1,17 @@
 function [sharpe] = optim(DSpre,DS1,DS2,deltaRSI)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Function: exanple function feeding into DEoptim           
+% created by Daniel, December 2015
+%
+% Last update: 2016 Jan 31, by Daniel
+%   2016-01-31: (Daniel)
+%       1. restructuring
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % warm up time
 tInit = 100;
+equityInit = 100000;
 
 % artificial exchange rate
 usdkurs = ones(length(DSpre.time),1);
@@ -22,10 +32,10 @@ setIndicatorStruct();
 [Time, Action] = buildActionMatrix(DS1,DS2,DS2,tInit,fBuyEntry,fBuyExit,fSellEntry,fSellExit);
 
 % generate trades
-tradingTable = buildTradingTable(DSpre, usdkurs,comission,Time,Action*100000);
+tradingTable = buildTradingTable(DSpre, equityInit, usdkurs,comission,Time,Action*100000);
 
 % summary
-dailyTT = buildDailyTradingTable(tradingTable);
+dailyTT = buildDailyTradingTable(tradingTable, equityInit);
 
 % sharpe-ratio
 sharpe = sharpeRatio(dailyTT);

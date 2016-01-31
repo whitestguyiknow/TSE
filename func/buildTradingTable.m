@@ -1,6 +1,14 @@
-function [tradingTable] = buildTradingTable(DSpre,usdKurs,comission,tradeTime,position)
-% comission [2 * comission per 100'000]
-
+function [tradingTable] = buildTradingTable(DSpre,equityInit,usdKurs,comission,tradeTime,position)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Function: summarize all trades
+% created by Daniel, December 2015
+%
+% Last update: 2016 Jan 31, by Daniel
+%   2016-01-31: (Daniel)
+%       1. insert equity init for return calculation; restructuring
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 
 disp('building trading table..');
 tic;
 
@@ -79,19 +87,12 @@ end
 
 bruttoPnL = exitPrice.*entryPosition+entryPrice.*exitPosition; %Bruttorendite = (exitPrice-entryprice)/EntryPrice
 bruttoPnLUSD = bruttoPnL.*usdKurs(tradeIdx(2:2:end));
-<<<<<<< HEAD
+
 comissionUSD = 2*abs(position(2:2:end)).*comission;
 nettoPnLUSD = bruttoPnLUSD - comissionUSD;
 nettoPnLPerComm = nettoPnLUSD./comissionUSD;
-equity = cumsum(nettoPnLUSD)+100000; %%TODO: flexible position
-=======
-comissionUSD = 2*abs(position(2:2:end)).*comission; %Commision muss relativ gerechnet werden 0.00004 pro Seite
-nettoPnLUSD = bruttoPnLUSD - comissionUSD; % netto return
-nettoPnLPerComm = nettoPnLUSD./comissionUSD; %return per commision
-equity = cumsum(nettoPnLUSD); %
-%need an intraday return like: r(i)= (equity(i)-equity(i-1))/equity(i-1)
-%Please insert
->>>>>>> e45eaefb665a39081c0b164f3c51cea0524b69bb
+equity = cumsum(nettoPnLUSD)+equityInit; %%TODO: flexible position
+
 
 % calculate low and high Prices during positioning
 idx = 1;

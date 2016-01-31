@@ -20,10 +20,10 @@
 % setup
 setup();
 
+tInit = 100;
+
 % tasks
 opt = true;
-
-tInit = 100;
 
 % try load
 try
@@ -68,7 +68,7 @@ CR = 0.7;
 F = 1.5;
 N_cpu = 3;
 seed = 8392;
-optimStruct = generateOptimStruct(nPopoulation,maxIter,CR,F,seed,N_cpu);
+optimStruct = generateOptimStruct(nPopoulation,maxIter,CR,F,seed,N_cpu,equityInit);
 
 % optimization
 if(opt)

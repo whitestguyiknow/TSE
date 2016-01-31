@@ -22,6 +22,7 @@ setup();
 opt = true;
 
 tInit = 100;
+equityInit = 100000;
 deltaRSI = 0.058268;
 
 % try load
@@ -64,10 +65,6 @@ usdkurs = ones(length(EURUSD_pre.time),1);
 comission = 0.5*8/100000;
 
 % function handles to indicators
-<<<<<<< HEAD
-=======
-deltaRSI = -0.046887;
->>>>>>> e45eaefb665a39081c0b164f3c51cea0524b69bb
 fBuyEntry = @(DS1,i,DS2,k,DS3,l) entryBuyRSI(DS1,i,DS2,k,deltaRSI);
 fSellEntry = @(DS1,i,DS2,k,DS3,l) entrySellRSI(DS1,i,DS2,k,deltaRSI);
 fBuyExit = @(DS1,i,DS2,k,DS3,l) exitBuyTrailingSDEV(DS1,i,DS2,k);
@@ -80,10 +77,10 @@ setIndicatorStruct();
 [Time, Action] = buildActionMatrix(EURUSD_t1,EURUSD_t2,EURUSD_t2,tInit,fBuyEntry,fBuyExit,fSellEntry,fSellExit);
 
 % generate trades
-tradingTable = buildTradingTable(EURUSD_pre, usdkurs,comission,Time,Action*100000);
+tradingTable = buildTradingTable(EURUSD_pre, equityInit,usdkurs,comission,Time,Action*100000);
 
 % summary
-dailyTT = buildDailyTradingTable(tradingTable);
+dailyTT = buildDailyTradingTable(tradingTable, equityInit);
 
 % sharpe-ratio
 sharpe = sharpeRatio(dailyTT);
