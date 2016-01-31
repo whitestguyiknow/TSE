@@ -4,7 +4,10 @@ function [tcompDS] = compress(DS, dt, varargin)
 % Function: compressing dataset into frames of duration dt [mins]   
 % created by Daniel, December 2015
 %
-% Last update: 2016 Jan 28, by Daniel
+% Last update: 2016 Jan 31, by Daniel
+%   2016-01-31: (Daniel)
+%       1. bug fixxing (problem with time leaps in data), using min max
+%       functions
 %   2016-01-28: (Daniel)
 %       1. restructuring
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -25,13 +28,11 @@ if (~isempty(varargin))
 end
 
 l=length(DS.time);
-d=(DS.time-DS.time(1))*86400/60; %[sec]
+d=(DS.time-DS.time(1))*86400/60; %[min]
 idxOpen = false(l,1); idxOpen(1)=true;
-t = dt;
+tCount = dt;
 M = double(DS);
 C = 99999*ones(1,nvarargin);
-tmp_max = -C;
-tmp_min = +C;
 
 max_Mat = zeros(l,nvarargin);
 min_Mat = max_Mat;
@@ -39,19 +40,18 @@ med_Mat = max_Mat;
 
 lastFrameIdx = 1;
 for i=2:l
-    tmp_max(M(i,colIdx)>tmp_max) = M(i,colIdx(M(i,colIdx)>tmp_max));
-    tmp_min(M(i,colIdx)<tmp_min) = M(i,colIdx(M(i,colIdx)<tmp_min));
     % next interval
-    if(d(i)>=t)
+    if(d(i)>=tCount)
         idxOpen(i)=true;
-        max_Mat(i,:) = tmp_max;
-        min_Mat(i,:) = tmp_min;
-        med_Mat(i,:) = median(M(lastFrameIdx:i,colIdx),1);
-        tmp_max = -C;
-        tmp_min = C;
+        max_Mat(i,:) = max(M(lastFrameIdx:i,colIdx));
+        min_Mat(i,:) = min(M(lastFrameIdx:i,colIdx));
+        med_Mat(i,:) = median(M(lastFrameIdx:i,colIdx));
         lastFrameIdx = i;
         % update time
-        t = t+dt;
+        % increase time if big time leaps
+        while(d(i+1)>=tCount)
+            tCount = tCount+dt;
+        end
     end
 end
 

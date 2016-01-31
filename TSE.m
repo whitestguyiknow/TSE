@@ -18,9 +18,6 @@
 % setup
 setup();
 
-% tasks
-opt = true;
-
 tInit = 100;
 equityInit = 100000;
 deltaRSI = 0.058268;
@@ -57,7 +54,7 @@ catch
     EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'sdev',fSdev,50);
     
     % save dataset
-    save './dat/EURUSD.mat' EURUSD_t1 EURUSD_t2
+    save './dat/EURUSDshort.mat' EURUSD_t1 EURUSD_t2
 end
 
 % artificial exchange rate
