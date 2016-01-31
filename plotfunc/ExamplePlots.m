@@ -8,7 +8,7 @@ EURUSD = load('./dat/EURUSDplot.mat');
     EURUSD_t2 = EURUSD.EURUSD_t2;
     
 %%%%%% Asset manipulation
-n=100;
+n=30;
 O=EURUSD_t2.ask_open(1:n);
 H=EURUSD_t2.HIGH_ask(1:n);
 L=EURUSD_t2.LOW_ask(1:n);
@@ -17,8 +17,9 @@ med=EURUSD_t2.MED_ask(1:n);
 
 %%%%%%%%%%%%%%%%%%% CANDLESTICK NORMAL + MEDIAN********
 %%%%%%%Normal Candlestick Plot
+plot(C)
 subplot(2,1,1);
-datacndl(H,L,C,O)
+datacndl(H,L,O,C)
 t=title('Normal Candlestick (OHLC Data)');
 set(t,'FontSize', 12);
 xlabel('250 min Candles')
@@ -27,7 +28,7 @@ hold off;
 
 %%%%Candle Stick with MEDIAN Whoop Whooop! Idea using as Turningpoint Indication.... 
 subplot(2,1,2);
-datacndlmed(H,L,C,O,med)
+datacndlmed(H,L,O,C,med)
 t=title('Candlestick In Candle Tick based Median (OHLC+Median Data)');
 set(t,'FontSize', 12);
 xlabel('250 min Candles')

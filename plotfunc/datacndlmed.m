@@ -1,6 +1,6 @@
 function datacndlmed(H,L,O,C,med)
 %Plot OHLC Candles and adding the tick Based Median
-% Author Of OHLC: Nagi Hatoum, Candlestick chart ploter function, 5/29/03
+% Author Of OHLC: Nagi Hatoum, Candlestick chart ploter function, 5/29/0
 
 %Source: http://www.mathworks.com/matlabcentral/fileexchange/3549-candlestick-graph/content//cndl.m
 %Changed Colors
@@ -35,9 +35,8 @@ if ~isempty(n)
    end
    %Plot Median
     for i=1:l
-        plot(i,med(i),'y*')
+        plot(i,med(i),'y*','LineWidth',0.5)
     end
-   
    grid on;
 end
 
