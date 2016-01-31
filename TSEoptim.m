@@ -45,16 +45,16 @@ catch
     fSdev = @(DS,i,t) sdev(DS,i,t);
     
     % append indicator values
-    EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'buyRSI_14',fBuyRSI,14);
-    EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'buyRSI_30',fBuyRSI,30);
-    EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'sellRSI_14',fSellRSI,14);
-    EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'sellRSI_30',fSellRSI,30);
+    %EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'buyRSI_14',fBuyRSI,14);
+    %EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'buyRSI_30',fBuyRSI,30);
+    %EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'sellRSI_14',fSellRSI,14);
+    %EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'sellRSI_30',fSellRSI,30);
     EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'sdev',fSdev,50);
     
-    EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'buyRSI_14',fBuyRSI,14);
-    EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'buyRSI_30',fBuyRSI,30);
-    EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'sellRSI_14',fSellRSI,14);
-    EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'sellRSI_30',fSellRSI,30);
+    %EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'buyRSI_14',fBuyRSI,14);
+    %EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'buyRSI_30',fBuyRSI,30);
+    %EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'sellRSI_14',fSellRSI,14);
+    %EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'sellRSI_30',fSellRSI,30);
     EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'sdev',fSdev,50);
     
     % save dataset
@@ -62,19 +62,19 @@ catch
 end
 
 % optim parameter
-nPopoulation = 10;
+nPopoulation = 30;
 maxIter = 100;
 CR = 0.7;
 F = 1.5;
 N_cpu = 3;
 seed = 8392;
-optimStruct = generateOptimStruct(nPopoulation,maxIter,CR,F,seed,N_cpu,equityInit);
+optimStruct = generateOptimStruct(nPopoulation,maxIter,CR,F,seed,N_cpu);
 
 % optimization
 if(opt)
     % objective function -sharpe, minimize neg sharpe -> maximize sharp
-    f = @(x) -optim(EURUSD_pre,EURUSD_t1,EURUSD_t2,x); %x: deltaRSI
-    [obj,par] = DEoptim(f,optimStruct,[-1,1],'2ndRSIoptim.csv');
+    f = @(x) -optim(EURUSD_pre,EURUSD_t1,EURUSD_t2,x(1),x(2),x(3));
+    [obj,par] = DEoptim(f,optimStruct,[3,40],[0.1,15],[0.1,15],'2ndRSIoptim.csv');
 end
 
 

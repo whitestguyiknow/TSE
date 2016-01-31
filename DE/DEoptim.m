@@ -76,11 +76,11 @@ else
     
     if parallel
         parfor i = 1:nAgents
-            fObj(i) = func(par(i));
+            fObj(i) = func(par(i,:));
         end
     else
         for i = 1:nAgents
-            fObj(i) = func(par(i));
+            fObj(i) = func(par(i,:));
         end
     end
 end
