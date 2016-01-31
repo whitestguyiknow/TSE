@@ -68,7 +68,7 @@ CR = 0.7;
 F = 1.5;
 N_cpu = 3;
 seed = 8392;
-optimStruct = generateOptimStruct(nPopoulation,maxIter,CR,F,seed,N_cpu,equityInit);
+optimStruct = generateOptimStruct(nPopoulation,maxIter,CR,F,seed,N_cpu);
 
 % optimization
 if(opt)
