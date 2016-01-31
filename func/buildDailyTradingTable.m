@@ -40,7 +40,7 @@ nTrades = nTrades(I);
 equity = equity(I);
 
 % calculate daily returns
-r = [0; (equity(2:end)-equity(1:end-1))./equity(1:end-1)];
+r = [(equity(1)-100000)./100000; (equity(2:end)-equity(1:end-1))./abs(equity(1:end-1))];
 
 cnames = {'Date','nTrades','Equity','Return'};
 dailyTradingTable = table(dates,nTrades,equity,r,...

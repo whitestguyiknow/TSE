@@ -82,7 +82,7 @@ bruttoPnLUSD = bruttoPnL.*usdKurs(tradeIdx(2:2:end));
 comissionUSD = 2*abs(position(2:2:end)).*comission;
 nettoPnLUSD = bruttoPnLUSD - comissionUSD;
 nettoPnLPerComm = nettoPnLUSD./comissionUSD;
-equity = cumsum(nettoPnLUSD);
+equity = cumsum(nettoPnLUSD)+100000; %%TODO: flexible position
 
 % calculate low and high Prices during positioning
 idx = 1;
