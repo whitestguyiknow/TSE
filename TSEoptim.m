@@ -22,6 +22,9 @@ setup();
 
 tInit = 100;
 
+% partitioning variable
+insamplePCT = 0.7;
+
 % try load
 try
     clear EURUSD
@@ -68,6 +71,15 @@ F = 1.5;
 N_cpu = 3;
 seed = 8392;
 optimStruct = generateOptimStruct(nPopoulation,maxIter,CR,F,seed,N_cpu);
+
+% partitioning
+lp = length(EURUSD_pre); l1 = length(EURUSD_t1); l2 = length(EURUSD_t2);
+EURUSD_pre_is = EURUSD_pre(1:ceil(lp*insamplePCT),:);
+EURUSD_t1_is = EURUSD_t1(1:ceil(l1*insamplePCT),:);
+EURUSD_t2_is = EURUSD_t2(1:ceil(l2*insamplePCT),:);
+EURUSD_pre_oos = EURUSD_pre(floor(lp*insamplePCT):end,:);
+EURUSD_t1_oos = EURUSD_t1(floor(l1*insamplePCT):end,:);
+EURUSD_t2_oos = EURUSD_t2(floor(l2*insamplePCT):end,:);
 
 % optimization
 % objective function -sharpe, minimize neg sharpe -> maximize sharp
