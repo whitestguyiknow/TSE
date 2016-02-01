@@ -22,9 +22,6 @@ setup();
 
 tInit = 100;
 
-% tasks
-opt = true;
-
 % try load
 try
     clear EURUSD
@@ -32,8 +29,7 @@ try
     EURUSD_pre = EURUSD.EURUSD_pre;
     EURUSD_t1 = EURUSD.EURUSD_t1;
     EURUSD_t2 = EURUSD.EURUSD_t2;
-catch
-    
+catch   
     % load & process data
     EURUSD_pre = loadDataCsv('EURUSD_tick.csv');
     EURUSD_t1 = compress(EURUSD_pre,15,'bid','ask');
@@ -61,6 +57,9 @@ catch
     save './dat/EURUSD.mat' EURUSD_pre EURUSD_t1 EURUSD_t2 
 end
 
+% pick isamples
+% & osamples
+
 % optim parameter
 nPopoulation = 30;
 maxIter = 100;
@@ -71,20 +70,7 @@ seed = 8392;
 optimStruct = generateOptimStruct(nPopoulation,maxIter,CR,F,seed,N_cpu);
 
 % optimization
-if(opt)
-    % objective function -sharpe, minimize neg sharpe -> maximize sharp
-    f = @(x) -optim(EURUSD_pre,EURUSD_t1,EURUSD_t2,x(1),x(2),x(3));
-    [obj,par] = DEoptim(f,optimStruct,[3,40],[0.1,15],[0.1,15],'2ndRSIoptim.csv');
-end
+% objective function -sharpe, minimize neg sharpe -> maximize sharp
+f = @(x) -optim(EURUSD_pre,EURUSD_t1,EURUSD_t2,x(1),x(2),x(3));
+[obj,par] = DEoptim(f,optimStruct,[3,40],[0.1,15],[0.1,15],'2ndRSIoptim.csv');
 
-
-%oben Plot Equity line in of sample vs out of sample and print optimised in of
-%sample and print out of sample sharpe ratio
-
-
-%mitte Kernel density estimate of insample and out of sample return
-%distribution
-%unten gross Trading hours dependency boxplots hourly returns 1:24 hours
-
-
-    

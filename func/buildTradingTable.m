@@ -92,7 +92,7 @@ comissionUSD = 2*abs(position(2:2:end)).*comission;
 nettoPnLUSD = bruttoPnLUSD - comissionUSD;
 nettoPnLPerComm = nettoPnLUSD./comissionUSD;
 equity = cumsum(nettoPnLUSD)+equityInit; %%TODO: flexible position
-
+returns = [equity(1)/equityInit-1;equity(2:end)./equity(1:end-1)-1];
 
 % calculate low and high Prices during positioning
 idx = 1;
@@ -105,11 +105,11 @@ end
 
 cnames = {'EntryTime','EntryPrice','Position','ExitTime','ExitPrice',...
     'BruttoPnL','USDKurs','BruttoPnLUSD','Commssion','NettoPnLUSD',...
-    'NettoPnLPerCommission','Duration','LowPrice','HighPrice','Equity'};
+    'NettoPnLPerCommission','Duration','LowPrice','HighPrice','Return','Equity'};
 
 tradingTable = table(entryTimeVec,entryPrice,position(1:2:end-1),exitTimeVec,exitPrice,...
     bruttoPnL,usdrate(2:2:end),bruttoPnLUSD,comissionUSD,nettoPnLUSD,nettoPnLPerComm,...
-    duration,lowPrice,highPrice,equity,'VariableNames',cnames);
+    duration,lowPrice,highPrice,returns,equity,'VariableNames',cnames);
 
 disp('DONE!');
 toc;
