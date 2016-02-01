@@ -103,7 +103,7 @@ for k=1:maxIter
     
     % preparing random selection
     r = rand(nAgents,nDim);
-    R = randi(dims,nAgents,1);
+    R = randi(nDim,nAgents,1);
     I = repmat(1:nDim,nAgents,1) == repmat(R,1,nDim);
     
     % select
