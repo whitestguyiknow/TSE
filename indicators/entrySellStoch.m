@@ -9,7 +9,12 @@ L2 = min(DS1.LOW_ask(i-LB-T:i-LB));
 H2 = max(DS1.HIGH_ask(i-LB-T:i-LB));
 stoch_X2 = (DS1.ask_close(i)-L2)/(H2-L2);
 
-b=(stoch_X1<0.4 && stoch_X2>0.4);
+if isempty(L1) || isempty(L2)
+    b=false;
+else
+    b=(stoch_X1<0.4 && stoch_X2>0.4);
+end
+
 end
 
 

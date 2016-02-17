@@ -19,6 +19,7 @@
 
 % setup
 setup();
+dbstop if error
 
 tInit = 100;
 

@@ -33,6 +33,11 @@ assert(length(ask)==N);
 assert(length(usdKurs)==N);
 assert(mod(l,2)==0);
 
+if l<3
+    tradingTable = [];
+    return
+end
+    
 % initialization
 entryTime   = zeros(m,1);
 entryTimeVec = zeros(m,6);
@@ -92,7 +97,11 @@ comissionUSD = 2*abs(position(2:2:end)).*comission;
 nettoPnLUSD = bruttoPnLUSD - comissionUSD;
 nettoPnLPerComm = nettoPnLUSD./comissionUSD;
 equity = cumsum(nettoPnLUSD)+equityInit; %%TODO: flexible position
-returns = [equity(1)/equityInit-1;equity(2:end)./equity(1:end-1)-1];
+try %debugging
+    returns = [equity(1)/equityInit-1;equity(2:end)./equity(1:end-1)-1];
+catch
+    -1
+end
 
 % calculate low and high Prices during positioning
 idx = 1;

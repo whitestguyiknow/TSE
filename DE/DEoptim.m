@@ -121,7 +121,11 @@ for k=1:maxIter
         for i =1:nAgents
             abc = datasample(selection(i,:),3,'Replace',false);
             Idx = cDim(i,:)==1;
-            new_Par(i,Idx) = min(max(par(abc(1),Idx)+F*(par(abc(2),Idx)-par(abc(3),Idx)),lower(Idx)),upper(Idx));
+            try %debugging
+                new_Par(i,Idx) = min(max(par(abc(1),Idx)+F*(par(abc(2),Idx)-par(abc(3),Idx)),lower(Idx)),upper(Idx));
+            catch
+                -1
+            end
         end
         parfor i=1:nAgents
             new_fObj(i) = func(new_Par(i,:));
