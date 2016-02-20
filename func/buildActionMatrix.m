@@ -27,6 +27,9 @@ N = length(DS1.time);
 Action = zeros(N,1);    % vector storing actions: buy = 1, sell = -1
 Time = zeros(N,1);      % vector storing tradign times
 
+
+
+setIndicatorStruct();
 global IndicatorStruct;
 
 % parameter for fExitBuy (stoploss/takeprofit)

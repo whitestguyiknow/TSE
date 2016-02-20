@@ -23,7 +23,7 @@ write_Par = false;
 load_Par = false;
 
 if(~isempty(varargin) && ischar(varargin{nDim}))
-    fileName = ['./dat/',varargin{nDim}];
+    fileName = [varargin{nDim}];
     write_Par = true;
     nDim = nDim-1;
     try
@@ -126,7 +126,7 @@ for k=1:maxIter
             catch
                 -1
             end
-        end
+        end   
         parfor i=1:nAgents
             new_fObj(i) = func(new_Par(i,:));
         end
@@ -141,10 +141,14 @@ for k=1:maxIter
             new_fObj(i) = func(new_Par(i,:));
         end
     end
+    % replace better values
     I = new_fObj<fObj;
     par(I,:) = new_Par(I,:);
     fObj(I,:) = new_fObj(I,:);
-    
+    % sort them
+    [fObj,Is] = sort(fObj,'descend');
+    par = par(Is,:);
+    % write to file
     if write_Par
         dlmwrite(fileName,[par,fObj],'delimiter',',','-append');
     end
