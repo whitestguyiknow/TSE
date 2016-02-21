@@ -1,4 +1,4 @@
-function [Time, Action] = buildActionMatrix(DS1, DS2, DS3, dtInit, fEntryBuy, fExitBuy, fEntrySell, fExitSell, varargin)
+function [Time, Action] = buildActionMatrix(DS1, DS2, DS3, sys_par, fEntryBuy, fExitBuy, fEntrySell, fExitSell, varargin)
 % Parameters:
 % DS, created with function tcompressMat
 % dtInit, time-leap, must be greater than all lookback timespans in f's
@@ -40,7 +40,7 @@ l = 1;
 
 p=0;
 frac = N/100;
-for i=dtInit:N
+for i=sys_par.tInit:N
     
     if(echo && i>p*frac)
         disp([num2str(p), '% ..']);

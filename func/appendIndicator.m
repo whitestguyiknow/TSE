@@ -1,4 +1,4 @@
-function [DS] = appendIndicator(DS,tInit,name,f,varargin)
+function [DS] = appendIndicator(DS,sys_par,name,f,varargin)
     assert(strcmp(class(f),'function_handle'), 'f must be a function handle');
     assert(strcmp(class(DS),'dataset'), 'DS must be a dataset');
     assert(ischar(name), 'name must be a string');
@@ -7,7 +7,7 @@ function [DS] = appendIndicator(DS,tInit,name,f,varargin)
     indicator = zeros(l,1);
     
     % calculate additional indicator
-    for i=tInit:l
+    for i=sys_par.tInit:l
         indicator(i) = f(DS,i,varargin{:});
     end
     

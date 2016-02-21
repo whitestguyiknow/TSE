@@ -1,4 +1,4 @@
-function [sharpe] = optim(DSpre,DS1,DS2,x,Clow,Chigh)
+function [sharpe] = optim(DSpre,DS1,DS2,sys_par,x,Clow,Chigh)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Function: exanple function feeding into DEoptim           
@@ -10,18 +10,18 @@ function [sharpe] = optim(DSpre,DS1,DS2,x,Clow,Chigh)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % warm up time
-tInit = 100;
-equityInit = 100000;
+tInit = sys_par.tInit;
+equityInit = sys_par.equityInit;
 
 % artificial exchange rate
 usdkurs = ones(length(DSpre.time),1);
-comission = 0.5*8/100000;
+comission = sys_par.comission;
 
 %% SECTION TO INTERCHANGE INDICATORS
 % function handles to indicators
-LB = 10;
-fBuyEntry = @(DS1,i,DS2,k,DS3,l) entryBuyStoch(DS1,i,DS2,k,LB,x);
-fSellEntry = @(DS1,i,DS2,k,DS3,l) entrySellStoch(DS1,i,DS2,k,LB,x);
+lookback = 10;
+fBuyEntry = @(DS1,i,DS2,k,DS3,l) entryBuyStoch(DS1,i,DS2,k,lookback,x);
+fSellEntry = @(DS1,i,DS2,k,DS3,l) entrySellStoch(DS1,i,DS2,k,lookback,x);
 fBuyExit = @(DS1,i,DS2,k) exitBuyTrailingSDEV(DS1,i,DS2,k,Clow,Chigh);
 fSellExit = @(DS1,i,DS2,k) exitSellTrailingSDEV(DS1,i,DS2,k,Clow,Chigh);
 %%

@@ -19,12 +19,10 @@
 
 % setup
 setup();
-dbstop if error
-
-tInit = 100;
-
-% partitioning variable
-insamplePCT = 0.7;
+% system parameter
+sys_par = createSysPar();
+% optim parameter
+optimStruct = generateOptimStruct();
 
 % try load
 try
@@ -49,46 +47,32 @@ catch
     %EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'buyRSI_30',fBuyRSI,30);
     %EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'sellRSI_14',fSellRSI,14);
     %EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'sellRSI_30',fSellRSI,30);
-    EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'sdev',fSdev,50);
+    EURUSD_t1 = appendIndicator(EURUSD_t1,sys_par,'sdev',fSdev,50);
     
     %EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'buyRSI_14',fBuyRSI,14);
     %EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'buyRSI_30',fBuyRSI,30);
     %EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'sellRSI_14',fSellRSI,14);
     %EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'sellRSI_30',fSellRSI,30);
-    EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'sdev',fSdev,50);
+    EURUSD_t2 = appendIndicator(EURUSD_t2,sys_par,'sdev',fSdev,50);
     
     % save dataset
     save './dat/EURUSD.mat' EURUSD_pre EURUSD_t1 EURUSD_t2 
 end
 
-% pick isamples
-% & osamples
-
-% optim parameter
-nPopoulation = 30;
-maxIter = 2;
-CR = 0.7;
-F = 1.5;
-N_cpu = 2;
-seed = 8392;
-optimStruct = generateOptimStruct(nPopoulation,maxIter,CR,F,seed,N_cpu);
-
 % partitioning
 % insamle
 lp = length(EURUSD_pre); l1 = length(EURUSD_t1); l2 = length(EURUSD_t2);
-EURUSD_pre_is = EURUSD_pre(1:ceil(lp*insamplePCT),:);
-EURUSD_t1_is = EURUSD_t1(1:ceil(l1*insamplePCT),:);
-EURUSD_t2_is = EURUSD_t2(1:ceil(l2*insamplePCT),:);
+EURUSD_pre_is = EURUSD_pre(1:ceil(lp*sys_par.insamplePCT),:);
+EURUSD_t1_is = EURUSD_t1(1:ceil(l1*sys_par.insamplePCT),:);
+EURUSD_t2_is = EURUSD_t2(1:ceil(l2*sys_par.insamplePCT),:);
 % osample
-EURUSD_pre_oos = EURUSD_pre(floor(lp*insamplePCT):end,:);
-EURUSD_t1_oos = EURUSD_t1(floor(l1*insamplePCT):end,:);
-EURUSD_t2_oos = EURUSD_t2(floor(l2*insamplePCT):end,:);
+EURUSD_pre_oos = EURUSD_pre(floor(lp*sys_par.insamplePCT):end,:);
+EURUSD_t1_oos = EURUSD_t1(floor(l1*sys_par.insamplePCT):end,:);
+EURUSD_t2_oos = EURUSD_t2(floor(l2*sys_par.insamplePCT):end,:);
 
 % optimization
-fileName = './dat/Stoch_optim.csv';
-% objective function -sharpe, minimize neg sharpe -> maximize sharp
-%f = @(x) -optim(EURUSD_pre_is,EURUSD_t1_is,EURUSD_t2_is,x(1),x(2),x(3));
-%[obj,par] = DEoptim(f,optimStruct,[3,40],[0.1,15],[0.1,15],fileName);
+f = @(x) -optim(EURUSD_pre_is,EURUSD_t1_is,EURUSD_t2_is,sys_par,x(1),x(2),x(3));
+[obj,par] = DEoptim(f,optimStruct,[3,40],[0.1,15],[0.1,15],sys_par.fileName);
 
 % load from previous run
 loaded_Par = dlmread(fileName, ',', 3, 0);
@@ -102,8 +86,6 @@ fSellEntry = @(DS1,i,DS2,k,DS3,l) entrySellStoch(DS1,i,DS2,k,LB,best_par(1));
 fBuyExit = @(DS1,i,DS2,k) exitBuyTrailingSDEV(DS1,i,DS2,k,best_par(2),best_par(3));
 fSellExit = @(DS1,i,DS2,k) exitSellTrailingSDEV(DS1,i,DS2,k,best_par(2),best_par(3));
 usdkurs = ones(length(EURUSD_pre_oos.time),1);
-comission = 0.5*8/100000;
-equityInit = 100000;
-[oosTime, oosAction] = buildActionMatrix(EURUSD_t1_oos,EURUSD_t2_oos,EURUSD_t2_oos,tInit,fBuyEntry,fBuyExit,fSellEntry,fSellExit);
+[oosTime, oosAction] = buildActionMatrix(EURUSD_t1_oos,EURUSD_t2_oos,EURUSD_t2_oos,sys_par,fBuyEntry,fBuyExit,fSellEntry,fSellExit);
 oosTradingTable = buildTradingTable(EURUSD_pre_oos, equityInit, usdkurs,comission,oosTime,oosAction*100000);
 oosDailyTT = buildDailyTradingTable(oosTradingTable, equityInit);

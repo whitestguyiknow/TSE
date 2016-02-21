@@ -14,10 +14,10 @@ echo = true;
 
 rng(optimStruct.seed);
 nDim    = length(varargin);
-nAgents = optimStruct.nAgents;
+nAgents = optimStruct.nPopulation;
 maxIter = optimStruct.maxIter;
-CR      = optimStruct.crossOverProbability;
-F       = optimStruct.differentialWeight;
+CR      = optimStruct.CR;
+F       = optimStruct.F;
 
 write_Par = false;
 load_Par = false;
