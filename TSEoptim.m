@@ -38,9 +38,9 @@ catch
     EURUSD_t2 = compress(EURUSD_pre,60,'bid','ask');
     
     % function handles to precomputed indicators
-%     fBuyRSI = @(DS,i,t) BuyRSI(DS,i,t);
-%     fSellRSI = @(DS,i,t) SellRSI(DS,i,t);
-%     fSdev = @(DS,i,t) sdev(DS,i,t);
+    fBuyRSI = @(DS,i,t) BuyRSI(DS,i,t);
+    fSellRSI = @(DS,i,t) SellRSI(DS,i,t);
+    fSdev = @(DS,i,t) sdev(DS,i,t);
     
     % append indicator values
     %EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'buyRSI_14',fBuyRSI,14);
