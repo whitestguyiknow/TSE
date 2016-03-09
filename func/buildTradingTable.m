@@ -100,7 +100,8 @@ equity = cumsum(nettoPnLUSD)+equityInit; %%TODO: flexible position
 try %debugging
     returns = [equity(1)/equityInit-1;equity(2:end)./equity(1:end-1)-1];
 catch
-    -1
+    tradingTable = [];
+    return
 end
 
 % calculate low and high Prices during positioning
