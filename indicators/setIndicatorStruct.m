@@ -1,10 +1,10 @@
 function [] = setIndicatorStruct()
 % creates a global struct which holds variables needed in indicators
     global IndicatorStruct;
-    IndicatorStruct = struct('control',0,...
-                             'buyPrice',nan,...
-                             'sellPrice',nan,...
-                             'trailingSDEV_lower',0,...
-                             'trailingSDEV_upper',100);
+    IndicatorStruct.control = 0;
+    IndicatorStruct.buyPrice = nan;
+    IndicatorStruct.sellPrice = nan;
+    IndicatorStruct.trailingSDEV_lower = 0;
+    IndicatorStruct.trailingSDEV_upper = 100;
 end
 

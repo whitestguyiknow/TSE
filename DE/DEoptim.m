@@ -49,7 +49,11 @@ upper = zeros(nDim,1);
 b = zeros(nDim,1);
 fObj = zeros(nAgents,1);
 
-parallel = start_cores(optimStruct.N_cpu);
+if optimStruct.enable_parallel
+    parallel = start_cores(optimStruct.N_cpu);
+else
+    parallel = false;
+end
 if parallel
     fprintf('running optimization using %d cpus\n',optimStruct.N_cpu);
 else
