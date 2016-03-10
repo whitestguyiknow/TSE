@@ -23,17 +23,17 @@ equityInit = 100000;
 deltaRSI = 0.058268;
 
 % try load
-try
-    clear EURUSD
-    EURUSD = load('./dat/EURUSD.mat');
-    EURUSD_pre = EURUSD.EURUSD_pre;
-    EURUSD_t1 = EURUSD.EURUSD_t1;
-    EURUSD_t2 = EURUSD.EURUSD_t2;
-catch
+%try
+%     clear EURUSD
+%     EURUSD = load('./dat/EURUSD.mat');
+%     EURUSD_pre = EURUSD.EURUSD_pre;
+%     EURUSD_t1 = EURUSD.EURUSD_t1;
+%     EURUSD_t2 = EURUSD.EURUSD_t2;
+% catch
     % load & process data
-    EURUSD_pre = loadDataCsv('EURUSD_tick.csv');
-    EURUSD_t1 = compress(EURUSD_pre,15,'bid','ask');
-    EURUSD_t2 = compress(EURUSD_pre,60,'bid','ask');
+    EURUSD_pre = loadDataCsv('EURUSD1y_tick.csv');
+    EURUSD_t1 = compress(EURUSD_pre,5,'bid','ask');
+    EURUSD_t2 = compress(EURUSD_pre,120,'bid','ask');
     
     % function handles to precomputed indicators
     fBuyRSI = @(DS,i,t) BuyRSI(DS,i,t);
