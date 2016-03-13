@@ -1,4 +1,4 @@
-function [tradingTable] = buildTradingTable(DSpre,equityInit,usdKurs,comission,tradeTime,position)
+function [tradingTable] = buildTradingTable(DSpre,tradeTime,position,usdKurs,sys_par)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Function: summarize all trades
@@ -16,6 +16,9 @@ tic;
 time = DSpre.time;
 bid  = DSpre.bid;
 ask  = DSpre.ask;
+
+equityInit = sys_par.equityInit;
+comission = sys_par.comission;
 
 % convert time for calculations
 time = datenum(time);

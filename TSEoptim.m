@@ -38,28 +38,17 @@ catch
     EURUSD_t2 = compress(EURUSD_pre,60,'bid','ask');
     
     % function handles to precomputed indicators
-    fBuyRSI = @(DS,i,t) BuyRSI(DS,i,t);
-    fSellRSI = @(DS,i,t) SellRSI(DS,i,t);
     fSdev = @(DS,i,t) sdev(DS,i,t);
     
     % append indicator values
-    %EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'buyRSI_14',fBuyRSI,14);
-    %EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'buyRSI_30',fBuyRSI,30);
-    %EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'sellRSI_14',fSellRSI,14);
-    %EURUSD_t1 = appendIndicator(EURUSD_t1,tInit,'sellRSI_30',fSellRSI,30);
     EURUSD_t1 = appendIndicator(EURUSD_t1,sys_par,'sdev',fSdev,50);
-    
-    %EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'buyRSI_14',fBuyRSI,14);
-    %EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'buyRSI_30',fBuyRSI,30);
-    %EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'sellRSI_14',fSellRSI,14);
-    %EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'sellRSI_30',fSellRSI,30);
     EURUSD_t2 = appendIndicator(EURUSD_t2,sys_par,'sdev',fSdev,50);
     
     % save dataset
     save './dat/EURUSD.mat' EURUSD_pre EURUSD_t1 EURUSD_t2 
 end
 
-% partitioning
+%% partitioning
 % insamle
 lp = length(EURUSD_pre); l1 = length(EURUSD_t1); l2 = length(EURUSD_t2);
 EURUSD_pre_is = EURUSD_pre(1:ceil(lp*sys_par.insamplePCT),:);

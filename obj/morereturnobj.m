@@ -8,7 +8,7 @@ function [s] = morereturnobj(intrareturnvec)
 if(isempty(intrareturnvec))
     s=-99;
 else
-    s = mean(intrareturnvec)^1.99999999999999999999999999/std(intrareturnvec)*sqrt(length(intrareturnvec));
+    s = mean(intrareturnvec)^1.9/std(intrareturnvec)*sqrt(length(intrareturnvec));
 end
 
 end

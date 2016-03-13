@@ -128,7 +128,7 @@ for k=1:maxIter
             try %debugging
                 new_Par(i,Idx) = min(max(par(abc(1),Idx)+F*(par(abc(2),Idx)-par(abc(3),Idx)),lower(Idx)),upper(Idx));
             catch
-                -1
+                -1;
             end
         end   
         parfor i=1:nAgents

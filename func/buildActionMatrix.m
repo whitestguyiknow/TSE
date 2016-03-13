@@ -1,4 +1,4 @@
-function [Time, Action] = buildActionMatrix(DS1, DS2, DS3, tInit, fEntryBuy, fExitBuy, fEntrySell, fExitSell, varargin)
+function [Time, Action] = buildActionMatrix(DS1, DS2, DS3, fEntryBuy, fExitBuy, fEntrySell, fExitSell, sys_par)
 % Parameters:
 % DS, created with function tcompressMat
 % dtInit, time-leap, must be greater than all lookback timespans in f's
@@ -8,12 +8,6 @@ function [Time, Action] = buildActionMatrix(DS1, DS2, DS3, tInit, fEntryBuy, fEx
 % fEntrySell, function handle taking dataTable and i as input
 % fExitSell, function handle taking dataTable, i and buyprice as input
 
-% 
-if(length(varargin)>1)
-    echo = varargin{1};
-else
-    echo = false;
-end
 disp('building action matrix..');
 tic;
 
@@ -40,9 +34,9 @@ l = 1;
 
 p=0;
 frac = N/100;
-for i=tInit:N
+for i=sys_par.tInit:N
     
-    if(echo && i>p*frac)
+    if(sys_par.echo && i>p*frac)
         disp([num2str(p), '% ..']);
         p = p+1;    %buggy if N small
     end
@@ -119,4 +113,3 @@ assert(isempty(Action) || all(Action(1:2:end-1)+Action(2:2:end))==0);
 disp('DONE!');
 toc;
 end
-

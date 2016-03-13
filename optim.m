@@ -9,13 +9,8 @@ function [sharpe] = optim(DSpre,DS1,DS2,sys_par,x,Clow,Chigh)
 %       1. restructuring
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% warm up time
-tInit = sys_par.tInit;
-equityInit = sys_par.equityInit;
-
 % artificial exchange rate
 usdkurs = ones(length(DSpre.time),1);
-comission = sys_par.comission;
 
 %% SECTION TO INTERCHANGE INDICATORS
 % function handles to indicators
@@ -30,13 +25,13 @@ fSellExit = @(DS1,i,DS2,k) exitSellTrailingSDEV(DS1,i,DS2,k,Clow,Chigh);
 setIndicatorStruct();
 
 % action matrix and time
-[Time, Action] = buildActionMatrix(DS1,DS2,DS2,tInit,fBuyEntry,fBuyExit,fSellEntry,fSellExit);
+[Time, Action] = buildActionMatrix(DS1,DS2,DS2,fBuyEntry,fBuyExit,fSellEntry,fSellExit, sys_par);
 
 % generate trades
-tradingTable = buildTradingTable(DSpre, equityInit, usdkurs,comission,Time,Action*100000);
+tradingTable = buildTradingTable(DSpre,Time,Action*100000,usdkurs,sys_par);
 
 % summary
-dailyTT = buildDailyTradingTable(tradingTable, equityInit);
+dailyTT = buildDailyTradingTable(tradingTable, sys_par);
 
 % sharpe-ratio
 sharpe = sharpeRatio(dailyTT);
