@@ -1,4 +1,4 @@
-function [Time, Action] = buildActionMatrix(DS1, DS2, DS3, fEntryBuy, fExitBuy, fEntrySell, fExitSell, sys_par)
+function [Time, Action] = buildActionMatrix(DS1, DS2, fEntryBuy, fExitBuy, fEntrySell, fExitSell, sys_par)
 % Parameters:
 % DS, created with function tcompressMat
 % dtInit, time-leap, must be greater than all lookback timespans in f's
@@ -14,7 +14,6 @@ tic;
 % transforming time for calculations
 DS1.time = datenum(DS1.time);
 DS2.time = datenum(DS2.time);
-DS3.time = datenum(DS3.time);
 
 N = length(DS1.time);
 
@@ -71,8 +70,8 @@ for i=sys_par.tInit:N
     end
     
     % go long - buy
-    if(IndicatorStruct.control == 0 && fEntryBuy(DS1,i,DS2,k,DS3,l) ...
-            && ~fEntrySell(DS1,i,DS2,k,DS3,l))
+    if(IndicatorStruct.control == 0 && fEntryBuy(DS1,i,DS2,k) ...
+            && ~fEntrySell(DS1,i,DS2,k))
         Time(i) = DS1.time(i);
         Action(i) = 1;
         IndicatorStruct.buyPrice = DS1.ask_open(i); %check correctness if open or close
@@ -81,8 +80,8 @@ for i=sys_par.tInit:N
     end
     
     % go short - sell
-    if(IndicatorStruct.control == 0 && fEntrySell(DS1,i,DS2,k,DS3,l) ...
-            && ~fEntryBuy(DS1,i,DS2,k,DS3,l))
+    if(IndicatorStruct.control == 0 && fEntrySell(DS1,i,DS2,k) ...
+            && ~fEntryBuy(DS1,i,DS2,k))
         Time(i) = DS1.time(i);
         Action(i) = -1;
         IndicatorStruct.sellPrice = DS1.bid_open(i); %check correctness if open or close
