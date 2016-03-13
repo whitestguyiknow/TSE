@@ -1,4 +1,4 @@
-function [dailyTradingTable] = buildDailyTradingTable(tradingTable,equityInit)
+function [dailyTradingTable] = buildDailyTradingTable(tradingTable,sys_par)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Function: summarize trades within each day 
@@ -11,6 +11,8 @@ function [dailyTradingTable] = buildDailyTradingTable(tradingTable,equityInit)
  
 disp('building daily trading table..');
 tic;
+
+equityInit = sys_par.equityInit;
 
 if(isempty(tradingTable) || height(tradingTable)<10) % 10 min trades for now..
     dailyTradingTable = [];

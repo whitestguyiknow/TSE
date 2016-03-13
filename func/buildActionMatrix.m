@@ -1,4 +1,4 @@
-function [Time, Action] = buildActionMatrix(DS1, DS2, DS3, tInit, fEntryBuy, fExitBuy, fEntrySell, fExitSell, varargin)
+function [Time, Action] = buildActionMatrix(DS1, DS2, fEntryBuy, fExitBuy, fEntrySell, fExitSell, sys_par)
 % Parameters:
 % DS, created with function tcompressMat
 % dtInit, time-leap, must be greater than all lookback timespans in f's
@@ -8,19 +8,12 @@ function [Time, Action] = buildActionMatrix(DS1, DS2, DS3, tInit, fEntryBuy, fEx
 % fEntrySell, function handle taking dataTable and i as input
 % fExitSell, function handle taking dataTable, i and buyprice as input
 
-% 
-if(length(varargin)>1)
-    echo = varargin{1};
-else
-    echo = false;
-end
 disp('building action matrix..');
 tic;
 
 % transforming time for calculations
 DS1.time = datenum(DS1.time);
 DS2.time = datenum(DS2.time);
-DS3.time = datenum(DS3.time);
 
 N = length(DS1.time);
 
@@ -40,9 +33,9 @@ l = 1;
 
 p=0;
 frac = N/100;
-for i=tInit:N
+for i=sys_par.tInit:N
     
-    if(echo && i>p*frac)
+    if(sys_par.echo && i>p*frac)
         disp([num2str(p), '% ..']);
         p = p+1;    %buggy if N small
     end
@@ -77,8 +70,8 @@ for i=tInit:N
     end
     
     % go long - buy
-    if(IndicatorStruct.control == 0 && fEntryBuy(DS1,i,DS2,k,DS3,l) ...
-            && ~fEntrySell(DS1,i,DS2,k,DS3,l))
+    if(IndicatorStruct.control == 0 && fEntryBuy(DS1,i,DS2,k) ...
+            && ~fEntrySell(DS1,i,DS2,k))
         Time(i) = DS1.time(i);
         Action(i) = 1;
         IndicatorStruct.buyPrice = DS1.ask_open(i); %check correctness if open or close
@@ -87,8 +80,8 @@ for i=tInit:N
     end
     
     % go short - sell
-    if(IndicatorStruct.control == 0 && fEntrySell(DS1,i,DS2,k,DS3,l) ...
-            && ~fEntryBuy(DS1,i,DS2,k,DS3,l))
+    if(IndicatorStruct.control == 0 && fEntrySell(DS1,i,DS2,k) ...
+            && ~fEntryBuy(DS1,i,DS2,k))
         Time(i) = DS1.time(i);
         Action(i) = -1;
         IndicatorStruct.sellPrice = DS1.bid_open(i); %check correctness if open or close
@@ -119,4 +112,3 @@ assert(isempty(Action) || all(Action(1:2:end-1)+Action(2:2:end))==0);
 disp('DONE!');
 toc;
 end
-
