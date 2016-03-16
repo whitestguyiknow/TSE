@@ -45,7 +45,7 @@ catch
     EURUSD_t2 = appendIndicator(EURUSD_t2,sys_par,'sdev',fSdev,50);
     
     % save dataset
-    save './dat/EURUSD.mat' EURUSD_pre EURUSD_t1 EURUSD_t2 
+    save './dat/EURUSD1560.mat' EURUSD_pre EURUSD_t1 EURUSD_t2 
 end
 
 %% partitioning

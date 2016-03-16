@@ -32,7 +32,7 @@ deltaRSI = 0.058268;
 % catch
     % load & process data
     EURUSD_pre = loadDataCsv('EURUSD1y_tick.csv');
-    EURUSD_t1 = compress(EURUSD_pre,5,'bid','ask');
+    EURUSD_t1 = compress(EURUSD_pre,15,'bid','ask');
     EURUSD_t2 = compress(EURUSD_pre,120,'bid','ask');
     
     % function handles to precomputed indicators
@@ -54,7 +54,7 @@ deltaRSI = 0.058268;
     EURUSD_t2 = appendIndicator(EURUSD_t2,tInit,'sdev',fSdev,50);
     
     % save dataset
-    save './dat/EURUSDshort.mat' EURUSD_t1 EURUSD_t2
+    save './dat/EURUSD15.mat' EURUSD_t1 EURUSD_t2
 end
 
 % artificial exchange rate
