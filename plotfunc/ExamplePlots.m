@@ -78,3 +78,17 @@ saveas(gcf,'./plots/ExampleforSpread','epsc') %EPS for latex
 saveas(gcf,'./plots/ExampleforSpread','png') %PNG normal
 close
 
+x=Stochoptim.x;
+tp=Stochoptim.tp;
+sl=Stochoptim.sl;
+scatter3(x,y,z,s,c)(Stochoptim.x,Stochoptim.tp,Stochoptim.sl,Stochoptim.sharpe,'.','Optimisation')
+
+x = Stochoptim.x(1:50);
+y = Stochoptim.tp(1:50);
+z = Stochoptim.sl(1:50);
+s = ones(50, 1) * 20; %sizes of markers
+sharpe = Stochoptim.sharpe(1:50); %color data
+
+scatter3(x,y,z,s,sharpe, '*');
+colorbar;
+scatter(x,sharpe,'*')

@@ -33,7 +33,7 @@ try
     EURUSD_t2 = EURUSD.EURUSD_t2;
 catch   
     % load & process data
-    EURUSD_pre = loadDataCsv('EURUSD_tick.csv');
+    EURUSD_pre = loadDataCsv('EURUSD_tick_6M.csv');
     EURUSD_t1 = compress(EURUSD_pre,15,'bid','ask');
     EURUSD_t2 = compress(EURUSD_pre,60,'bid','ask');
     
@@ -45,7 +45,7 @@ catch
     EURUSD_t2 = appendIndicator(EURUSD_t2,sys_par,'sdev',fSdev,50);
     
     % save dataset
-    save './dat/EURUSD.mat' EURUSD_pre EURUSD_t1 EURUSD_t2 
+    save './dat/EURUSD1560.mat' EURUSD_pre EURUSD_t1 EURUSD_t2 
 end
 
 %% partitioning
@@ -64,9 +64,9 @@ f = @(x) -optim(EURUSD_pre_is,EURUSD_t1_is,EURUSD_t2_is,sys_par,x(1),x(2),x(3));
 [obj,par] = DEoptim(f,optimStruct,[3,40],[0.1,15],[0.1,15],sys_par.fileName);
 
 % load from previous run
-loaded_Par = dlmread(fileName, ',', 3, 0);
-best_par = loaded_Par(end,1:end-1);
-best_fObj = loaded_Par(end,end);
+ loaded_Par = dlmread('Stoch_optim.csv', ',', 3, 0);
+ best_par = loaded_Par(160,1:end-1);
+best_fObj = loaded_Par(160,end);
 
 % out of sample run
 LB = 10;
