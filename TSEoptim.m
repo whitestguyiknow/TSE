@@ -50,14 +50,19 @@ end
 
 %% partitioning
 % insample
-lp = length(EURUSD_pre); l1 = length(EURUSD_t1); l2 = length(EURUSD_t2);
-EURUSD_pre_is = EURUSD_pre(1:ceil(lp*sys_par.insamplePCT),:);
-EURUSD_t1_is = EURUSD_t1(1:ceil(l1*sys_par.insamplePCT),:);
-EURUSD_t2_is = EURUSD_t2(1:ceil(l2*sys_par.insamplePCT),:);
-% osample
-EURUSD_pre_oos = EURUSD_pre(floor(lp*sys_par.insamplePCT):end,:);
-EURUSD_t1_oos = EURUSD_t1(floor(l1*sys_par.insamplePCT):end,:);
-EURUSD_t2_oos = EURUSD_t2(floor(l2*sys_par.insamplePCT):end,:);
+len_pre = ceil(length(EURUSD_pre)*sys_par.insamplePCT); 
+len_frame1 = ceil(length(EURUSD_t1)*sys_par.insamplePCT); 
+len_frame2 = ceil(length(EURUSD_t2)*sys_par.insamplePCT);
+EURUSD_pre_is = EURUSD_pre(1:len_pre,:);
+EURUSD_t1_is = EURUSD_t1(1:len_frame1,:);
+EURUSD_t2_is = EURUSD_t2(1:len_frame2,:);
+% outsample
+len_pre_out = floor(length(EURUSD_pre)*(1-sys_par.insamplePCT)); 
+len_frame1_out = floor(length(EURUSD_t1)*(1-sys_par.insamplePCT)); 
+len_frame2_out = floor(length(EURUSD_t2)*(1-sys_par.insamplePCT)); 
+EURUSD_pre_oos = EURUSD_pre(len_pre_out:end,:);
+EURUSD_t1_oos = EURUSD_t1(len_frame1_out:end,:);
+EURUSD_t2_oos = EURUSD_t2(len_frame2_out:end,:);
 
 % optimization
 xinit = [5,1,1]';
