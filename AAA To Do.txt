@@ -1,6 +1,0 @@
-%%TODO
-
--is & oos within one run (omit 2nd init)
--code saeubern
--indicator func of trading hours
--position size adaptiv (leverage)

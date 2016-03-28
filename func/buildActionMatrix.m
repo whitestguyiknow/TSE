@@ -8,8 +8,10 @@ function [Time, Action] = buildActionMatrix(DS1, DS2, fEntryBuy, fExitBuy, fEntr
 % fEntrySell, function handle taking dataTable and i as input
 % fExitSell, function handle taking dataTable, i and buyprice as input
 
-disp('building action matrix..');
-tic;
+if sys_par.echo
+    disp('building action matrix..');
+    tic;
+end
 
 % transforming time for calculations
 DS1.time = datenum(DS1.time);
@@ -109,6 +111,9 @@ assert(mod(length(Action),2)==0);
 assert(length(Time)==length(Action));
 assert(isempty(Action) || all(Action(1:2:end-1)+Action(2:2:end))==0);
 
-disp('DONE!');
-toc;
+if sys_par.echo
+    disp('DONE!');
+    toc;
+end
+
 end

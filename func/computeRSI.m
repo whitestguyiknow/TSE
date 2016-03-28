@@ -1,5 +1,8 @@
 function [rsiIndex] = computeRSI(vec,windowLength)
-    disp('compute RSI..'); 
+    if sys_par.echo
+        disp('compute RSI..');
+    end
+    
     N = length(vec);
     d = [0; diff(vec)];
     sup = zeros(N,1); sdn = zeros(N,1);
@@ -9,5 +12,8 @@ function [rsiIndex] = computeRSI(vec,windowLength)
     end
     rsiIndex = sup./(sup+sdn);
     rsiIndex(isnan(rsiIndex))=0.5;
-    disp('DONE!');
+    
+    if sys_par.echo
+        disp('DONE!');
+    end
 end

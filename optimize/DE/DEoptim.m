@@ -1,4 +1,10 @@
-function [fObj,par] = DEoptim(func,optimStruct,varargin)
+function [fObj,par] = DEoptim(fitfun,inOpts,varargin)
+CMAoptim( ...
+    fitfun, ...    % name of objective/fitness function
+    xstart, ...    % objective variables initial point, determines N
+    insigma, ...   % initial coordinate wise standard deviation(s)
+    inopts, ...    % options struct, see defopts below
+    varargin )     % arguments passed to objective function 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Function: Optimization with Differential Evolution           
@@ -12,20 +18,18 @@ function [fObj,par] = DEoptim(func,optimStruct,varargin)
 % print progress
 echo = true;
 
-rng(optimStruct.seed);
-nDim    = length(varargin);
-nAgents = optimStruct.nPopulation;
-maxIter = optimStruct.maxIter;
-CR      = optimStruct.CR;
-F       = optimStruct.F;
+rng(inOpts.seed);
+nDim    = length(inOpts.dim);
+nAgents = inOpts.nPopulation;
+maxIter = inOpts.maxIter;
+CR      = inOpts.CR;
+F       = inOpts.F;
 
-write_Par = false;
+write_Par = true;
 load_Par = false;
 
-if(~isempty(varargin) && ischar(varargin{nDim}))
-    fileName = [varargin{nDim}];
-    write_Par = true;
-    nDim = nDim-1;
+if(write_Par)
+    fileName = inOpts.SaveFilename;
     try
         % load from previous run
         loaded_Par = dlmread(fileName, ',', 3, 0);
@@ -33,7 +37,7 @@ if(~isempty(varargin) && ischar(varargin{nDim}))
     catch
         % print new file
         file = fopen(fileName,'wt');
-        fprintf(file,'func %s\n', func2str(func));
+        fprintf(file,'func %s\n', func2str(fitfun));
         fprintf(file,'nDim %i\n',nDim);
         fprintf(file,'nAgents %i\n',nAgents);
         fclose(file);
@@ -43,31 +47,25 @@ end
 dims   = 1:nDim;
 agents = 1:nAgents;
 
-bounds = zeros(nDim,2);
-lower = zeros(nDim,1);
-upper = zeros(nDim,1);
-b = zeros(nDim,1);
 fObj = zeros(nAgents,1);
 
-if optimStruct.enable_parallel
-    parallel = start_cores(optimStruct.N_cpu);
+if inOpts.enable_parallel
+    parallel = start_cores(inOpts.N_cpu);
 else
     parallel = false;
 end
 if parallel
-    fprintf('running optimization using %d cpus\n',optimStruct.N_cpu);
+    fprintf('running optimization using %d cpus\n',inOpts.N_cpu);
 else
     fprintf('running optimization serial\n');
 end
 
 % extract parameter bounds
-for i = 1:nDim
-    bounds(i,:) = varargin{i};
-    lower(i) = min(bounds(i,:));
-    upper(i) = max(bounds(i,:));
-    b(i) = upper(i)-lower(i,1);
-    assert(b(i)>0,'upper bound - lower bound must be greater than 0');
-end
+lower = inOpts.lower;
+upper = inOpts.upper;
+b = upper - lower;
+assert(all(b>0),'upper bound - lower bound must be greater than 0');
+
 
 CRmat = repmat(CR,nAgents,nDim);
 
@@ -80,11 +78,11 @@ else
     
     if parallel
         parfor i = 1:nAgents
-            fObj(i) = func(par(i,:));
+            fObj(i) = fitfun(par(i,:));
         end
     else
         for i = 1:nAgents
-            fObj(i) = func(par(i,:));
+            fObj(i) = fitfun(par(i,:));
         end
     end
 end
@@ -132,7 +130,7 @@ for k=1:maxIter
             end
         end   
         parfor i=1:nAgents
-            new_fObj(i) = func(new_Par(i,:));
+            new_fObj(i) = fitfun(new_Par(i,:));
         end
         
     else
@@ -142,7 +140,7 @@ for k=1:maxIter
             abc = datasample(selection(i,:),3,'Replace',false);
             I = cDim(i,:)==1;
             new_Par(i,I) = par(abc(1),I)+F*(par(abc(2),I)-par(abc(3),I));
-            new_fObj(i) = func(new_Par(i,:));
+            new_fObj(i) = fitfun(new_Par(i,:));
         end
     end
     % replace better values

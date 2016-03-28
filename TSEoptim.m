@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Title:            First Optimization
+% Title:            Optimization
 %
 % Authors:          Daniel Waelchli, Mike Schwitalla
 % Date:             January 2016
@@ -20,9 +20,9 @@
 % setup
 setup();
 % system parameter
-sys_par = createSysPar();
+sys_par = getSysPar();
 % optim parameter
-optimStruct = generateOptimStruct();
+optimStruct = getOptimPar();
 
 % try load
 try
@@ -49,7 +49,7 @@ catch
 end
 
 %% partitioning
-% insamle
+% insample
 lp = length(EURUSD_pre); l1 = length(EURUSD_t1); l2 = length(EURUSD_t2);
 EURUSD_pre_is = EURUSD_pre(1:ceil(lp*sys_par.insamplePCT),:);
 EURUSD_t1_is = EURUSD_t1(1:ceil(l1*sys_par.insamplePCT),:);
@@ -60,20 +60,17 @@ EURUSD_t1_oos = EURUSD_t1(floor(l1*sys_par.insamplePCT):end,:);
 EURUSD_t2_oos = EURUSD_t2(floor(l2*sys_par.insamplePCT):end,:);
 
 % optimization
-f = @(x) -optim(EURUSD_pre_is,EURUSD_t1_is,EURUSD_t2_is,sys_par,x(1),x(2),x(3));
-[obj,par] = DEoptim(f,optimStruct,[3,40],[0.1,15],[0.1,15],sys_par.fileName);
-
-% load from previous run
- loaded_Par = dlmread('Stoch_optim.csv', ',', 3, 0);
- best_par = loaded_Par(160,1:end-1);
-best_fObj = loaded_Par(160,end);
+xinit = [5,1,1]';
+addpath('./optimze/');
+[obj,par,counteval,stopflag,out,bestever] = ...
+    CMAoptim('optim',xinit,[],optimStruct,EURUSD_pre_is,EURUSD_t1_is,EURUSD_t2_is,sys_par);
 
 % out of sample run
 LB = 10;
-fBuyEntry = @(DS1,i,DS2,k,DS3,l) entryBuyStoch(DS1,i,DS2,k,LB,best_par(1));
-fSellEntry = @(DS1,i,DS2,k,DS3,l) entrySellStoch(DS1,i,DS2,k,LB,best_par(1));
-fBuyExit = @(DS1,i,DS2,k) exitBuyTrailingSDEV(DS1,i,DS2,k,best_par(2),best_par(3));
-fSellExit = @(DS1,i,DS2,k) exitSellTrailingSDEV(DS1,i,DS2,k,best_par(2),best_par(3));
+fBuyEntry = @(DS1,i,DS2,k,DS3,l) entryBuyStoch(DS1,i,DS2,k,LB,bestever.x(1));
+fSellEntry = @(DS1,i,DS2,k,DS3,l) entrySellStoch(DS1,i,DS2,k,LB,bestever.x(1));
+fBuyExit = @(DS1,i,DS2,k) exitBuyTrailingSDEV(DS1,i,DS2,k,bestever.x(2),bestever.x(3));
+fSellExit = @(DS1,i,DS2,k) exitSellTrailingSDEV(DS1,i,DS2,k,bestever.x(2),bestever.x(3));
 usdkurs = ones(length(EURUSD_pre_oos.time),1);
 [oosTime, oosAction] = buildActionMatrix(EURUSD_t1_oos,EURUSD_t2_oos,EURUSD_t2_oos,sys_par,fBuyEntry,fBuyExit,fSellEntry,fSellExit);
 oosTradingTable = buildTradingTable(EURUSD_pre_oos, equityInit, usdkurs,comission,oosTime,oosAction*100000);

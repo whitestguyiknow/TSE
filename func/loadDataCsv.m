@@ -10,7 +10,10 @@ function [DS] = loadDataCsv(datCsv)
 %       1. restructuring
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    disp('reading table from csv file..');
+    if sys_par.echo
+        disp('reading table from csv file..');
+        tic;
+    end
     dataTable = readtable(datCsv,'ReadVariableNames',false,'ReadRowNames',false,...
     'TreatAsEmpty',{'NA'});
        
@@ -27,5 +30,9 @@ function [DS] = loadDataCsv(datCsv)
     DS = dataset({M 'time','bid','ask','spread'});
     DS((DS.spread<0),:) = []; %remove negative spreads;
     DS.time = datevec(DS.time);
-    disp('DONE!');
+    
+    if sys_par.echo
+        disp('DONE!');
+        toc;
+    end
 end

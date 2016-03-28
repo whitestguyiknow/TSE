@@ -12,8 +12,11 @@ function [tcompDS] = compress(DS, dt, varargin)
 %       1. restructuring
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-disp('compressing matrix..');
-tic;
+if sys_par.echo
+    disp('compressing matrix..');
+    tic;
+end
+
 DS.time = datenum(DS.time);
 nvarargin = length(varargin);
 variableNames = DS.Properties.VarNames;
@@ -81,7 +84,11 @@ variableNames = [{'time', 'bid_open','ask_open','spread_open',...
     'bid_close','ask_close','spread_close'},newVariables];
 tcompDS = mat2dataset(M,'VarNames',variableNames);
 tcompDS.time = datevec(tcompDS.time);
-disp('DONE!');
-toc;
+
+if sys_par.echo
+    disp('DONE!');
+    toc;
+end
+
 end
 

@@ -8,9 +8,11 @@ function [tradingTable] = buildTradingTable(DSpre,tradeTime,position,usdKurs,sys
 %   2016-01-31: (Daniel)
 %       1. insert equity init for return calculation; restructuring
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
- 
-disp('building trading table..');
-tic;
+
+if sys_par.echo
+    disp('building trading table..');
+    tic;
+end
 
 % exctract values
 time = DSpre.time;
@@ -124,8 +126,11 @@ tradingTable = table(entryTimeVec,entryPrice,position(1:2:end-1),exitTimeVec,exi
     bruttoPnL,usdrate(2:2:end),bruttoPnLUSD,comissionUSD,nettoPnLUSD,nettoPnLPerComm,...
     duration,lowPrice,highPrice,returns,equity,'VariableNames',cnames);
 
-disp('DONE!');
-toc;
+if sys_par.echo
+    disp('DONE!');
+    toc;
+end
+
 end
 
 

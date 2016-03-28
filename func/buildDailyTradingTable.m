@@ -8,9 +8,11 @@ function [dailyTradingTable] = buildDailyTradingTable(tradingTable,sys_par)
 %   2016-01-31: (Daniel)
 %       1. insert equity init for return calculation; restructuring
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
- 
-disp('building daily trading table..');
-tic;
+
+if sys_par.echo
+    disp('building daily trading table..');
+    tic;
+end
 
 equityInit = sys_par.equityInit;
 
@@ -57,7 +59,9 @@ cnames = {'Date','nTrades','Equity','Return'};
 dailyTradingTable = table(dates,nTrades,equity,r,...
     'VariableNames',cnames);
 
-disp('DONE!');
-toc;
+if sys_par.echo
+    disp('DONE!');
+    toc;
+end
 end
 

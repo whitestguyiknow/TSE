@@ -1,10 +1,12 @@
-function [sharpe] = optim(DSpre,DS1,DS2,sys_par,x,Clow,Chigh)
+function [neg_sharpe] = optim(x,DSpre,DS1,DS2,sys_par)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Function: exanple function feeding into DEoptim           
 % created by Daniel, December 2015
 %
 % Last update: 2016 Jan 31, by Daniel
+%   2016-03-28: (Daniel)
+%       1. all optimization params in x
 %   2016-01-31: (Daniel)
 %       1. restructuring
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -15,10 +17,10 @@ usdkurs = ones(length(DSpre.time),1);
 %% SECTION TO INTERCHANGE INDICATORS
 % function handles to indicators
 lookback = 10;
-fBuyEntry = @(DS1,i,DS2,k) entryBuyStoch(DS1,i,DS2,k,lookback,x);
-fSellEntry = @(DS1,i,DS2,k) entrySellStoch(DS1,i,DS2,k,lookback,x);
-fBuyExit = @(DS1,i,DS2,k) exitBuyTrailingSDEV(DS1,i,DS2,k,Clow,Chigh);
-fSellExit = @(DS1,i,DS2,k) exitSellTrailingSDEV(DS1,i,DS2,k,Clow,Chigh);
+fBuyEntry = @(DS1,i,DS2,k) entryBuyStoch(DS1,i,DS2,k,lookback,x(1));
+fSellEntry = @(DS1,i,DS2,k) entrySellStoch(DS1,i,DS2,k,lookback,x(1));
+fBuyExit = @(DS1,i,DS2,k) exitBuyTrailingSDEV(DS1,i,DS2,k,x(2),x(2));
+fSellExit = @(DS1,i,DS2,k) exitSellTrailingSDEV(DS1,i,DS2,k,x(3),x(3));
 %%
 
 % initialize global indicator struct
@@ -34,6 +36,6 @@ tradingTable = buildTradingTable(DSpre,Time,Action*100000,usdkurs,sys_par);
 dailyTT = buildDailyTradingTable(tradingTable, sys_par);
 
 % sharpe-ratio
-sharpe = sharpeRatio(dailyTT);
+neg_sharpe = -sharpeRatio(dailyTT);
 end
 
