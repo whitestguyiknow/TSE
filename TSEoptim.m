@@ -34,8 +34,8 @@ try
 catch   
     % load & process data
     EURUSD_pre = loadDataCsv('EURUSD_tick_6M.csv',sys_par);
-    EURUSD_t1 = compress(EURUSD_pre,15,'bid','ask',sys_par);
-    EURUSD_t2 = compress(EURUSD_pre,60,'bid','ask',sys_par);
+    EURUSD_t1 = compress(EURUSD_pre,15,sys_par,'bid','ask');
+    EURUSD_t2 = compress(EURUSD_pre,60,sys_par,'bid','ask');
     
     % function handles to precomputed indicators
     fSdev = @(DS,i,t) sdev(DS,i,t);
@@ -50,19 +50,13 @@ end
 
 %% partitioning
 % insample
-len_pre = ceil(length(EURUSD_pre)*sys_par.insamplePCT); 
-len_frame1 = ceil(length(EURUSD_t1)*sys_par.insamplePCT); 
-len_frame2 = ceil(length(EURUSD_t2)*sys_par.insamplePCT);
-EURUSD_pre_is = EURUSD_pre(1:len_pre,:);
-EURUSD_t1_is = EURUSD_t1(1:len_frame1,:);
-EURUSD_t2_is = EURUSD_t2(1:len_frame2,:);
+EURUSD_pre_is = partition('in',EURUSD_pre,sys_par);
+EURUSD_t1_is = partition('in',EURUSD_t1,sys_par);
+EURUSD_t2_is = partition('in',EURUSD_t2,sys_par);
 % outsample
-len_pre_out = floor(length(EURUSD_pre)*(1-sys_par.insamplePCT)); 
-len_frame1_out = floor(length(EURUSD_t1)*(1-sys_par.insamplePCT)); 
-len_frame2_out = floor(length(EURUSD_t2)*(1-sys_par.insamplePCT)); 
-EURUSD_pre_oos = EURUSD_pre(len_pre_out:end,:);
-EURUSD_t1_oos = EURUSD_t1(len_frame1_out:end,:);
-EURUSD_t2_oos = EURUSD_t2(len_frame2_out:end,:);
+EURUSD_pre_oos = partition('out',EURUSD_pre,sys_par);
+EURUSD_t1_oos = partition('out',EURUSD_t1,sys_par);
+EURUSD_t2_oos = partition('out',EURUSD_t2,sys_par);
 
 % optimization
 xinit = [5,1,1]';
