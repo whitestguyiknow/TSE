@@ -1,4 +1,4 @@
-function [DS] = loadDataCsv(datCsv)
+function [DS] = loadDataCsv(datCsv,sys_par)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Function: load data & preprocessing

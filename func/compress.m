@@ -1,4 +1,4 @@
-function [tcompDS] = compress(DS, dt, varargin)
+function [tcompDS] = compress(DS, dt, varargin,sys_par)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Function: compressing dataset into frames of duration dt [mins]   

@@ -1,4 +1,4 @@
-function [rsiIndex] = computeRSI(vec,windowLength)
+function [rsiIndex] = computeRSI(vec,windowLength,sys_par)
     if sys_par.echo
         disp('compute RSI..');
     end

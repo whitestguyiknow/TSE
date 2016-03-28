@@ -33,9 +33,9 @@ try
     EURUSD_t2 = EURUSD.EURUSD_t2;
 catch   
     % load & process data
-    EURUSD_pre = loadDataCsv('EURUSD_tick_6M.csv');
-    EURUSD_t1 = compress(EURUSD_pre,15,'bid','ask');
-    EURUSD_t2 = compress(EURUSD_pre,60,'bid','ask');
+    EURUSD_pre = loadDataCsv('EURUSD_tick_6M.csv',sys_par);
+    EURUSD_t1 = compress(EURUSD_pre,15,'bid','ask',sys_par);
+    EURUSD_t2 = compress(EURUSD_pre,60,'bid','ask',sys_par);
     
     % function handles to precomputed indicators
     fSdev = @(DS,i,t) sdev(DS,i,t);
