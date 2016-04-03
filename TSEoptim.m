@@ -33,7 +33,7 @@ try
     EURUSD_t2 = EURUSD.EURUSD_t2;
 catch   
     % load & process data
-    EURUSD_pre = loadDataCsv('EURUSD_tick_6M.csv',sys_par);
+    EURUSD_pre = loadDataCsv('EURUSD_tick_24M.csv',sys_par);
     EURUSD_t1 = compress(EURUSD_pre,15,sys_par,'bid','ask');
     EURUSD_t2 = compress(EURUSD_pre,60,sys_par,'bid','ask');
     
@@ -45,7 +45,7 @@ catch
     EURUSD_t2 = appendIndicator(EURUSD_t2,sys_par,'sdev',fSdev,50);
     
     % save dataset
-    save './dat/EURUSD1560.mat' EURUSD_pre EURUSD_t1 EURUSD_t2 
+    save './dat/EURUSD1560240.mat' EURUSD_pre EURUSD_t1 EURUSD_t2 
 end
 
 %% partitioning
