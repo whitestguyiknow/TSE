@@ -42,12 +42,6 @@ function [ ] = plot_cumret_dens_invsout(insamplereturnvec, outsamplereturnvec)
    
     lcrout=log(lcrout);
     
-    
-    %Returns in percent
-    crin=crin*100;
-    crout=crout*100;
-    insamplereturnvec=100*insamplereturnvec;
-    outsamplereturnvec=100*outsamplereturnvec;
       %Returns in percent
     crin=crin*100;
     crout=crout*100;
@@ -169,6 +163,6 @@ function [ ] = plot_cumret_dens_invsout(insamplereturnvec, outsamplereturnvec)
 
     
     %Saving plots
-    saveas(gcf,'./plots/linInVSoutPlot_cumret_dens','epsc') %EPS for latex
-    saveas(gcf,'./plots/linInVSoutPlot_cumret_dens','png') %PNG normal
+    saveas(gcf,'./plots/linInVSoutPlotStoch_cumret_dens','epsc') %EPS for latex
+    saveas(gcf,'./plots/linInVSoutPlotStoch_cumret_dens','png') %PNG normal
     close;

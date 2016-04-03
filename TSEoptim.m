@@ -64,13 +64,33 @@ addpath('./optimze/');
 [obj,par,counteval,stopflag,out,bestever] = ...
     CMAoptim('optim',xinit,[],optimStruct,EURUSD_pre_is,EURUSD_t1_is,EURUSD_t2_is,sys_par);
 
-% out of sample run
+% out and in of sample run of sample run
 LB = 10;
 fBuyEntry = @(DS1,i,DS2,k) entryBuyStoch(DS1,i,DS2,k,LB,bestever.x(1));
 fSellEntry = @(DS1,i,DS2,k) entrySellStoch(DS1,i,DS2,k,LB,bestever.x(1));
 fBuyExit = @(DS1,i,DS2,k) exitBuyTrailingSDEV(DS1,i,DS2,k,bestever.x(2),bestever.x(3));
 fSellExit = @(DS1,i,DS2,k) exitSellTrailingSDEV(DS1,i,DS2,k,bestever.x(2),bestever.x(3));
-usdkurs = ones(length(EURUSD_pre_oos.time),1);
-[oosTime, oosAction] = buildActionMatrix(EURUSD_t1_oos,EURUSD_t2_oos,EURUSD_t2_oos,sys_par,fBuyEntry,fBuyExit,fSellEntry,fSellExit);
-oosTradingTable = buildTradingTable(EURUSD_pre_oos, equityInit, usdkurs,comission,oosTime,oosAction*100000);
-oosDailyTT = buildDailyTradingTable(oosTradingTable, equityInit);
+
+usdkursis = ones(length(EURUSD_pre_is.time),1);
+[isTime, isAction] = buildActionMatrix(EURUSD_t1_is,EURUSD_t2_is,fBuyEntry,fBuyExit,fSellEntry,fSellExit, sys_par);
+isTradingTable = buildTradingTable(EURUSD_pre_is,isTime,isAction*100000,usdkursis,sys_par);
+isDailyTT = buildDailyTradingTable(isTradingTable, sys_par);
+
+usdkursoos = ones(length(EURUSD_pre_oos.time),1);
+[oosTime, oosAction] = buildActionMatrix(EURUSD_t1_oos,EURUSD_t2_oos,fBuyEntry,fBuyExit,fSellEntry,fSellExit, sys_par);
+oosTradingTable = buildTradingTable(EURUSD_pre_oos,oosTime,oosAction*100000,usdkursoos,sys_par);
+oosDailyTT = buildDailyTradingTable(oosTradingTable, sys_par);
+
+save './dat/StochCMAinvsout.mat' isTradingTable isDailyTT oosTradingTable oosDailyTT  ;
+clear all
+
+%Loading results test
+StochCMAinvsout = load('./dat/StochCMAinvsout.mat');
+isTradingTable= StochCMAinvsout.isTradingTable;
+isDailyTT= StochCMAinvsout.isDailyTT;
+oosTradingTable= StochCMAinvsout.oosTradingTable;
+oosDailyTT= StochCMAinvsout.oosDailyTT;
+
+%Plot in vs Out of sample
+plot_cumret_dens_invsout(isTradingTable.Return,oosTradingTable.Return)
+
