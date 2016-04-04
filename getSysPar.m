@@ -10,7 +10,7 @@ sys_par.fileName = './dat/Stoch_optim.csv';
 %Daily Optimisation
 sys_par.obj_func = 'sharpeRatio'; %Or 'sortino'
 %Intraday Optimisation
-sys_par.obj_func_intra
+sys_par.obj_func_intra = 'morereturnobj'; %Or 'profitfactor', 'maxdrawdown'
 
 %% Trading Parameters
 % initial equity
@@ -22,7 +22,7 @@ sys_par.tInit = 100;
 
 %% Partitioning
 % percentage of data used in opimization
-sys_par.insamplePCT = 0.7;
+sys_par.insamplePCT = 0.4;
 
 %% MISC
 % allow program output to command window
