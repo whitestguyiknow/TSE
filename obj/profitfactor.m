@@ -1,6 +1,6 @@
 function [p] = profitfactor(intradaytradingtable)
 % Computes Profit Factor
-% Input: trade profit vector in Dollar
+% Input: trade profit vector in Dollar intraday
 
 %Output Profitfactor
 
@@ -8,9 +8,9 @@ function [p] = profitfactor(intradaytradingtable)
 if(isempty(intradaytradingtable))
     p=-99;
 else
-   grossloss=sum(nonzeros(intradaytradingtable(intradaytradingtable<0)));
-   grossprofit=sum(nonzeros(intradaytradingtable(intradaytradingtable>0)));
-   p=grossprofit/grossloss;
+   grossloss=sum(nonzeros(intradaytradingtable.NettoPnLUSD(intradaytradingtable.NettoPnLUSD<0)));
+   grossprofit=sum(nonzeros(intradaytradingtable.NettoPnLUSD(intradaytradingtable.NettoPnLUSD>0)));
+   p=grossprofit/abs(grossloss);
    
 end
 

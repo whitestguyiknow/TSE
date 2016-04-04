@@ -7,7 +7,10 @@ sys_par.fileName = './dat/Stoch_optim.csv';
 
 %% Objective Function
 % use functions from ./obj/ folder
-sys_par.obj_func = 'sharpeRatio';
+%Daily Optimisation
+sys_par.obj_func = 'sharpeRatio'; %Or 'sortino'
+%Intraday Optimisation
+sys_par.obj_func_intra
 
 %% Trading Parameters
 % initial equity
