@@ -41,7 +41,7 @@ catch
     %mit der Funktion generate Dataset gearbeitet werden muss
     %daher müssen in getSyspar noc 'SystemName', 'unterlying', t1, t2, definiert werden 
     % load & process data
-    EURUSD_pre = loadDataCsv('EURUSD_tick_24M.csv',sys_par);
+    EURUSD_pre = loadDataCsv('USDJPY_tick_6M.csv',sys_par);
     EURUSD_t1 = compress(EURUSD_pre,15,sys_par,'bid','ask');
     EURUSD_t2 = compress(EURUSD_pre,60,sys_par,'bid','ask');
     

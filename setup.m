@@ -1,6 +1,6 @@
 function [] = setup()
     format long;
-    N_cpu = 2;
+    N_cpu = feature('numCores');
     start_cores(N_cpu);
     
     addpath('func', ...
