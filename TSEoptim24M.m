@@ -72,9 +72,15 @@ xinit = [5,1,1]'; %Initial Startpoint for CMA
 addpath('./optimize/');
 %Intraday Optimisation. (For Daily Optimisation use optimdaily instead of
 %optimintraday
+timeoptimstart=clock;
+
 [obj,par,counteval,stopflag,out,bestever] = ...
     CMAoptim('optimintraday',xinit,[],optimStruct,EURUSD_pre_is,EURUSD_t1_is,EURUSD_t2_is,sys_par);
 
+timeoptimend=clock;
+evaltime= roundn(floor(etime(timeoptimend,timeoptimstart))/60,-1);
+N_cpu=numlabs;
+fprintf('Time used for optimisation: %.1f min with %.0f CPUs\n', evaltime,N_cpu);
 %save bestever under: /dat/optresults/bestever_'SystemName'_'Underlying'_'Zeitintervall'.csv)
 
 %% out and in of sample run of sample run

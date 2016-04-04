@@ -72,9 +72,15 @@ xinit = [5,1,1]'; %Initial Startpoint for CMA
 addpath('./optimize/');
 %Intraday Optimisation. (For Daily Optimisation use optimdaily instead of
 %optimintraday
+timeoptimstart=clock;
+
 [obj,par,counteval,stopflag,out,bestever] = ...
     CMAoptim('optimintraday',xinit,[],optimStruct,EURUSD_pre_is,EURUSD_t1_is,EURUSD_t2_is,sys_par);
 
+timeoptimend=clock;
+evaltime= roundn(floor(etime(timeoptimend,timeoptimstart))/60,-1);
+N_cpu=numlabs;
+fprintf('Time used for optimisation: %.1f min with %.0f CPUs\n', evaltime,N_cpu);
 %save bestever under: /dat/optresults/bestever_'SystemName'_'Underlying'_'Zeitintervall'.csv)
 
 %% out and in of sample run of sample run
@@ -98,14 +104,14 @@ oosTradingTable = buildTradingTable(EURUSD_pre_oos,oosTime,oosAction*100000,usdk
 oosDailyTT = buildDailyTradingTable(oosTradingTable, sys_par);
 
 save './dat/StochCMAinvsout.mat' isTradingTable isDailyTT oosTradingTable oosDailyTT; %(saved under: /dat/optresults/Trtables_'SystemName'_'Underlying'_'Zeitintervall'.mat)
-clear all
-
-%Loading results test
-StochCMAinvsout = load('./dat/StochCMAinvsout.mat');
-isTradingTable= StochCMAinvsout.isTradingTable;
-isDailyTT= StochCMAinvsout.isDailyTT;
-oosTradingTable= StochCMAinvsout.oosTradingTable;
-oosDailyTT= StochCMAinvsout.oosDailyTT;
+% clear all
+% 
+% %Loading results test
+% StochCMAinvsout = load('./dat/StochCMAinvsout.mat');
+% isTradingTable= StochCMAinvsout.isTradingTable;
+% isDailyTT= StochCMAinvsout.isDailyTT;
+% oosTradingTable= StochCMAinvsout.oosTradingTable;
+% oosDailyTT= StochCMAinvsout.oosDailyTT;
 
 %%Performance Analytics
 %Cumulative Return & Kernel Density Estimate of Return (saved under: /plots/invsout/invsout_'SystemName'_'Underlying'_'Zeitintervall'. eps and png)
