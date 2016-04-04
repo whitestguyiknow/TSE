@@ -5,7 +5,7 @@
 % Date:             January 2016
 % Version:          2.00
 %
-% Description:      main engine,
+% Description:      main engine Default 24 Month of data,
 %                   function collection in ./func/
 %                   indicator functions in ./indicators/
 %                   optimizer in ./DE/
@@ -44,12 +44,6 @@ catch
     EURUSD_pre = loadDataCsv('EURUSD_tick_24M.csv',sys_par);
     EURUSD_t1 = compress(EURUSD_pre,15,sys_par,'bid','ask');
     EURUSD_t2 = compress(EURUSD_pre,60,sys_par,'bid','ask');
-    
-
-    
-    % append indicator values
-    EURUSD_t1 = appendIndicator(EURUSD_t1,sys_par,'sdev',fSdev,50);
-    EURUSD_t2 = appendIndicator(EURUSD_t2,sys_par,'sdev',fSdev,50);
     
     % save dataset
     save './dat/EURUSD1560240.mat' EURUSD_pre EURUSD_t1 EURUSD_t2 
