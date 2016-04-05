@@ -118,7 +118,11 @@ save './dat/StochCMAreturnproblemsolvedinvsout.mat' isTradingTable isDailyTT oos
 plot_cumret_dens_invsout(isTradingTable.Return,oosTradingTable.Return)
 
 %Boxplot Trading Hours (saved under: /plots/boxplots/boxplot_'SystemName'_'Underlying'_'Zeitintervall'.eps and png)
+tBox = 60;
+underlying = 'EURUSD';
+System = 'xy';
+Zeitintervall = '6M';
+boxInVsOut( isTradingTable, oosTradingTable,...
+    tBox, underlying, System, Zeitintervall );
 
-
-%Performance Analytics Table (saved under: /statistics/systems/perfan_'SystemName'_'Underlying'_'Zeitintervall'.csv)
-
+%AV:Performance Analytics Table (saved under: /statistics/systems/perfan_'SystemName'_'Underlying'_'Zeitintervall'.csv)
