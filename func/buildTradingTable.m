@@ -95,7 +95,10 @@ for i = 1:2:l
     idx = idx+1;
 end
 
-bruttoPnL = exitPrice.*entryPosition+entryPrice.*exitPosition; %Bruttorendite = (exitPrice-entryprice)/EntryPrice
+bruttoPnL = exitPrice.*entryPosition+entryPrice.*exitPosition; %% buggy
+%bruttoPnL = (exitPrice-entryPrice)./entryPrice.*position; fixing idea but
+%dim problem
+
 bruttoPnLUSD = bruttoPnL.*usdKurs(tradeIdx(2:2:end));
 
 comissionUSD = 2*abs(position(2:2:end)).*comission;
@@ -103,7 +106,9 @@ nettoPnLUSD = bruttoPnLUSD - comissionUSD;
 nettoPnLPerComm = nettoPnLUSD./comissionUSD;
 equity = cumsum(nettoPnLUSD)+equityInit; %%TODO: flexible position
 try %debugging
-    returns = [equity(1)/equityInit-1;equity(2:end)./equity(1:end-1)-1];
+    %returns = [equity(1)/equityInit-1;equity(2:end)./equity(1:end-1)-1];
+    %qucik fix netto returns
+    returns = ((exitPrice-entryPrice)./entryPrice) -(2*comission/equityInit);
 catch
     tradingTable = [];
     return

@@ -41,7 +41,7 @@ catch
     %mit der Funktion generate Dataset gearbeitet werden muss
     %daher müssen in getSyspar noc 'SystemName', 'unterlying', t1, t2, definiert werden 
     % load & process data
-    EURUSD_pre = loadDataCsv('EURUSD_tick_6M.csv',sys_par);
+    EURUSD_pre = loadDataCsv('USDJPY_tick_6M.csv',sys_par);
     EURUSD_t1 = compress(EURUSD_pre,15,sys_par,'bid','ask');
     EURUSD_t2 = compress(EURUSD_pre,60,sys_par,'bid','ask');
     
@@ -68,7 +68,7 @@ EURUSD_t2_oos = partition('out',EURUSD_t2,sys_par);
 
 %% Setting entry and exit rules & optimization
 %(entry and exit rules defind in optimintraday or optimdaily)
-xinit = [5,1,1]'; %Initial Startpoint for CMA
+xinit = [13,1,1]'; %Initial Startpoint for CMA
 addpath('./optimize/');
 %Intraday Optimisation. (For Daily Optimisation use optimdaily instead of
 %optimintraday
@@ -79,7 +79,7 @@ timeoptimstart=clock;
 
 timeoptimend=clock;
 evaltime= roundn(floor(etime(timeoptimend,timeoptimstart))/60,-1);
-N_cpu=numlabs;
+N_cpu=4;
 fprintf('Time used for optimisation: %.1f min with %.0f CPUs\n', evaltime,N_cpu);
 %save bestever under: /dat/optresults/bestever_'SystemName'_'Underlying'_'Zeitintervall'.csv)
 
@@ -103,7 +103,7 @@ usdkursoos = ones(length(EURUSD_pre_oos.time),1);
 oosTradingTable = buildTradingTable(EURUSD_pre_oos,oosTime,oosAction*100000,usdkursoos,sys_par);
 oosDailyTT = buildDailyTradingTable(oosTradingTable, sys_par);
 
-save './dat/StochCMAinvsout.mat' isTradingTable isDailyTT oosTradingTable oosDailyTT; %(saved under: /dat/optresults/Trtables_'SystemName'_'Underlying'_'Zeitintervall'.mat)
+save './dat/StochCMAreturnproblemsolvedinvsout.mat' isTradingTable isDailyTT oosTradingTable oosDailyTT; %(saved under: /dat/optresults/Trtables_'SystemName'_'Underlying'_'Zeitintervall'.mat)
 % clear all
 % 
 % %Loading results test
