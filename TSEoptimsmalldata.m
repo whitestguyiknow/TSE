@@ -41,7 +41,7 @@ catch
     %mit der Funktion generate Dataset gearbeitet werden muss
     %daher müssen in getSyspar noc 'SystemName', 'unterlying', t1, t2, definiert werden 
     % load & process data
-    EURUSD_pre = loadDataCsv('USDJPY_tick_6M.csv',sys_par);
+    EURUSD_pre = loadDataCsv('EURUSD_tick_UTC+0_00_noweekends_24M.csv',sys_par);
     EURUSD_t1 = compress(EURUSD_pre,15,sys_par,'bid','ask');
     EURUSD_t2 = compress(EURUSD_pre,60,sys_par,'bid','ask');
     
@@ -106,17 +106,18 @@ oosDailyTT = buildDailyTradingTable(oosTradingTable, sys_par);
 save './dat/StochCMAreturnproblemsolvedinvsout.mat' isTradingTable isDailyTT oosTradingTable oosDailyTT; %(saved under: /dat/optresults/Trtables_'SystemName'_'Underlying'_'Zeitintervall'.mat)
 % clear all
 % 
-% %Loading results test
-% StochCMAinvsout = load('./dat/StochCMAinvsout.mat');
-% isTradingTable= StochCMAinvsout.isTradingTable;
-% isDailyTT= StochCMAinvsout.isDailyTT;
-% oosTradingTable= StochCMAinvsout.oosTradingTable;
-% oosDailyTT= StochCMAinvsout.oosDailyTT;
+%Loading results test
+StochCMAinvsout = load('./dat/StochCMAreturnproblemsolvedinvsout.mat');
+isTradingTable= StochCMAinvsout.isTradingTable;
+isDailyTT= StochCMAinvsout.isDailyTT;
+oosTradingTable= StochCMAinvsout.oosTradingTable;
+oosDailyTT= StochCMAinvsout.oosDailyTT;
 
 %%Performance Analytics
 %Cumulative Return & Kernel Density Estimate of Return (saved under: /plots/invsout/invsout_'SystemName'_'Underlying'_'Zeitintervall'. eps and png)
 plot_cumret_dens_invsout(isTradingTable.Return,oosTradingTable.Return)
-
+median(isTradingTable.Duration)
+median(oosTradingTable.Duration)
 %Boxplot Trading Hours (saved under: /plots/boxplots/boxplot_'SystemName'_'Underlying'_'Zeitintervall'.eps and png)
 tBox = 60;
 underlying = 'EURUSD';

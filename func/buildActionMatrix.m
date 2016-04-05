@@ -106,8 +106,11 @@ end
 Time(Time == 0) = [];
 Action(Action == 0) = [];
 
+
+%Printig all Stuff for debugging
+
 % Final Assertions:
-assert(mod(length(Action),2)==0);
+assert(mod(length(Action),2)==0); %%% hier tritt immer Fehler Auf. Wieso?
 assert(length(Time)==length(Action));
 assert(isempty(Action) || all(Action(1:2:end-1)+Action(2:2:end))==0);
 
