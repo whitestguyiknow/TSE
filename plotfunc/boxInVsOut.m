@@ -1,5 +1,5 @@
 function [ ] = boxInVsOut( inOfSampleTable, outOfSampleTable,...
-    tBox, underlying, System, Zeitintervall )
+    tBox, underlying, System, lengthData, dt)
 %boxInVsOut( inOfSampleTable, outOfSampleTable, tBox, underlying, System, Zeitintervall )
 %   Creates boxplots
 %% plot
@@ -34,18 +34,18 @@ for jj = 1:4
     ax.FontSize = 6;
     ylabel('Return [%]')
     xlabel('Zeit [h]')
-    title([timeString,' ',dataString])
+    title([timeString,' ',dataString,'(N = ',num2str(size(dataTable,1)),')'])
     grid minor
     legend('Median','Location','SouthEast')
     legend('boxoff')
     
 end
-titleAll = mtit(['Boxplot',', System: ',System,', ',underlying,', Zeitintervall: ',Zeitintervall]);
+titleAll = mtit(['Boxplot',', System: ',System,', ',underlying,', Zeitintervall: ',num2str(lengthData),' M', ', timestep: ',num2str(dt),' min']);
 set(titleAll.th,'Position',titleAll.th.Position+[0;0.04;0]')
 
 %% save figures
-print(['./plots/boxplots/','boxplot_',System,'_',underlying,'_',Zeitintervall],'-deps')%save plot to folder
-print(['./plots/boxplots/','boxplot_',System,'_',underlying,'_',Zeitintervall],'-dpng')%save plot to folder
+print(['./plots/boxplots/','boxplot_',System,'_',underlying,'_',num2str(lengthData),'M',num2str(dt)],'-deps')%save plot to folder
+print(['./plots/boxplots/','boxplot_',System,'_',underlying,'_',num2str(lengthData),'M',num2str(dt)],'-dpng')%save plot to folder
 close
 end
 

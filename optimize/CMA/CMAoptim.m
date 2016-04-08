@@ -901,9 +901,16 @@ while isempty(stopflag)
       % (columns of) arxvalid(:,k) only for the evaluation of the
       % fitness function. arx and arxvalid should not be changed.
       tmptmp = zeros(1,size(arxvalid,2));
-      parfor c0 = 1:size(arxvalid,2)
-         tmptmp(c0) = feval(fitfun, arxvalid(:,c0), varargin{:}); 
+      if opts.EvalParallel
+        parfor c0 = 1:size(arxvalid,2)
+            tmptmp(c0) = feval(fitfun, arxvalid(:,c0), varargin{:}); 
+        end
+      else
+        for c0 = 1:size(arxvalid,2)
+            tmptmp(c0) = feval(fitfun, arxvalid(:,c0), varargin{:}); 
+        end
       end
+      
       fitness.raw = tmptmp;
       countevalNaN = countevalNaN + sum(isnan(fitness.raw));
       counteval = counteval + sum(~isnan(fitness.raw)); 

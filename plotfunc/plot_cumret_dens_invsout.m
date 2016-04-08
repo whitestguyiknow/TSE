@@ -1,4 +1,5 @@
-function [ ] = plot_cumret_dens_invsout(insamplereturnvec, outsamplereturnvec)
+function [ ] = plot_cumret_dens_invsout(insamplereturnvec, outsamplereturnvec, ...
+    underlying, sysName, lengthData, timeStep)
 %Plots comparing in vs out of sample (cumulativ returns and distributions of returns)
 %Inputs
 %insamplereturnvec..... intraday trades returns in sample,
@@ -76,10 +77,9 @@ function [ ] = plot_cumret_dens_invsout(insamplereturnvec, outsamplereturnvec)
         plot(lcrout,'r' ,'LineWidth',1.5);
         grid on;
         c_legend=legend('In Sample','Out of Sample','Location','northwest');
-        set(c_legend,'FontSize', 8);
-        t=title('Kumulativer Return');
-        set(t,'FontSize', 12)
-        %legend('boxoff')
+        set(c_legend,'FontSize', 10);
+        title('Kumulativer Return');
+        legend('boxoff')
         xlabel('Anzahl Trades')
         ylabel('ln(Kumulativer Return))')
         hold off; 
@@ -88,8 +88,7 @@ function [ ] = plot_cumret_dens_invsout(insamplereturnvec, outsamplereturnvec)
 
     subplot(2,2,[3,4]);
     plot(xi,x, 'b-.','LineWidth',1.5);
-    t=title('Kerneldichteschätzung');
-    set(t,'FontSize', 12);
+    title('Kerneldichteschätzung');
     hold on;
     line([mi mi], [0.0 inmax],'Color','b', 'LineStyle','-.','LineWidth',1)
     xlabel('Return (%)')
@@ -99,9 +98,9 @@ function [ ] = plot_cumret_dens_invsout(insamplereturnvec, outsamplereturnvec)
     hold on;
     line([mo mo], [0.0 outmax],'Color','r', 'LineStyle','-','LineWidth',1)
     axis([-inf inf 0 xmax])
-    k_legend=legend('In Sample','Median In Sample','Out of Sample','Median Out of Sample','Location','northwest');
-    set(k_legend,'FontSize', 8);
-    %legend('boxoff')
+   legObj1=legend('In Sample','Median In Sample','Out of Sample','Median Out of Sample','Location','northwest');
+    legend('boxoff')
+    set(legObj1,'FontSize',10);
     xlabel('Return (%)')
     ylabel('Dichte')
     grid on;
@@ -128,11 +127,10 @@ function [ ] = plot_cumret_dens_invsout(insamplereturnvec, outsamplereturnvec)
         grid on;
         c_legend=legend('In Sample','Out of Sample','Location','northwest');
         set(c_legend,'FontSize', 8);
-        t=title('Kumulativer Return');
-        set(t,'FontSize', 12)
-        %legend('boxoff')
+        title('Kumulativer Return & Dichteschätzung der Trads [%]');
+        legend('boxoff')
         xlabel('Anzahl Trades')
-        ylabel('Kumulativer Return (%)')
+        ylabel('Kumulativer Return [%]')
         hold off; 
 
 
@@ -141,10 +139,9 @@ function [ ] = plot_cumret_dens_invsout(insamplereturnvec, outsamplereturnvec)
     subplot(2,2,[3,4]);
     plot(xi,x, 'b-.','LineWidth',1.5);
     t=title('Kerneldichteschätzung');
-    set(t,'FontSize', 12);
     hold on;
     line([mi mi], [0.0 inmax],'Color','b', 'LineStyle','-.','LineWidth',1)
-    xlabel('Return (%)')
+    xlabel('Return [%]')
     ylabel('Dichte')
     %Out of Sample overlay
     plot(xo,y, 'r','LineWidth',1.5);
@@ -152,8 +149,8 @@ function [ ] = plot_cumret_dens_invsout(insamplereturnvec, outsamplereturnvec)
     line([mo mo], [0.0 outmax],'Color','r', 'LineStyle','-','LineWidth',1)
     axis([-inf inf 0 xmax])
     k_legend=legend('In Sample','Median In Sample','Out of Sample','Median Out of Sample','Location','northwest');
-    set(k_legend,'FontSize', 8);
-    %legend('boxoff')
+    set(k_legend,'FontSize', 10);
+    legend('boxoff')
     xlabel('Return (%)')
     ylabel('Dichte')
     grid on;
@@ -163,6 +160,6 @@ function [ ] = plot_cumret_dens_invsout(insamplereturnvec, outsamplereturnvec)
 
     
     %Saving plots
-    saveas(gcf,'./plots/linInVSoutPlotStoch_cumret_dens','epsc') %EPS for latex
-    saveas(gcf,'./plots/linInVSoutPlotStoch_cumret_dens','png') %PNG normal
+    saveas(gcf,['./plots/invsout/invsout_',sysName,'_',underlying,'_',num2str(lengthData),'M',num2str(timeStep)],'eps') %EPS for latex
+    saveas(gcf,['./plots/invsout/invsout_',sysName,'_',underlying,'_',num2str(lengthData),'M',num2str(timeStep)],'png') %PNG normal
     close;

@@ -40,11 +40,12 @@ maxVal =        [max(returnData(ind_in));max(returnData(ind_out))];
 medianVal =     [median(returnData(ind_in));median(returnData(ind_out))];
 
 
-RowNames = {underlying;'N';'Mean Return';'Std. Deviation';'Standard Fehler';'t-ratio';'Skewness';'Kurtosis';'Min';'Max';'Median'};
-InSample =      {daten{1};N(1);meanReturn(1);stdDev(1);stdErrMean(1);tRatio(1);skwnss(1);krtsis(1);minVal(1);maxVal(1);medianVal(1)};
-OutOfSample =   {daten{2};N(2);meanReturn(2);stdDev(2);stdErrMean(2);tRatio(2);skwnss(2);krtsis(2);minVal(2);maxVal(2);medianVal(2)};
+RowNames = {underlying;'N';'Mean Return';'Std. Deviation';'Standard Fehler';'t-ratio';'Skewness';'Kurtosis';'Min';'Max';'Median'}';
+InSample =      (daten{1};N(1);meanReturn(1);stdDev(1);stdErrMean(1);tRatio(1);skwnss(1);krtsis(1);minVal(1);maxVal(1);medianVal(1))';
+OutOfSample =   (daten{2};N(2);meanReturn(2);stdDev(2);stdErrMean(2);tRatio(2);skwnss(2);krtsis(2);minVal(2);maxVal(2);medianVal(2))';
 T = table(InSample,OutOfSample,'RowNames',RowNames);
 T.Properties.DimensionNames{1} = 'Vars';
+
 
 % % Print Latex table
 % input.data = T;
