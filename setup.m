@@ -1,7 +1,6 @@
 function [] = setup()
     format long;
-    N_cpu = 2;
-    start_cores(N_cpu);
+    N_cpu = 1;
     
     addpath('func', ...
         'dat', ...
@@ -11,6 +10,11 @@ function [] = setup()
         'plots', ...
         'spread',...
         'plotfunc');
+    
+    if N_cpu > 1
+        start_cores(N_cpu);
+    end
+    
 end
 
 function [b] = start_cores(N_cpu)

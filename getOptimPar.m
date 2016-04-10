@@ -1,5 +1,7 @@
 function [opts] = getOptimPar()
 
+flag_parallel = false;
+
 %% Bounds
 
 % number of params to optimize, dims of x
@@ -8,10 +10,14 @@ opts.dim = 3;
 opts.LBounds = [3 0.1 0.1]';
 % upper bounds
 opts.UBounds = [40 15 15]';
+% integer optimization
+% 0 continuous
+% x>0 step size, 0.2 searches .., -0.2, 0, 0.2, 0.4, ..
+opts.StairWidths = [1 0 0];
 
 %% Differential Evolution Options
 % turn parallel optimization on/off
-opts.enable_parallel = true;
+opts.enable_parallel = flag_parallel;
 % number of workers/genes
 opts.nPopulation = 30;
 % number of iterations
@@ -51,7 +57,7 @@ opts.SaveVariables = 1;
 % plot while running using output data files
 opts.LogPlot = 0;
 % objective function FUN accepts NxM matrix, with M>1?';
-opts.EvalParallel = 1;
+opts.flgEvalParallel = flag_parallel;
 % evaluation of initial solution;
 opts.EvalInitialX = 1;
 % stop if x-change smaller TolX'

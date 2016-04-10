@@ -18,18 +18,20 @@
 % setup
 setup();
 
+sys_par = getSysPar();
+
 tInit = 100;
 equityInit = 100000;
 deltaRSI = 0.058268;
 
 % try load
-%try
-%     clear EURUSD
-%     EURUSD = load('./dat/EURUSD.mat');
-%     EURUSD_pre = EURUSD.EURUSD_pre;
-%     EURUSD_t1 = EURUSD.EURUSD_t1;
-%     EURUSD_t2 = EURUSD.EURUSD_t2;
-% catch
+ try
+     clear EURUSD
+     EURUSD = load('./dat/EURUSD.mat');
+     EURUSD_pre = EURUSD.EURUSD_pre;
+     EURUSD_t1 = EURUSD.EURUSD_t1;
+     EURUSD_t2 = EURUSD.EURUSD_t2;
+ catch
     % load & process data
     EURUSD_pre = loadDataCsv('EURUSD1y_tick.csv');
     EURUSD_t1 = compress(EURUSD_pre,15,'bid','ask');
@@ -71,13 +73,13 @@ fSellExit = @(DS1,i,DS2,k,DS3,l) exitSellTrailingSDEV(DS1,i,DS2,k);
 setIndicatorStruct();
 
 % action matrix and time
-[Time, Action] = buildActionMatrix(EURUSD_t1,EURUSD_t2,EURUSD_t2,tInit,fBuyEntry,fBuyExit,fSellEntry,fSellExit);
+[Time, Action] = buildActionMatrix(EURUSD_t1,EURUSD_t2,tInit,fBuyEntry,fBuyExit,fSellEntry,fSellExit,sys_par);
 
 % generate trades
-tradingTable = buildTradingTable(EURUSD_pre, equityInit,usdkurs,comission,Time,Action*100000);
+tradingTable = buildTradingTable(EURUSD_pre, equityInit,usdkurs,comission,Time,Action*100000,sys_par);
 
 % summary
-dailyTT = buildDailyTradingTable(tradingTable, equityInit);
+dailyTT = buildDailyTradingTable(tradingTable, equityInit, sys_par);
 
 % sharpe-ratio
 sharpe = sharpeRatio(dailyTT);
