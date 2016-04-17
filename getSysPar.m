@@ -21,14 +21,10 @@ sys_par.equityInit = 100000;
 sys_par.comission = 0.5*8/100000;
 % warm up time
 sys_par.tInit = 100;
-% min mean trades per day
-sys_par.minTradesPerDay = 1;
-% max mean trades per day
-sys_par.maxTradesPerDay = 30;
 
 %% Partitioning
 % percentage of data used in opimization
-sys_par.insamplePCT = 0.7;
+sys_par.insamplePCT = 0.4;
 
 %% MISC
 % allow program output to command window
