@@ -59,7 +59,6 @@ EURUSD_t1_os = partition('out',EURUSD_t1,sys_par);
 EURUSD_t2_os = partition('out',EURUSD_t2,sys_par);
 
 % optimization
-xinit = [10,10,1,1]';
 addpath('./optimize/');
 [isObj,par,counteval,stopflag,out,bestever] = ...
     CMAoptim('optim',xinit,[],optimStruct,EURUSD_pre_is,EURUSD_t1_is,EURUSD_t2_is,sys_par);

@@ -7,9 +7,10 @@ flag_parallel = true;
 % number of params to optimize, dims of x
 opts.dim = 4;
 % lower bounds
-opts.LBounds = [5 5 0.01 0.01]';
+opts.LBounds = [5 5 1e-4 1e-4]';
 % upper bounds
-opts.UBounds = [20 20 3 3]';
+opts.UBounds = [50 50 0.99 0.99]';
+% initial 
 % integer optimization
 % 0 continuous, x>0 step size (0.2 searches .., -0.2, 0, 0.2, 0.4, ..)
 opts.StairWidths = [1 1 0 0];
@@ -23,7 +24,7 @@ data_folder = './dat/';
 % faster.
 opts.CMA.active = 0;
 % number of samples per stage
-opts.PopSize = 5;
+opts.PopSize = 10;
 % restart on/off
 opts.Resume = 0;
 % max objective fun evaluations
@@ -40,7 +41,7 @@ opts.SaveVariables = 1;
 % plot while running using output data files
 opts.LogPlot = 0;
 % objective function FUN accepts NxM matrix, with M>1?';
-opts.flgEvalParallel = false;
+opts.EvalParallel = flag_parallel;
 % evaluation of initial solution;
 opts.EvalInitialX = 1;
 % stop if x-change smaller TolX'

@@ -9,10 +9,14 @@ function [s] = sharpeRatio(dailyTradingTable,sys_par)
 %   2016-01-31: (Daniel)
 %       1. restrictions for sharpe-ratio; restructuring
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-nDays = countDays(dailyTradingTable.Date(1,:),dailyTradingTable.Date(end,:));
 if isempty(dailyTradingTable)
     s = -1e6; %no trades
-elseif dailyTradingTable.Equity(end)<1
+    return
+end
+
+nDays = countDays(dailyTradingTable.Date(1,:),dailyTradingTable.Date(end,:));
+
+if dailyTradingTable.Equity(end)<1
     s = -1e6; %equity shrunk below 0
 elseif nDays*sys_par.minTradesPerDay>sum(dailyTradingTable.nTrades)
     s = -1e6; %not enough trades, we expect one trade p day
