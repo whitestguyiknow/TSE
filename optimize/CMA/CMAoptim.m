@@ -1,5 +1,5 @@
-function [xmin, ...      % minimum search point of last iteration
-	  fmin, ...      % function value of xmin
+function [fmin, ...      % minimum search point of last iteration
+	  xmin, ...      % function value of xmin
 	  counteval, ... % number of function evaluations done
 	  stopflag, ...  % stop criterion reached
 	  out, ...     % struct with various histories and solutions
@@ -1685,7 +1685,11 @@ end
                     fitness.raw(1), median(fitness.raw), fitness.raw(end)); 
             % fprintf(fid, ' %f', 10^succ_act); 
             if 1 < 3 && ~isempty(varargin)
-              fprintf(fid, ' %f', varargin{1});
+                try
+                    fprintf(fid, ' %f', varargin{1});
+                catch
+                    fprintf('varargin{1}');
+                end
             end
 	    fprintf(fid, '\n');
 	  elseif strcmp(name, 'stddev')

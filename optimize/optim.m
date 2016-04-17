@@ -1,4 +1,4 @@
-function [obj] = optim(x,DSpre,DS1,DS2,sys_par)
+function [obj,tradingTable,dailyTT] = optim(x,DSpre,DS1,DS2,sys_par)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Function: exanple function feeding into DEoptim           
@@ -16,11 +16,14 @@ usdkurs = ones(length(DSpre.time),1);
 
 %% SECTION TO INSERT INDICATORS
 % function handles to indicators
-lookback = 10;
-fBuyEntry = @(DS1,i,DS2,k) entryBuyStoch(DS1,i,DS2,k,lookback,x(1));
-fSellEntry = @(DS1,i,DS2,k) entrySellStoch(DS1,i,DS2,k,lookback,x(1));
-fBuyExit = @(DS1,i,DS2,k) exitBuyTrailingSDEV(DS1,i,DS2,k,x(2),x(2));
-fSellExit = @(DS1,i,DS2,k) exitSellTrailingSDEV(DS1,i,DS2,k,x(3),x(3));
+% x(1) additional (long) looback time in stoch. osc.
+% x(2) (short) lookback time in stoch. osc.
+% x(3) lower exit STDdev factor
+% x(4) upper exit STDdev factor
+fBuyEntry = @(DS1,i,DS2,k) entryBuyStoch(DS1,i,DS2,k,x(1),x(2));
+fSellEntry = @(DS1,i,DS2,k) entrySellStoch(DS1,i,DS2,k,x(1),x(2));
+fBuyExit = @(DS1,i,DS2,k) exitBuyTrailingSDEV(DS1,i,DS2,k,x(3),x(3));
+fSellExit = @(DS1,i,DS2,k) exitSellTrailingSDEV(DS1,i,DS2,k,x(4),x(4));
 
 %% Evaluation
 % initialize global indicator struct
@@ -36,7 +39,7 @@ tradingTable = buildTradingTable(DSpre,Time,Action*100000,usdkurs,sys_par);
 dailyTT = buildDailyTradingTable(tradingTable, sys_par);
 
 % objective function, declared in sys_par
-obj = -feval(sys_par.obj_func,dailyTT);
+obj = -feval(sys_par.obj_func,dailyTT,sys_par);
 
 end
 

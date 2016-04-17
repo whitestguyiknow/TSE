@@ -54,23 +54,16 @@ EURUSD_pre_is = partition('in',EURUSD_pre,sys_par);
 EURUSD_t1_is = partition('in',EURUSD_t1,sys_par);
 EURUSD_t2_is = partition('in',EURUSD_t2,sys_par);
 % outsample
-EURUSD_pre_oos = partition('out',EURUSD_pre,sys_par);
-EURUSD_t1_oos = partition('out',EURUSD_t1,sys_par);
-EURUSD_t2_oos = partition('out',EURUSD_t2,sys_par);
+EURUSD_pre_os = partition('out',EURUSD_pre,sys_par);
+EURUSD_t1_os = partition('out',EURUSD_t1,sys_par);
+EURUSD_t2_os = partition('out',EURUSD_t2,sys_par);
 
 % optimization
-xinit = [5,1,1]';
+xinit = [10,10,1,1]';
 addpath('./optimize/');
-[obj,par,counteval,stopflag,out,bestever] = ...
+[isObj,par,counteval,stopflag,out,bestever] = ...
     CMAoptim('optim',xinit,[],optimStruct,EURUSD_pre_is,EURUSD_t1_is,EURUSD_t2_is,sys_par);
 
 % out of sample run
-LB = 10;
-fBuyEntry = @(DS1,i,DS2,k) entryBuyStoch(DS1,i,DS2,k,LB,bestever.x(1));
-fSellEntry = @(DS1,i,DS2,k) entrySellStoch(DS1,i,DS2,k,LB,bestever.x(1));
-fBuyExit = @(DS1,i,DS2,k) exitBuyTrailingSDEV(DS1,i,DS2,k,bestever.x(2),bestever.x(3));
-fSellExit = @(DS1,i,DS2,k) exitSellTrailingSDEV(DS1,i,DS2,k,bestever.x(2),bestever.x(3));
-usdkurs = ones(length(EURUSD_pre_oos.time),1);
-[oosTime, oosAction] = buildActionMatrix(EURUSD_t1_oos,EURUSD_t2_oos,EURUSD_t2_oos,sys_par,fBuyEntry,fBuyExit,fSellEntry,fSellExit);
-oosTradingTable = buildTradingTable(EURUSD_pre_oos, equityInit, usdkurs,comission,oosTime,oosAction*100000);
-oosDailyTT = buildDailyTradingTable(oosTradingTable, equityInit);
+[osObj,osTradingTable,osDailyTT] = optim(bestever.x,EURUSD_pre_os,EURUSD_t1_os,EURUSD_t2_os,sys_par);
+

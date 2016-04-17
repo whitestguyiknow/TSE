@@ -1,12 +1,17 @@
-function [b] = entryBuyStoch(DS1,i,DS2,k,LB,x)
-T = round(x);
+function [b] = entryBuyStoch(DS1,i,DS2,k,LBslow,LBshort)
+% Stochastic Oscillator Optim Params
+% LBslow    additional "lookback" time for slow stoch. osc. (must be int)
+% LBshort   short "lookback" time (must be int)
 
-L1 = min(DS1.LOW_ask(i-T:i));
-H1 = max(DS1.HIGH_ask(i-T:i));
+LBslow = round(LBslow); % sometimes CMA does not generate exact ints
+LBshort = round(LBshort); % "
+
+L1 = min(DS1.LOW_ask(i-LBshort:i));
+H1 = max(DS1.HIGH_ask(i-LBshort:i));
 stoch_X1 = (DS1.ask_close(i)-L1)/(H1-L1);
 
-L2 = min(DS1.LOW_ask(i-LB-T:i-LB));
-H2 = max(DS1.HIGH_ask(i-LB-T:i-LB));
+L2 = min(DS1.LOW_ask(i-LBslow-LBshort:i)); % or i-LBslow??
+H2 = max(DS1.HIGH_ask(i-LBslow-LBshort:i)); % i-LBslow??
 stoch_X2 = (DS1.ask_close(i)-L2)/(H2-L2);
 
 if isempty(L1) || isempty(L2)

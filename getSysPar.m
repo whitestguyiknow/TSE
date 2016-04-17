@@ -16,6 +16,8 @@ sys_par.equityInit = 100000;
 sys_par.comission = 0.5*8/100000;
 % warm up time
 sys_par.tInit = 100;
+% min mean trades per day
+sys_par.minTradesPerDay = 1;
 
 %% Partitioning
 % percentage of data used in opimization
