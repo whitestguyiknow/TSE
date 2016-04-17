@@ -20,10 +20,10 @@ usdkurs = ones(length(DSpre.time),1);
 % x(2) (short) lookback time in stoch. osc.
 % x(3) lower exit STDdev factor
 % x(4) upper exit STDdev factor
-fBuyEntry = @(DS1,i,DS2,k) entryBuyStoch(DS1,i,DS2,k,x(1),x(2));
-fSellEntry = @(DS1,i,DS2,k) entrySellStoch(DS1,i,DS2,k,x(1),x(2));
-fBuyExit = @(DS1,i,DS2,k) exitBuyTrailingSDEV(DS1,i,DS2,k,x(3),x(3));
-fSellExit = @(DS1,i,DS2,k) exitSellTrailingSDEV(DS1,i,DS2,k,x(4),x(4));
+% fBuyEntry = @(DS1,i,DS2,k) entryBuyStoch(DS1,i,DS2,k,x(1),x(2));
+% fSellEntry = @(DS1,i,DS2,k) entrySellStoch(DS1,i,DS2,k,x(1),x(2));
+% fBuyExit = @(DS1,i,DS2,k) exitBuyTrailingSDEV(DS1,i,DS2,k,x(3),x(3));
+% fSellExit = @(DS1,i,DS2,k) exitSellTrailingSDEV(DS1,i,DS2,k,x(4),x(4));
 
 % make shure x(3), x(4) are integers
 x(1) = round(x(1));

@@ -24,12 +24,12 @@ data_folder = './dat/';
 % faster.
 opts.CMA.active = 0;
 % number of samples per stage
-opts.PopSize = 5;
+opts.PopSize = 40;
 % restart on/off
 opts.Resume = 0;
 % max objective fun evaluations
 % (other Stopping options StopFunEvals, StopIter, MaxFunEvals, Fitness)
-opts.MaxFunEvals = 1e1;
+opts.MaxFunEvals = 1e2;
 % In case of a noisy objective function set opts.Noise.on = 1. 
 % termination criteria, because the step-size sigma will not converge to zero
 opts.Noise.on = 0;
