@@ -40,7 +40,7 @@ opts.SaveVariables = 1;
 % plot while running using output data files
 opts.LogPlot = 0;
 % objective function FUN accepts NxM matrix, with M>1?';
-opts.flgEvalParallel = false;
+opts.EvalParallel = flag_parallel;
 % evaluation of initial solution;
 opts.EvalInitialX = 1;
 % stop if x-change smaller TolX'
