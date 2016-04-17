@@ -1,7 +1,8 @@
 function [] = setup()
     format long;
     N_cpu = 1;
-    
+    %N_cpu = feature('numCores'); %gibt die maximale Anzahl Kerne auf dem
+    %System wieder
     addpath('func', ...
         'dat', ...
         'indicators', ...
