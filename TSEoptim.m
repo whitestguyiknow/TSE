@@ -33,7 +33,7 @@ try
     EURUSD_t2 = EURUSD.EURUSD_t2;
 catch   
     % load & process data
-    EURUSD_pre = loadDataCsv('EURUSD_tick.csv',sys_par);
+    EURUSD_pre = loadDataCsv('EURUSD_tick_12M.csv',sys_par);
     EURUSD_t1 = compress(EURUSD_pre,15,sys_par,'bid','ask');
     EURUSD_t2 = compress(EURUSD_pre,60,sys_par,'bid','ask');
     
