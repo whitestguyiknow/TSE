@@ -1,7 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Title:            TRADER SYSTEM ENGINE
 %
-% Authors:          Daniel Waelchli, Mike Schwitalla
 % Date:             January 2016
 % Version:          2.00
 %

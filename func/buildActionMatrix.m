@@ -1,4 +1,3 @@
-
 function [Time, Action] = buildActionMatrix(DS1, DS2, fEntryBuy, fExitBuy, fEntrySell, fExitSell, sys_par)
 % Parameters:
 % DS, created with function tcompressMat

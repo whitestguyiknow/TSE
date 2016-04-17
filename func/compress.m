@@ -5,11 +5,7 @@ function [tcompDS] = compress(DS, dt, sys_par, varargin)
 % created by Daniel, December 2015
 %
 % Last update: 2016 Jan 31, by Daniel
-%   2016-01-31: (Daniel)
-%       1. bug fixxing (problem with time leaps in data), using min max
-%       functions
-%   2016-01-28: (Daniel)
-%       1. restructuring
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if sys_par.echo

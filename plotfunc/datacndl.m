@@ -1,10 +1,14 @@
-
-function datacndl(H,L,O,C)
+function datacndl(underlying_tx, startpoint, numberbars)
 %Plot OHLC Candles
 % Author: Nagi Hatoum, Candlestick chart ploter function, 5/29/03
 %Source: http://www.mathworks.com/matlabcentral/fileexchange/3549-candlestick-graph/content//cndl.m
 %Changed Colors
-
+n= startpoint+numberbars;
+O=underlying_tx.ask_open(startpoint:n);
+H=underlying_tx.HIGH_ask(startpoint:n);
+L=underlying_tx.LOW_ask(startpoint:n);
+C=underlying_tx.ask_close(startpoint:n);
+med=underlying_tx.MED_ask(startpoint:n);
 
 w=.4; %width of body, change to draw body thicker or thinner
 %%%%%%%%%%%Find up and down days%%%%%%%%%%%%%%%%%%%
@@ -34,6 +38,11 @@ if ~isempty(n)
       patch(x,y,'g')
    end
    grid on;
+   grid minor;
+      %%%Hier müssen wieder die Labels und Titel rein
+   %X axis: Date [YYYY-MM-DD HH:mm]
+   %Y Axis: Preis
+   % title: Underying YYYY-MM-DD HH:mm - YYYY-MM-DD HH:mm OHLC
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

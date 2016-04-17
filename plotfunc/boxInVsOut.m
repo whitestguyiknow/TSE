@@ -14,10 +14,10 @@ for jj = 1:4
     end
     if jj == 1 || jj == 3
         dataTable = inOfSampleTable;
-        dataString = 'in-of sample';
+        dataString = 'In of Sample';
     else
         dataTable = outOfSampleTable;
-        dataString = 'out-of sample';
+        dataString = 'Out of Sample';
     end
     %generate bin matrix
     [binMatrix,timeVecCenter,medRet] = setUpBinMatrix(dataTable, tBox, timeString);
@@ -34,7 +34,7 @@ for jj = 1:4
     ax.FontSize = 6;
     ylabel('Return [%]')
     xlabel('Zeit [h]')
-    title([timeString,' ',dataString,'(N = ',num2str(size(dataTable,1)),')'])
+    title([timeString,' ',dataString,' (N = ',num2str(size(dataTable,1)),')'])
     grid minor
     legend('Median','Location','SouthEast')
     legend('boxoff')
@@ -44,7 +44,7 @@ titleAll = mtit(['Boxplot',', System: ',System,', ',underlying,', Zeitintervall:
 set(titleAll.th,'Position',titleAll.th.Position+[0;0.04;0]')
 
 %% save figures
-print(['./plots/boxplots/','boxplot_',System,'_',underlying,'_',num2str(lengthData),'M',num2str(dt)],'-deps')%save plot to folder
+print(['./plots/boxplots/','boxplot_',System,'_',underlying,'_',num2str(lengthData),'M',num2str(dt)],'-depsc')%save plot to folder
 print(['./plots/boxplots/','boxplot_',System,'_',underlying,'_',num2str(lengthData),'M',num2str(dt)],'-dpng')%save plot to folder
 close
 end

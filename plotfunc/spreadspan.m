@@ -79,7 +79,7 @@ plot(breaks,ppval(ppSpannweite,breaks),'r*')
 % plot(timeVecPlot, y_fitSpann+deltaSpann,'r')
 % plot(timeVecPlot, y_fitSpann-deltaSpann,'r')
 hold off
-ylabel('Absolute Return [%]')
+ylabel('Absoluter Return [%]')
 xlabel('Zeit [h] UTC') %%%%%%%%%%%%%%%%
 grid on
 

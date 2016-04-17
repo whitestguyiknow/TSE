@@ -5,9 +5,9 @@ function [opts] = getOptimPar_test()
 % number of params to optimize, dims of x
 opts.dim = 3;
 % lower bounds
-opts.LBounds = [3 0.1 0.1]';
+opts.LBounds = [0;0;1;1];
 % upper bounds
-opts.UBounds = [40 15 15]';
+opts.UBounds = [10;10;99;99];
 
 %% Differential Evolution Options
 % turn parallel optimization on/off
@@ -40,7 +40,7 @@ opts.Resume = 0;
 % max objective fun evaluations
 % (other Stopping options StopFunEvals, StopIter, MaxFunEvals, Fitness)
 opts.MaxFunEvals = 1e4;
-opts.StopIter = 1;
+opts.StopIter = 10;
 % In case of a noisy objective function set opts.Noise.on = 1. 
 % termination criteria, because the step-size sigma will not converge to zero
 opts.Noise.on = 0;

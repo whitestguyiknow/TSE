@@ -30,9 +30,9 @@ sys_par.echo = false;
 
 %% For automation
 sys_par.underlying = {'EURUSD'}; %underlying (string)
-% sys_par.underlying = {'AUDUSD';'EURUSD';'GBPUSD';'NZDUSD';'USDCAD';'USDCHF';'USDJPY';'USDNOK';'USDSEK'; 'BRENTCMDUSD'; 'JPNIDXJPY'}; %%%%Ohne Weekend multiple
-sys_par.lengthData = 6; %length of tick data (months)
-sys_par.tVec = [60;120]; %time steps tick data is compressed to (min)
+%sys_par.underlying = {'AUDUSD';'EURUSD';'GBPUSD';'NZDUSD';'USDCAD';'USDCHF';'USDJPY';'USDNOK';'USDSEK'; 'BRENTCMDUSD'; 'JPNIDXJPY'}; %%%%Ohne Weekend multiple
+sys_par.lengthData = 24; %length of tick data (months)
+sys_par.tVec = [12;480]; %time steps tick data is compressed to (min)
 sys_par.sysName = 'xy';
 %underlying = {'USDJPY'; 'EURUSD'; 'EURNOK'; 'EURSEK'}
 %underlying = {'EURUSD';'USDJPY';'AUDUSD';'GBPUSD';'NZDUSD';'USDCAD';'USDCHF'}; %cell array Majors

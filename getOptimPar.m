@@ -21,7 +21,7 @@ opts.CR = 0.7;
 % differential weight [0,2]
 opts.F = 1.5;
 % number cpu's to be used
-opts.N_cpu = 4;
+opts.N_cpu = 2;
 % seed for random generator
 opts.seed = 8392;
 
@@ -62,5 +62,3 @@ opts.SaveFilename = [ data_folder 'results_cma_optimization.mat'];
 opts.LogFilenamePrefix = [ data_folder 'outcmaes_results_optimization_'];
 
 end
-
-

@@ -1,5 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Title:            Optimization
+% Date:             January 2016
+% Version:          2.00
 %
 % Authors:          Daniel Waelchli, Mike Schwitalla
 % Date:             January 2016
@@ -41,7 +43,7 @@ catch
     %mit der Funktion generate Dataset gearbeitet werden muss
     %daher müssen in getSyspar noc 'SystemName', 'unterlying', t1, t2, definiert werden 
     % load & process data
-    EURUSD_pre = loadDataCsv('USDJPY_tick_6M.csv',sys_par);
+    EURUSD_pre = loadDataCsv('EURUSD_tick_24M.csv',sys_par);
     EURUSD_t1 = compress(EURUSD_pre,15,sys_par,'bid','ask');
     EURUSD_t2 = compress(EURUSD_pre,60,sys_par,'bid','ask');
     
@@ -104,7 +106,7 @@ oosTradingTable = buildTradingTable(EURUSD_pre_oos,oosTime,oosAction*100000,usdk
 oosDailyTT = buildDailyTradingTable(oosTradingTable, sys_par);
 
 save './dat/StochCMAinvsout.mat' isTradingTable isDailyTT oosTradingTable oosDailyTT; %(saved under: /dat/optresults/Trtables_'SystemName'_'Underlying'_'Zeitintervall'.mat)
-clear all
+%clear all
 
 %Loading results test
 StochCMAinvsout = load('./dat/StochCMAinvsout.mat');
