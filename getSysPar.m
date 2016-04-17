@@ -6,10 +6,12 @@ function [sys_par] = getSysPar()
 sys_par.fileName = './dat/Stoch_optim.csv';
 
 %% Objective Function
+% Use Daily Optimisation
+sys_par.daily_optim = true;
 % use functions from ./obj/ folder
-%Daily Optimisation
+% Daily Optimisation
 sys_par.obj_func = 'sharpeRatio'; %Or 'sortino'
-%Intraday Optimisation
+% Intraday Optimisation
 sys_par.obj_func_intra = 'morereturnobj'; %Or 'profitfactor', 'maxdrawdown'
 
 %% Trading Parameters

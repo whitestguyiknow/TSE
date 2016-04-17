@@ -1,4 +1,4 @@
-function [obj] = optimintradayMAFix(x,DSpre,DS1,DS2,sys_par)
+function [obj,tradingTable,dailyTT] = optimintradayMAFix(x,DSpre,DS1,DS2,sys_par)
 % for testing:
 % clear
 % close all
@@ -33,16 +33,16 @@ function [obj] = optimintradayMAFix(x,DSpre,DS1,DS2,sys_par)
 usdkurs = ones(length(DSpre.time),1);
 
 % make shure x(3), x(4) are integers
-x(3) = round(x(3));
-x(4) = round(x(4));
+x(1) = round(x(1));
+x(2) = round(x(2));
 
 %% SECTION TO INSERT INDICATORS
 % function handles to indicators
 
-fBuyEntry =     @(DS1,i,DS2,k) entryBuyEMAXing(DS1,i,x(3),x(4));  %entry long
-fSellEntry =    @(DS1,i,DS2,k) entrySellEMAXing(DS1,i,x(3),x(4));	%entry short
-fBuyExit =      @(DS1,i,DS2,k) exitBuyFixTpSl(DS1,i,x(1),x(2));  	%exit long
-fSellExit =     @(DS1,i,DS2,k) exitSellFixTpSl(DS1,i,x(1),x(2));  %exit short
+fBuyEntry =     @(DS1,i,DS2,k) entryBuyEMAXing(DS1,i,x(1),x(2));  %entry long
+fSellEntry =    @(DS1,i,DS2,k) entrySellEMAXing(DS1,i,x(1),x(2));	%entry short
+fBuyExit =      @(DS1,i,DS2,k) exitBuyFixTpSl(DS1,i,x(3),x(4));  	%exit long
+fSellExit =     @(DS1,i,DS2,k) exitSellFixTpSl(DS1,i,x(3),x(4));  %exit short
 
 %% Evaluation
 % initialize global indicator struct
@@ -52,11 +52,13 @@ setIndicatorStruct();
 [Time, Action] = buildActionMatrix(DS1,DS2,fBuyEntry,fBuyExit,fSellEntry,fSellExit, sys_par);
 
 %  intraday Trades generate trades
-tradingtable = buildTradingTable(DSpre,Time,Action*100000,usdkurs,sys_par);
+tradingTable = buildTradingTable(DSpre,Time,Action*100000,usdkurs,sys_par);
 
+% summary
+dailyTT = buildDailyTradingTable(tradingTable, sys_par);
 
 % objective function, declared in sys_par
-obj = -feval(sys_par.obj_func_intra,tradingtable);
+obj = -feval(sys_par.obj_func,dailyTT,sys_par);
 
 %% plot
 % lineVec = [min(DS1.ask_open);max(DS1.ask_open)];

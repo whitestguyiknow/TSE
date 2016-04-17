@@ -1002,7 +1002,7 @@ while isempty(stopflag)
       %%
       
       %% OLD
-      %%fitness.raw = feval(fitfun, arxvalid, varargin{:}); 
+      %fitness.raw = feval(fitfun, arxvalid, varargin{:}); 
       %%
       
       countevalNaN = countevalNaN + sum(isnan(fitness.raw));

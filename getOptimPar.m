@@ -7,9 +7,10 @@ flag_parallel = true;
 % number of params to optimize, dims of x
 opts.dim = 4;
 % lower bounds
-opts.LBounds = [5 5 0.01 0.01]';
+opts.LBounds = [5 5 1e-4 1e-4]';
 % upper bounds
-opts.UBounds = [20 20 3 3]';
+opts.UBounds = [50 50 0.99 0.99]';
+% initial 
 % integer optimization
 % 0 continuous, x>0 step size (0.2 searches .., -0.2, 0, 0.2, 0.4, ..)
 opts.StairWidths = [1 1 0 0];
