@@ -15,7 +15,7 @@ timeVecPlot =       linspace(0,24,24*60+1);
 dtData = mode(diff(timeVec)); %time step size of data
 
 spreadVec =         dataSorted.MED_ask-dataSorted.MED_bid;
-spannweiteVec =     abs((dataSorted.bid_close - dataSorted.bid_open)./dataSorted.bid_open);%%%%%%%
+spannweiteVec =     abs((dataSorted.bid_close - dataSorted.bid_open)./dataSorted.bid_open)*100;%%%%%%%
 
 %% polyfit
 % %% polyfit to spread data points
@@ -36,8 +36,9 @@ else
     dt = 2*dtData;
 end
 breaks = linspace(0,24,24/dt+1);
-ppSpread =      splinefit(timeVec,spreadVec,breaks,n);
-ppSpannweite =  splinefit(timeVec,spannweiteVec,breaks,n);
+% perodic boundray condition: y(0) = y(24)
+ppSpread =      splinefit(timeVec,spreadVec,breaks,n,'p');
+ppSpannweite =  splinefit(timeVec,spannweiteVec,breaks,n,'p');
 
 %% plot
 
@@ -49,7 +50,8 @@ yAxMult = 5; %constant for y axis scaling
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %plotting
-figure
+scrsz = get(groot,'ScreenSize');
+figure('Position',[1 scrsz(4)/2 1920/2 1080/2])
 ax1 = subplot(2,1,1);
 s1 = scatter(timeVec,spreadVec,markersize,'filled','b'); %data points
 alpha(s1,transparency)
@@ -60,9 +62,11 @@ plot(breaks,ppval(ppSpread,breaks),'r*')
 % plot(timeVecPlot, y_fitSpread+deltaSpread,'r')
 % plot(timeVecPlot, y_fitSpread-deltaSpread,'r')
 hold off
-legend('data points','spline fit','poly breaks','Location','NorthWest')
+legObj = legend('data points','spline fit','poly breaks','Location','NorthWest');
+set(legObj,'FontSize',10);
+legend('boxoff')
 ylabel('Spread')
-title([underlying,', time step: ',num2str(dtData*60),'min, poly order = ',num2str(n-1)])%%%%%%
+title([underlying,', Zeitintervall: ',num2str(dtData*60),'min, poly order = ',num2str(n-1)])%%%%%%
 grid on
 
 ax2 = subplot(2,1,2);
@@ -75,7 +79,7 @@ plot(breaks,ppval(ppSpannweite,breaks),'r*')
 % plot(timeVecPlot, y_fitSpann+deltaSpann,'r')
 % plot(timeVecPlot, y_fitSpann-deltaSpann,'r')
 hold off
-ylabel('Absolute Return')
+ylabel('Absoluter Return [%]')
 xlabel('Zeit [h] UTC') %%%%%%%%%%%%%%%%
 grid on
 

@@ -35,7 +35,7 @@ l = 1;
 
 p=0;
 frac = N/100;
-for i=sys_par.tInit:N
+for i=sys_par.tInit:N-1 %changed from N to  N-1 by AV
     
     if(sys_par.echo && i>p*frac)
         disp([num2str(p), '% ..']);

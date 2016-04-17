@@ -16,6 +16,8 @@ elseif dailyTradingTable.Equity(end)<1
     s = -1e6; %equity shrunk below 0
 elseif nDays*sys_par.minTradesPerDay>sum(dailyTradingTable.nTrades)
     s = -1e6; %not enough trades, we expect one trade p day
+elseif nDays*sys_par.maxTradesPerDay<sum(dailyTradingTable.nTrades)
+    s = -1e6; %too many trades, we expect one trade p day
 else
     mu = sum(dailyTradingTable.Return)/nDays;
     variance = sum(dailyTradingTable.Return.^2)/nDays - mu^2;
