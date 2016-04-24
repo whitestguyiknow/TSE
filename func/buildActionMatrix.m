@@ -56,7 +56,7 @@ for i=sys_par.tInit:N-1 %changed from N to  N-1 by AV
     updateIndicatorStruct(DS1,i,IndicatorStruct.control);
     
     % go flat - sell
-    if(IndicatorStruct.control == 1 && fExitBuy(DS1,i,DS2,k)) %fExitBuy exit LONG position
+    if(IndicatorStruct.control == 1 && fExitSell(DS1,i,DS2,k)) % exit long Position
         Time(i) = DS1.time(i);
         Action(i) = -1;
         updateIndicatorStruct(DS1,i,0)
@@ -64,7 +64,7 @@ for i=sys_par.tInit:N-1 %changed from N to  N-1 by AV
     end
     
     % go flat - buy
-    if(IndicatorStruct.control == -1 && fExitSell(DS1,i,DS2,k)) %fExitSell exit short Position
+    if(IndicatorStruct.control == -1 && fExitBuy(DS1,i,DS2,k)) % exit short Position
         Time(i) = DS1.time(i);
         Action(i) = 1;
         updateIndicatorStruct(DS1,i,0)

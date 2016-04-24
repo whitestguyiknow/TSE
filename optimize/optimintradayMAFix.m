@@ -20,10 +20,10 @@ nDays = countDays(DS1.time(1,:), DS1.time(end,:));
 %% SECTION TO INSERT INDICATORS
 % function handles to indicators
 
-fBuyEntry =     @(DS1,i,DS2,k) entryBuyEMAXing(DS1,i,xEMA,yEMA);  %entry long
-fSellEntry =    @(DS1,i,DS2,k) entrySellEMAXing(DS1,i,xEMA,yEMA);	%entry short
-fBuyExit =      @(DS1,i,DS2,k) exitBuyFixTpSl(DS1,i,tp,sl);  	%exit long
-fSellExit =     @(DS1,i,DS2,k) exitSellFixTpSl(DS1,i,tp,sl);  %exit short
+fBuyEntry =     @(DS1,i,DS2,k) entryBuyEMAXing(DS1,i,xEMA,yEMA);  % entry long position
+fSellEntry =    @(DS1,i,DS2,k) entrySellEMAXing(DS1,i,xEMA,yEMA);	% entry short position
+fBuyExit =      @(DS1,i,DS2,k) exitBuyFixTpSl(DS1,i,tp,sl);  	% exit short position, buy 
+fSellExit =     @(DS1,i,DS2,k) exitSellFixTpSl(DS1,i,tp,sl);  % exit long posiition, sell
 
 %% Evaluation
 % initialize global indicator struct
