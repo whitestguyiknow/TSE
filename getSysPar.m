@@ -10,8 +10,8 @@ sys_par.fileName = './dat/Stoch_optim.csv';
 sys_par.daily_optim = true;
 % use functions from ./obj/ folder
 % Daily Optimisation
-%sys_par.obj_func = 'sharpeRatio'; 
-sys_par.obj_func = 'sortino';
+sys_par.obj_func = 'sharpeRatio'; 
+%sys_par.obj_func = 'sortino';
 % Intraday Optimisation
 sys_par.obj_func_intra = 'morereturnobjvs2'; %Or 'profitfactor', 'maxdrawdown'
 sys_par.alpha=1.999999; %alpha  preference scalar for own objective function
@@ -61,7 +61,7 @@ switch(sys_par.sysName)
         % x+y:  length of moving average filter of long filter
         % tp:   take profit factor
         % sl:   stop loss factor
-        sys_par.xinit = [10 10 0.02 0.02]'; 
+        sys_par.xinit = [5 10 0.01 0.01]'; 
         % number of params to optimize, dims of x
         sys_par.dim = length(sys_par.xinit);
         % lower bounds
@@ -99,7 +99,7 @@ switch(sys_par.sysName)
         % nRSI: window size RSI is calculated
         % tp:   take profit factor
         % sl:   stop loss factor
-        sys_par.xinit =         [20 0.03 0.03]';
+        sys_par.xinit =         [20 0.01 0.01]';
         % number of params to optimize, dims of x
         sys_par.dim = length(sys_par.xinit);
         % lower bounds
