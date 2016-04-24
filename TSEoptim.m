@@ -33,7 +33,7 @@ try
     EURUSD_t2 = EURUSD.EURUSD_t2;
 catch   
     % load & process data
-    EURUSD_pre = loadDataCsv('EURUSD_tick_12M.csv',sys_par);
+    EURUSD_pre = loadDataCsv('EURUSD_tick_3M.csv',sys_par);
     EURUSD_t1 = compress(EURUSD_pre,15,sys_par,'bid','ask');
     EURUSD_t2 = compress(EURUSD_pre,60,sys_par,'bid','ask');
     
@@ -49,20 +49,16 @@ catch
 end
 
 %% partitioning
-% insample
-EURUSD_pre_is = partition('in',EURUSD_pre,sys_par);
-EURUSD_t1_is = partition('in',EURUSD_t1,sys_par);
-EURUSD_t2_is = partition('in',EURUSD_t2,sys_par);
-% outsample
-EURUSD_pre_os = partition('out',EURUSD_pre,sys_par);
-EURUSD_t1_os = partition('out',EURUSD_t1,sys_par);
-EURUSD_t2_os = partition('out',EURUSD_t2,sys_par);
-
+% t1
+dataParti_t1 = partition(EURUSD_pre,EURUSD_t1,sys_par);
+% t2
+dataParti_t2 = partition(EURUSD_pre,EURUSD_t2,sys_par);
+%%
 % optimization
 addpath('./optimize/');
 [isObj,par,counteval,stopflag,out,bestever] = ...
-    CMAoptim('optim',xinit,[],optimStruct,EURUSD_pre_is,EURUSD_t1_is,EURUSD_t2_is,sys_par);
+    CMAoptim('optim',optimStruct.xinit,[],optimStruct,dataParti_t1.preIs,dataParti_t1.tIs,dataParti_t2.tIs,sys_par);
 
 % out of sample run
-[osObj,osTradingTable,osDailyTT] = optim(bestever.x,EURUSD_pre_os,EURUSD_t1_os,EURUSD_t2_os,sys_par);
+[osObj,osTradingTable,osDailyTT] = optim(bestever.x,dataParti_t1.preOs,dataParti_t1.tOs,dataParti_t2.tOs,sys_par);
 

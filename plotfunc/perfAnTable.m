@@ -41,21 +41,24 @@ nLong =     [   length(isTradingTable.Position(isTradingTable.Position>0));
 meanReturnTot =     100*[   mean(isTradingTable.Return);
                             mean(oosTradingTable.Return)];
 
-pValTot =           [   ttest(isTradingTable.Return);
-                        ttest(oosTradingTable.Return)];
+[~,pValTotIs] =     ttest(isTradingTable.Return);
+[~,pValTotOs] =     ttest(oosTradingTable.Return);
+                        
+pValTot =           [pValTotIs;pValTotOs];
 
 meanReturnLong = 	100*[   mean(isTradingTable.Return(isTradingTable.Position>0));
                             mean(oosTradingTable.Return(oosTradingTable.Position>0))];
 
-pValLong =          [   ttest(isTradingTable.Return(isTradingTable.Position>0));
-                        ttest(oosTradingTable.Return(oosTradingTable.Position>0))];
+[~,pValLongIs] =    ttest(isTradingTable.Return(isTradingTable.Position>0));
+[~,pValLongOs] =    ttest(oosTradingTable.Return(oosTradingTable.Position>0));
+pValLong =          [pValLongIs;pValLongOs];
 
 meanReturnShort = 	100*[   mean(isTradingTable.Return(isTradingTable.Position<0));
                             mean(oosTradingTable.Return(oosTradingTable.Position<0))];
 
-
-pValShort =         [   ttest(isTradingTable.Return(isTradingTable.Position<0));
-                        ttest(oosTradingTable.Return(oosTradingTable.Position<0))];
+[~,pValShortIs] =    ttest(isTradingTable.Return(isTradingTable.Position<0));
+[~,pValShortOs] =    ttest(oosTradingTable.Return(oosTradingTable.Position<0));
+pValShort =         [pValShortIs;pValShortOs];
 
 winRatio =          100*[   size(isTradingTable(isTradingTable.Return>0,:),1);
                             size(oosTradingTable(oosTradingTable.Return>0,:),1)]./nTrades;
@@ -78,10 +81,10 @@ maxDD =             100*[   maxdrawdown(isTradingTable);
 PUPRat =            [   morereturnobj(isTradingTable);
                         morereturnobj(oosTradingTable)];
                     
-kumReturnAnn =      cumuRet./nDays*sqrt(250);
+kumReturnAnn =      cumuRet./nDays*250;
 
-halfKellyKrit =     [   mean(isTradingTable.Return)/std(isTradingTable.Return)^2;
-                        mean(oosTradingTable.Return)/std(oosTradingTable.Return)^2];
+KellyKrit =     [   mean(isTradingTable.Return)/std(isTradingTable.Return)^2;
+                 	mean(oosTradingTable.Return)/std(oosTradingTable.Return)^2];
 
 sharpeAnn =         [nan;nan];
 
@@ -108,7 +111,7 @@ RowNames = {    [underlying{1},' ', num2str(timeStep),' min'];
                 'Max DD [%]';
                 'PUP-Ratio';
                 'kumulierter Retrun annualisiert';
-                'Half Kelly Kriterium';
+                'Kelly Kriterium';
                 'Sharpe annualisiert';
                 'Sortino annualisiert'};
 %% write data in columns       
@@ -132,7 +135,7 @@ InOfSample =      { daten{1};
                     maxDD(1);
                     PUPRat(1);
                     kumReturnAnn(1);
-                    halfKellyKrit(1);
+                    KellyKrit(1);
                     sharpeAnn(1);
                     sortinoAnn(1)};
                     
@@ -156,7 +159,7 @@ OutOfSample =   {   daten{2};
                     maxDD(2);
                     PUPRat(2);
                     kumReturnAnn(2);
-                    halfKellyKrit(2);
+                    KellyKrit(2);
                     sharpeAnn(2);
                     sortinoAnn(2)};
 %% set up table

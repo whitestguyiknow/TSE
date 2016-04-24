@@ -15,6 +15,8 @@ close all
 setup(); %adds folders to path
 sys_par = getSysPar();
 
+optimStruct = getOptimPar_test(sys_par);
+%underlying = {'AUDUSD';'EURUSD';'GBPUSD';'NZDUSD';'USDCAD';'USDCHF';'USDJPY';'USDNOK';'USDSEK'; 'BRENTCMDUSD'; 'JPNIDXJPY'}; %Majors
 %underlying = {'USDJPY'; 'EURUSD'; 'EURNOK'; 'EURSEK'}
 %underlying = {'EURUSD';'USDJPY';'AUDUSD';'GBPUSD';'NZDUSD';'USDCAD';'USDCHF'}; %cell array Majors
 %underlying = {'AUDCAD';'AUDJPY';'AUDNZD';'EURAUD';'EURGBP';'EURJPY';'EURCAD';'EURNOK';'EURSEK';'EURNZD';'GBPCHF';'GBPJPY';'CADJPY';'GBPAUD';'GBPCAD';'GBPNZD';'USDCNH';'NZDCAD';'NZDJPY'}; %Minors
@@ -40,7 +42,7 @@ for jj = 1:length(sys_par.underlying)
     catch
         %generate dataset structure and store in dat folder
         generateDataSet(sys_par,jj);
-        load(['./dat/',sys_par.underlying{jj},num2str(sys_par.lengthData),'M',string1,'.mat'])
+%         load(['./dat/',sys_par.underlying{jj},num2str(sys_par.lengthData),'M',string1,'.mat'])
     end
     
     for ii = 1:length(sys_par.tVec)
@@ -56,4 +58,4 @@ for jj = 1:length(sys_par.underlying)
     end
 
 end
-    clear all
+clear all

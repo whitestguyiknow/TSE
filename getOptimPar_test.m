@@ -1,29 +1,23 @@
-function [opts] = getOptimPar_test()
+function [opts] = getOptimPar_test(sys_par)
 
-%% Bounds
+flag_parallel = true;
+
+%% Parameters
+% initial guess
+opts.xinit = sys_par.xinit;
 
 % number of params to optimize, dims of x
-opts.dim = 3;
-% lower bounds
-opts.LBounds = [0;0;1;1];
-% upper bounds
-opts.UBounds = [10;10;99;99];
+opts.dim = sys_par.dim;
 
-%% Differential Evolution Options
-% turn parallel optimization on/off
-opts.enable_parallel = true;
-% number of workers/genes
-opts.nPopulation = 30;
-% number of iterations
-opts.maxIter = 100;
-% crossover rate [0,1]
-opts.CR = 0.7;
-% differential weight [0,2]
-opts.F = 1.5;
-% number cpu's to be used
-opts.N_cpu = 2;
-% seed for random generator
-opts.seed = 8392;
+% lower bounds
+opts.LBounds = sys_par.LBounds;
+
+% upper bounds
+opts.UBounds = sys_par.UBounds; 
+
+% integer optimization
+% 0 continuous, x>0 step size (0.2 searches .., -0.2, 0, 0.2, 0.4, ..)
+opts.StairWidths = sys_par.StairWidths;
 
 %% CMA-ES Options
 % folder to place results
@@ -34,7 +28,7 @@ data_folder = './dat/';
 % faster.
 opts.CMA.active = 0;
 % number of samples per stage
-opts.PopSize = 40;
+opts.PopSize = 10*opts.dim;
 % restart on/off
 opts.Resume = 0;
 % max objective fun evaluations
@@ -52,7 +46,7 @@ opts.SaveVariables = 1;
 % plot while running using output data files
 opts.LogPlot = 0;
 % objective function FUN accepts NxM matrix, with M>1?';
-opts.EvalParallel = 1;
+opts.EvalParallel = flag_parallel;
 % evaluation of initial solution;
 opts.EvalInitialX = 1;
 % stop if x-change smaller TolX'
@@ -62,4 +56,24 @@ opts.StopOnEqualFunctionValues = 0;
 opts.SaveFilename = [ data_folder 'results_cma_optimization.mat'];
 opts.LogFilenamePrefix = [ data_folder 'outcmaes_results_optimization_'];
 
+%% Differential Evolution Options
+% turn parallel optimization on/off
+opts.enable_parallel = flag_parallel;
+% number of workers/genes
+opts.nPopulation = 30;
+% number of iterations
+opts.maxIter = 100;
+% crossover rate [0,1]
+opts.CR = 0.7;
+% differential weight [0,2]
+opts.F = 1.5;
+% number cpu's to be used
+opts.N_cpu = 2;
+% seed for random generator
+opts.seed = 8392;
+
+
+
 end
+
+

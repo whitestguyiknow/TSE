@@ -111,9 +111,7 @@ for ii = 1:2
     ylabel('Kernel Density')
     grid on;
     grid on;
-    
 
-    
     %Saving plot
     if ii == 1 %logarithmic plot
         saveas(gcf,['./plots/invsout/loginvsout_',sysName,'_',underlying,'_',num2str(lengthData),'M',num2str(timeStep)],'epsc') %EPS for latex
@@ -124,12 +122,8 @@ for ii = 1:2
     end
 end
 close;
-
-%%
-    %Saving plots
-    saveas(gcf,['./plots/invsout/invsout_',sysName,'_',underlying,'_',num2str(lengthData),'M',num2str(timeStep)],'epsc') %EPS for latex
-    saveas(gcf,['./plots/invsout/invsout_',sysName,'_',underlying,'_',num2str(lengthData),'M',num2str(timeStep)],'png') %PNG normal
-    close;
+    
+    
 
 % %Linear plot    
 % figure

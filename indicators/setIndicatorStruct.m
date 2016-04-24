@@ -6,5 +6,6 @@ function [] = setIndicatorStruct()
     IndicatorStruct.sellPrice = nan;
     IndicatorStruct.trailingSDEV_lower = 0;
     IndicatorStruct.trailingSDEV_upper = 100;
+    IndicatorStruct.indexLastAction = nan;
 end
 

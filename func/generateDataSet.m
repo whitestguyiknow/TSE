@@ -32,6 +32,6 @@ else
 end
 string1 = string1(~isspace(string1));
 %%
-save(['./dat/',underlying,num2str(lengthData),'M',string1,'.mat'],[underlying,'*'])
+save(['./dat/',underlying,num2str(lengthData),'M',string1,'.mat'],[underlying,'*'],'-v7.3')
 end
 

@@ -61,7 +61,7 @@ tradeIdx = zeros(1,m);
 
 idx=1; j=1;
 for i = 1:2:l
-    
+    %%
     t = tradeTime(i);
     j = findPrevious(time,t,j);
     tradeIdx(i) = j;
@@ -75,7 +75,7 @@ for i = 1:2:l
         entryPrice(idx)=bid(j);
     end
     usdrate(i) = usdKurs(j);
-    
+    %%
     t = tradeTime(i+1);
     j = find(time>=t,1,'first');
     tradeIdx(i+1) = j;

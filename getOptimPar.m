@@ -1,19 +1,24 @@
-function [opts] = getOptimPar()
+function [opts] = getOptimPar(sys_par)
 
 flag_parallel = true;
 
-%% Bounds
+%% Parameters
+% initial guess
+opts.xinit = sys_par.xinit;
 
 % number of params to optimize, dims of x
-opts.dim = 4;
+opts.dim = sys_par.dim;
+
 % lower bounds
-opts.LBounds = [5 5 1e-4 1e-4]';
+opts.LBounds = sys_par.LBounds;
+
 % upper bounds
-opts.UBounds = [50 50 0.99 0.99]';
-% initial 
+opts.UBounds = sys_par.UBounds; 
+
 % integer optimization
 % 0 continuous, x>0 step size (0.2 searches .., -0.2, 0, 0.2, 0.4, ..)
-opts.StairWidths = [1 1 0 0];
+
+opts.StairWidths = sys_par.StairWidths;
 
 %% CMA-ES Options
 % folder to place results
@@ -24,12 +29,12 @@ data_folder = './dat/';
 % faster.
 opts.CMA.active = 0;
 % number of samples per stage
-opts.PopSize = 10;
+opts.PopSize = 10*opts.dim;
 % restart on/off
 opts.Resume = 0;
 % max objective fun evaluations
 % (other Stopping options StopFunEvals, StopIter, MaxFunEvals, Fitness)
-opts.MaxFunEvals = 1e1;
+opts.MaxFunEvals = 4e2;
 % In case of a noisy objective function set opts.Noise.on = 1. 
 % termination criteria, because the step-size sigma will not converge to zero
 opts.Noise.on = 0;

@@ -56,7 +56,7 @@ for i=sys_par.tInit:N-1 %changed from N to  N-1 by AV
     updateIndicatorStruct(DS1,i,IndicatorStruct.control);
     
     % go flat - sell
-    if(IndicatorStruct.control == 1 && fExitBuy(DS1,i,DS2,k))
+    if(IndicatorStruct.control == 1 && fExitBuy(DS1,i,DS2,k)) %fExitBuy exit LONG position
         Time(i) = DS1.time(i);
         Action(i) = -1;
         updateIndicatorStruct(DS1,i,0)
@@ -64,24 +64,24 @@ for i=sys_par.tInit:N-1 %changed from N to  N-1 by AV
     end
     
     % go flat - buy
-    if(IndicatorStruct.control == -1 && fExitSell(DS1,i,DS2,k))
+    if(IndicatorStruct.control == -1 && fExitSell(DS1,i,DS2,k)) %fExitSell exit short Position
         Time(i) = DS1.time(i);
         Action(i) = 1;
         updateIndicatorStruct(DS1,i,0)
         continue;
     end
     
-    % go long - buy
+    % go LONG - buy 
     if(IndicatorStruct.control == 0 && fEntryBuy(DS1,i,DS2,k) ...
-            && ~fEntrySell(DS1,i,DS2,k))
+            && ~fEntrySell(DS1,i,DS2,k)) 
         Time(i) = DS1.time(i);
         Action(i) = 1;
-        IndicatorStruct.buyPrice = DS1.ask_open(i); %check correctness if open or close
+        IndicatorStruct.buyPrice = DS1.ask_open(i); %check correctness if open or close 
         updateIndicatorStruct(DS1,i,1)
         continue;
     end
     
-    % go short - sell
+    % go SHORT - sell
     if(IndicatorStruct.control == 0 && fEntrySell(DS1,i,DS2,k) ...
             && ~fEntryBuy(DS1,i,DS2,k))
         Time(i) = DS1.time(i);

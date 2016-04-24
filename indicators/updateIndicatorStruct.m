@@ -1,6 +1,7 @@
 function [] = updateIndicatorStruct(DS,i,control)
 global IndicatorStruct;
 IndicatorStruct.control = control;
+IndicatorStruct.indexLastAction = i;
 
 % if long
 if(IndicatorStruct.control == 1)

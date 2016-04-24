@@ -30,6 +30,6 @@ end
 
 end
 
-function [nDays] = countDays(startDaye,endDate)
-    nDays = sum((endDate-startDaye).*[252,21,1]);
+function [nDays] = countDays(startDate,endDate)
+    nDays = sum((endDate-startDate).*[252,21,1]);
 end

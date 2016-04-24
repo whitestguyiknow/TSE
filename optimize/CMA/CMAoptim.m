@@ -995,7 +995,8 @@ while isempty(stopflag)
       
       %% PARALLEL NEW
       tmptmp = zeros(1,size(arxvalid,2));
-      parfor c0 = 1:size(arxvalid,2)
+   	  parfor c0 = 1:size(arxvalid,2)
+       %for c0 = 1:size(arxvalid,2)
          tmptmp(c0) = feval(fitfun, arxvalid(:,c0), varargin{:}); 
       end
       fitness.raw = tmptmp;
