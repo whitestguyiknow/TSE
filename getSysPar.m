@@ -61,13 +61,13 @@ switch(sys_par.sysName)
         % x+y:  length of moving average filter of long filter
         % tp:   take profit factor
         % sl:   stop loss factor
-        sys_par.xinit = [10 10 0.03 0.03]'; 
+        sys_par.xinit = [10 10 0.02 0.02]'; 
         % number of params to optimize, dims of x
         sys_par.dim = length(sys_par.xinit);
         % lower bounds
         sys_par.LBounds = [4 3 1e-3 1e-3]';
         % upper bounds
-        sys_par.UBounds = [50 50 0.05 0.03]'; 
+        sys_par.UBounds = [50 50 0.05 0.05]'; 
         % integer optimization
         % 0 continuous, x>0 step size (0.2 searches .., -0.2, 0, 0.2, 0.4, ..)
         sys_par.StairWidths = [1 1 0 0];

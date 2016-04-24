@@ -51,6 +51,8 @@ opts.EvalParallel = flag_parallel;
 opts.EvalInitialX = 1;
 % stop if x-change smaller TolX'
 opts.TolX = 1e-4;
+% stop if fun-changes smaller TolFun';
+opts.TolFun = 0.03;
 % stop if equal function values happen in more than 33%
 opts.StopOnEqualFunctionValues = 0;
 opts.SaveFilename = [ data_folder 'results_cma_optimization.mat'];
