@@ -72,6 +72,7 @@ dataParti_t2 = partition(underlying_pre,underlying_t2,sys_par);
 underlying_pre_is =     dataParti_t1.preIs;
 underlying_t1_is =      dataParti_t1.tIs;
 underlying_t2_is =      dataParti_t2.tIs;
+
 % outsample
 underlying_pre_oos =    dataParti_t1.preOs;
 underlying_t1_oos =     dataParti_t1.tOs;
@@ -107,12 +108,14 @@ if optimize_on
     N_cpu= feature('numCores');
     fprintf('Time used for optimisation: %.1f min with %.0f CPUs\n', evaltime,N_cpu);
     %save bestever
+    if ~exist('./dat/optresults/')
+        mkdir('./dat/optresults/)');
+    end
     save(['./dat/optresults/bestever_',stringConfig,'.mat'],'bestever')
 end
 %% out and in of sample run of sample run
 %load bestever from optimization
 load(['./dat/optresults/bestever_',stringConfig,'.mat'])
-
 %insample run
 [~,isTradingTable,isDailyTT] =      feval(sys_par.tradingSystem,bestever.x,underlying_pre_is,underlying_t1_is,underlying_t2_is,sys_par);
 
@@ -145,10 +148,6 @@ perfAnTable(isTradingTable, isDailyTT,...
     oosTradingTable, oosDailyTT,...
     underlying_pre, sys_par.sysName, sys_par.underlying, sys_par.tVec(ii),...
     sys_par.lengthData, bestever)
-
-
-
-
 
 
 

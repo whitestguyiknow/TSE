@@ -1,4 +1,4 @@
-function [s] = sharpeRatio(dailyTradingTable,sys_par)
+function [s] = sharpeRatio(dailyTradingTable,nDays,sys_par)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Function: computes Sharpe-ratio from dailyTradingTable        
@@ -10,26 +10,20 @@ function [s] = sharpeRatio(dailyTradingTable,sys_par)
 %       1. restrictions for sharpe-ratio; restructuring
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if isempty(dailyTradingTable)
-    s = -1e6; %no trades
+    s = -1e4; %no trades
     return
 end
 
-nDays = countDays(dailyTradingTable.Date(1,:),dailyTradingTable.Date(end,:));
-
 if dailyTradingTable.Equity(end)<1
-    s = -1e6; %equity shrunk below 0
+    s = -1e4-1; %equity shrunk below 0
 elseif nDays*sys_par.minTradesPerDay>sum(dailyTradingTable.nTrades)
-    s = -1e6; %not enough trades, we expect one trade p day
+    s = -1e4+1; %not enough trades, we expect one trade p day
 elseif nDays*sys_par.maxTradesPerDay<sum(dailyTradingTable.nTrades)
-    s = -1e6; %too many trades, we expect one trade p day
+    s = -1e4+2; %too many trades, we expect one trade p day
 else
     mu = sum(dailyTradingTable.Return)/nDays;
     variance = sum(dailyTradingTable.Return.^2)/nDays - mu^2;
     s = mu/sqrt(variance)*sqrt(252);
 end
 
-end
-
-function [nDays] = countDays(startDate,endDate)
-    nDays = sum((endDate-startDate).*[252,21,1]);
 end

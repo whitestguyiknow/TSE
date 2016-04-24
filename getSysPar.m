@@ -10,7 +10,8 @@ sys_par.fileName = './dat/Stoch_optim.csv';
 sys_par.daily_optim = true;
 % use functions from ./obj/ folder
 % Daily Optimisation
-sys_par.obj_func = 'sharpeRatio'; %Or 'sortino'
+%sys_par.obj_func = 'sharpeRatio'; 
+sys_par.obj_func = 'sortino';
 % Intraday Optimisation
 sys_par.obj_func_intra = 'morereturnobjvs2'; %Or 'profitfactor', 'maxdrawdown'
 sys_par.alpha=1.999999; %alpha  preference scalar for own objective function
@@ -51,6 +52,7 @@ sys_par.maxTradesPerDay = 60;
 
 %% Parameters to optimize
 switch(sys_par.sysName)
+    
     case 'MAFix'
         % trading system function
         sys_par.tradingSystem = 'optimintradayMAFix';
@@ -69,6 +71,7 @@ switch(sys_par.sysName)
         % integer optimization
         % 0 continuous, x>0 step size (0.2 searches .., -0.2, 0, 0.2, 0.4, ..)
         sys_par.StairWidths = [1 1 0 0];
+        
     case 'MAFlex'
         % trading system function
         sys_par.tradingSystem = 'optimintradayMAFlex';
@@ -88,6 +91,7 @@ switch(sys_par.sysName)
         % integer optimization
         % 0 continuous, x>0 step size (0.2 searches .., -0.2, 0, 0.2, 0.4, ..)
         sys_par.StairWidths =   [0 0 1 1 1];
+        
     case 'RSIFix'
         % trading system function
         sys_par.tradingSystem = 'optimintradayRSIFix';
@@ -105,6 +109,7 @@ switch(sys_par.sysName)
         % integer optimization
         % 0 continuous, x>0 step size (0.2 searches .., -0.2, 0, 0.2, 0.4, ..)
         sys_par.StairWidths =   [1 0 0];
+        
     case 'RSIFlex'
         % trading system function
         sys_par.tradingSystem = 'optimintradayRSIFlex';
@@ -123,6 +128,7 @@ switch(sys_par.sysName)
         % integer optimization
         % 0 continuous, x>0 step size (0.2 searches .., -0.2, 0, 0.2, 0.4, ..)
         sys_par.StairWidths =   [1 0 0 1];
+        
     otherwise
         disp('Error. No valid trading system slected!')
         return
@@ -141,7 +147,7 @@ sys_par.echo = false;
 %% For automation
 sys_par.underlying = {'EURUSD'}; %underlying (string)
 % sys_par.underlying = {'AUDUSD';'EURUSD';'GBPUSD';'NZDUSD';'USDCAD';'USDCHF';'USDJPY';'USDNOK';'USDSEK'; 'BRENTCMDUSD'; 'JPNIDXJPY'}; %%%%Ohne Weekend multiple
-sys_par.lengthData = 24; %length of tick data (months)
+sys_par.lengthData = 6; %length of tick data (months)
 sys_par.tVec = [12;480]; %time steps tick data is compressed to (min)
 
 %underlying = {'USDJPY'; 'EURUSD'; 'EURNOK'; 'EURSEK'}

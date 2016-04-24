@@ -76,7 +76,7 @@ for i=sys_par.tInit:N-1 %changed from N to  N-1 by AV
             && ~fEntrySell(DS1,i,DS2,k)) 
         Time(i) = DS1.time(i);
         Action(i) = 1;
-        IndicatorStruct.buyPrice = DS1.ask_open(i); %check correctness if open or close 
+        IndicatorStruct.buyPrice = DS1.ask_open(i+1); 
         updateIndicatorStruct(DS1,i,1)
         continue;
     end
@@ -86,7 +86,7 @@ for i=sys_par.tInit:N-1 %changed from N to  N-1 by AV
             && ~fEntryBuy(DS1,i,DS2,k))
         Time(i) = DS1.time(i);
         Action(i) = -1;
-        IndicatorStruct.sellPrice = DS1.bid_open(i); %check correctness if open or close
+        IndicatorStruct.sellPrice = DS1.bid_open(i+1); 
         updateIndicatorStruct(DS1,i,-1)
         continue;
     end

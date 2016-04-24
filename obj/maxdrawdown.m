@@ -1,4 +1,4 @@
-function [ ddRel] = maxdrawdown(intradaytradingtable)
+function [ ddRel] = maxdrawdown(intradaytradingtable,nDays,sys_par)
 % MUSSS Verbessert werden 
 %Calculates the maximum relative drawdown of (intraday)Tradingtable
 % INPUTS:

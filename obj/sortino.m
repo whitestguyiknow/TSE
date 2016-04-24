@@ -1,22 +1,21 @@
-function [sort] = sortino(dailyTradingTable)
+function [sortinoRatio] = sortino(dailyTradingTable,nDays,sys_par)
 % Computes Sortino ratio
 % Input: DailyTradingtable
 
+if isempty(dailyTradingTable)
+    sortinoRatio = -1e4; %no trades
+    return
+end
 
-%Output sortino Ratio
-
-
-if(isempty(dailyTradingTable))
-    sort=-99;
+if dailyTradingTable.Equity(end)<1
+    sortinoRatio = -1e4-1; %equity shrunk below 0
+elseif nDays*sys_par.minTradesPerDay>sum(dailyTradingTable.nTrades)
+    sortinoRatio = -1e4+1; %not enough trades, we expect one trade p day
+elseif nDays*sys_par.maxTradesPerDay<sum(dailyTradingTable.nTrades)
+    sortinoRatio = -1e4+2; %too many trades, we expect one trade p day
 else
-for j=1:size(dailyTradingTable.Return,2) 
-    
-F=dailyTradingTable.Return(:,j);
-
-%%Possible to enhance ...always size changing
-DD(:,j)=sqrt(sum(nonzeros(F(F<0)).^2))/length(nonzeros(F(F<0)));
-sort(:,j)=(mean(F)-MAR)/DD(:,j);
-   
+    DD = sqrt(sum((dailyTradingTable.Return<0).^2)/length(dailyTradingTable.Return));
+    sortinoRatio = mean(dailyTradingTable.Return)./DD;
 end
 
 end

@@ -1,4 +1,4 @@
-function [s] = morereturnobjvs2(intradaytradingtable,sys_par)
+function [s] = morereturnobjvs2(intradaytradingtable,nDays,sys_par)
 % Performance oriented fitness
 % computes fitness from every trade
 % taking into account standard deviation of all returns 

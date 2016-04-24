@@ -1,4 +1,4 @@
-function [p] = profitfactor(intradaytradingtable)
+function [p] = profitfactor(intradaytradingtable,nDays,sys_par)
 % Computes Profit Factor
 % Input: trade profit vector in Dollar intraday
 
