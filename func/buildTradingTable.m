@@ -95,14 +95,17 @@ for i = 1:2:l
     idx = idx+1;
 end
  
-bruttoReturns = entryPosition/abs(entryPosition) * (exitPrice-entryPrice)./entryPrice;
-nettoReturns = bruttoReturns - 2*sys_par.comission/abs(entryPosition);
+bruttoReturns = entryPosition./abs(entryPosition) .* (exitPrice-entryPrice)./entryPrice;
+nettoReturns = bruttoReturns - 2*sys_par.comission./abs(entryPosition);
  
-bruttoPnLUSD = bruttoPnL.*usdKurs(tradeIdx(2:2:end));
  
-comissionUSD = 2*abs(position(2:2:end)).*comission;
-nettoPnLUSD = abs(entryPosition)*nettoReturns;
- 
+comissionUSD = 2*abs(position(2:2:end)).*comission./100000;
+nettoPnLUSD = abs(entryPosition).*nettoReturns;
+nettoPnL = abs(entryPosition).*nettoReturns;
+
+bruttoPnLUSD = nettoPnL+2*sys_par.comission;
+bruttoPnL = nettoPnL+2*sys_par.comission;
+
 nettoPnLPerComm = nettoPnLUSD./comissionUSD;
 equity = cumsum(nettoPnLUSD)+equityInit; %%TODO: flexible position
  

@@ -43,7 +43,7 @@ disp(['Trading system ',str,' selected'])
 % initial equity
 sys_par.equityInit = 100000;
 % comission per trade
-sys_par.comission = 0.5*8/100000;
+sys_par.comission = 4;
 % warm up time
 sys_par.tInit = 100;
 
@@ -61,16 +61,16 @@ switch(sys_par.sysName)
         % x+y:  length of moving average filter of long filter
         % tp:   take profit factor
         % sl:   stop loss factor
-        sys_par.xinit = [5 10 0.01 0.01]'; 
+        sys_par.xinit = [9 10 0.01 0.01]'; 
         % number of params to optimize, dims of x
         sys_par.dim = length(sys_par.xinit);
         % lower bounds
-        sys_par.LBounds = [4 3 1e-3 1e-3]';
+        sys_par.LBounds = [7 6 7e-3 3e-3]';
         % upper bounds
-        sys_par.UBounds = [50 50 0.05 0.05]'; 
+        sys_par.UBounds = [50 50 0.1 0.1]'; 
         % integer optimization
         % 0 continuous, x>0 step size (0.2 searches .., -0.2, 0, 0.2, 0.4, ..)
-        sys_par.StairWidths = [1 1 0 0];
+        sys_par.StairWidths = [1 1 0.0001 0.0001];
         
     case 'MAFlex'
         % trading system function
@@ -99,16 +99,16 @@ switch(sys_par.sysName)
         % nRSI: window size RSI is calculated
         % tp:   take profit factor
         % sl:   stop loss factor
-        sys_par.xinit =         [20 0.01 0.01]';
+        sys_par.xinit =         [54 0.01 0.01]';
         % number of params to optimize, dims of x
         sys_par.dim = length(sys_par.xinit);
         % lower bounds
-        sys_par.LBounds =       [1 1e-3 1e-3]';
+        sys_par.LBounds =       [10 7e-3 3e-3]';
         % upper bounds
-        sys_par.UBounds =       [90 0.99 0.05]'; 
+        sys_par.UBounds =       [95 0.1 0.1]'; 
         % integer optimization
         % 0 continuous, x>0 step size (0.2 searches .., -0.2, 0, 0.2, 0.4, ..)
-        sys_par.StairWidths =   [1 0 0];
+        sys_par.StairWidths =   [1 0.0001 0.0001];
         
     case 'RSIFlex'
         % trading system function
@@ -145,7 +145,7 @@ sys_par.echo = false;
 
 
 %% For automation
-sys_par.underlying = {'EURUSD'}; %underlying (string)
+sys_par.underlying = {'USDJPY'}; %underlying (string)
 % sys_par.underlying = {'AUDUSD';'EURUSD';'GBPUSD';'NZDUSD';'USDCAD';'USDCHF';'USDJPY';'USDNOK';'USDSEK'; 'BRENTCMDUSD'; 'JPNIDXJPY'}; %%%%Ohne Weekend multiple
 sys_par.lengthData = 6; %length of tick data (months)
 sys_par.tVec = [12;480]; %time steps tick data is compressed to (min)

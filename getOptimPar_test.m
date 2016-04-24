@@ -33,8 +33,8 @@ opts.PopSize = 10*opts.dim;
 opts.Resume = 0;
 % max objective fun evaluations
 % (other Stopping options StopFunEvals, StopIter, MaxFunEvals, Fitness)
-opts.MaxFunEvals = 1e4;
-opts.StopIter = 10;
+opts.MaxFunEvals = 160;
+opts.StopIter = 4;
 % In case of a noisy objective function set opts.Noise.on = 1. 
 % termination criteria, because the step-size sigma will not converge to zero
 opts.Noise.on = 0;

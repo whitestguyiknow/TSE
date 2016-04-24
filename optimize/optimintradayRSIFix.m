@@ -12,6 +12,8 @@ sl = x(3);          %stop loss, sl >= 0)
 % artificial exchange rate
 usdkurs = ones(length(DSpre.time),1);
 
+% count trading days
+nDays = countDays(DS1.time(1,:), DS1.time(end,:));
 
 %% SECTION TO INSERT INDICATORS
 % function handles to indicators
@@ -28,14 +30,17 @@ setIndicatorStruct();
 % action matrix and time
 [Time, Action] = buildActionMatrix(DS1,DS2,fBuyEntry,fBuyExit,fSellEntry,fSellExit, sys_par);
 
-%  intraday Trades generate trades
+% generate trades
 tradingTable = buildTradingTable(DSpre,Time,Action*100000,usdkurs,sys_par);
 
-% summary
-dailyTT = buildDailyTradingTable(tradingTable, sys_par);
-
-% objective function, declared in sys_par
-obj = -feval(sys_par.obj_func,dailyTT,sys_par);
+if sys_par.daily_optim 
+    % daily optimization
+    dailyTT = buildDailyTradingTable(tradingTable, sys_par);
+    obj = -feval(sys_par.obj_func,dailyTT,nDays,sys_par);
+else 
+    % intraday optimization
+    obj = -feval(sys_par.obj_func_intra,tradingTable,nDays,sys_par);
+end
 
 end
 
