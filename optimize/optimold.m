@@ -4,9 +4,6 @@ function [sharpe] = optimold(DSpre,DS1,DS2,deltaRSI)
 % Function: exanple function feeding into DEoptim           
 % created by Daniel, December 2015
 %
-% Last update: 2016 Jan 31, by Daniel
-%   2016-01-31: (Daniel)
-%       1. restructuring
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % warm up time

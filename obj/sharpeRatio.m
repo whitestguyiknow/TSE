@@ -16,8 +16,8 @@ end
 
 if dailyTradingTable.Equity(end)<1
     s = -1e4-1; %equity shrunk below 0
-elseif nDays*sys_par.minTradesPerDay>sum(dailyTradingTable.nTrades)
-    s = -1e4+1; %not enough trades, we expect one trade p day
+% % elseif nDays*sys_par.minTradesPerDay>sum(dailyTradingTable.nTrades)
+%     s = -1e4+1; %not enough trades, we expect one trade p day
 elseif nDays*sys_par.maxTradesPerDay<sum(dailyTradingTable.nTrades)
     s = -1e4+2; %too many trades, we expect one trade p day
 else

@@ -29,14 +29,16 @@ setIndicatorStruct();
 % action matrix and time
 [Time, Action] = buildActionMatrix(DS1,DS2,fBuyEntry,fBuyExit,fSellEntry,fSellExit, sys_par);
 
-%  intraday Trades generate trades
+% generate trades
 tradingTable = buildTradingTable(DSpre,Time,Action*100000,usdkurs,sys_par);
-
-% summary
 dailyTT = buildDailyTradingTable(tradingTable, sys_par);
-
-% objective function, declared in sys_par
-obj = -feval(sys_par.obj_func,dailyTT,sys_par);
+if sys_par.daily_optim 
+    % daily optimization
+    obj = -feval(sys_par.obj_func,dailyTT,nDays,sys_par);
+else 
+    % intraday optimization
+    obj = -feval(sys_par.obj_func_intra,tradingTable,nDays,sys_par);
+end
 
 %% plot
 % lineVec = [min(DS1.ask_open);max(DS1.ask_open)];

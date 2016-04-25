@@ -104,11 +104,11 @@ for ii = 1:2
     line([mo mo], [0.0 outmax],'Color','r', 'LineStyle','-','LineWidth',1)
     hold off;
     axis([-inf inf 0 xmax])
-    legObj1=legend('In Sample','Median In Sample','Out of Sample','Median Out of Sample','Location','northwest');
+    legObj1=legend('In Sample','Median In Sample','Out of Sample','Median Out of Sample','Location','northeast');
     legend('boxoff')
     set(legObj1,'FontSize',10);
     xlabel('Return [%]')
-    ylabel('Kernel Density')
+    ylabel('Kernel Dichte')
     grid on;
     grid on;
 
@@ -160,7 +160,7 @@ close;
 % set(k_legend,'FontSize', 10);
 % legend('boxoff')
 % xlabel('Return [%]')
-% ylabel('Kernel Density')
+% ylabel('Kernel Dichte')
 % grid on;
 % grid on;
 % hold off;

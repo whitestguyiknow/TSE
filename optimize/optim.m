@@ -3,13 +3,6 @@ function [obj,tradingTable,dailyTT] = optim(x,DSpre,DS1,DS2,sys_par)
 %
 % Function: exanple function feeding into DEoptim           
 % created by Daniel, December 2015
-%
-% Last update: 2016 Jan 31, by Daniel
-%   2016-03-28: (Daniel)
-%       1. all optimization params in x
-%   2016-01-31: (Daniel)
-%       1. restructuring
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % artificial exchange rate
 usdkurs = ones(length(DSpre.time),1);
