@@ -61,7 +61,7 @@ tradeIdx = zeros(1,m);
 
 idx=1; j=1;
 for i = 1:2:l
-    %%
+    
     t = tradeTime(i);
     j = findPrevious(time,t,j);
     tradeIdx(i) = j;
@@ -75,7 +75,7 @@ for i = 1:2:l
         entryPrice(idx)=bid(j);
     end
     usdrate(i) = usdKurs(j);
-    %%
+    
     t = tradeTime(i+1);
     j = find(time>=t,1,'first');
     tradeIdx(i+1) = j;
@@ -95,19 +95,17 @@ for i = 1:2:l
     idx = idx+1;
 end
 
-bruttoPnL = exitPrice.*entryPosition+entryPrice.*exitPosition; %Bruttorendite = (exitPrice-entryprice)/EntryPrice
+bruttoReturns = entryPosition/abs(entryPosition) * (exitPrice-entryPrice)./entryPrice;
+nettoReturns = bruttoReturns - 2*sys_par.comission/abs(entryPosition);
+
 bruttoPnLUSD = bruttoPnL.*usdKurs(tradeIdx(2:2:end));
 
 comissionUSD = 2*abs(position(2:2:end)).*comission;
-nettoPnLUSD = bruttoPnLUSD - comissionUSD;
+nettoPnLUSD = abs(entryPosition)*nettoReturns;
+
 nettoPnLPerComm = nettoPnLUSD./comissionUSD;
 equity = cumsum(nettoPnLUSD)+equityInit; %%TODO: flexible position
-try %debugging
-    returns = [equity(1)/equityInit-1;equity(2:end)./equity(1:end-1)-1];
-catch
-    tradingTable = [];
-    return
-end
+
 
 % calculate low and high Prices during positioning
 idx = 1;
@@ -124,7 +122,7 @@ cnames = {'EntryTime','EntryPrice','Position','ExitTime','ExitPrice',...
 
 tradingTable = table(entryTimeVec,entryPrice,position(1:2:end-1),exitTimeVec,exitPrice,...
     bruttoPnL,usdrate(2:2:end),bruttoPnLUSD,comissionUSD,nettoPnLUSD,nettoPnLPerComm,...
-    duration,lowPrice,highPrice,returns,equity,'VariableNames',cnames);
+    duration,lowPrice,highPrice,nettoReturns,equity,'VariableNames',cnames);
 
 if sys_par.echo
     disp('DONE!');
@@ -132,5 +130,3 @@ if sys_par.echo
 end
 
 end
-
-
