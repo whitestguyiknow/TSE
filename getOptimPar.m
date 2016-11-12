@@ -34,7 +34,8 @@ opts.PopSize = 10*opts.dim;
 opts.Resume = 0;
 % max objective fun evaluations
 % (other Stopping options StopFunEvals, StopIter, MaxFunEvals, Fitness)
-opts.MaxFunEvals = 4e2;
+opts.MaxFunEvals = 401*opts.dim;
+opts.StopIter = 40;
 % In case of a noisy objective function set opts.Noise.on = 1. 
 % termination criteria, because the step-size sigma will not converge to zero
 opts.Noise.on = 0;
@@ -52,7 +53,7 @@ opts.EvalInitialX = 1;
 % stop if x-change smaller TolX'
 opts.TolX = 1e-4;
 % stop if fun-changes smaller TolFun';
-opts.TolFun = 0.03;
+opts.TolFun = 0.0003;
 % stop if equal function values happen in more than 33%
 opts.StopOnEqualFunctionValues = 0;
 opts.SaveFilename = [ data_folder 'results_cma_optimization.mat'];

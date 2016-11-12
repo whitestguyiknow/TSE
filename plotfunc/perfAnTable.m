@@ -25,7 +25,7 @@ cumuRet = [crin(end);crout(end)];
 daten = {   [datestr(isTradingTable.EntryTime(1,:),' yyyy.mm.dd HH:MM'),' - ',datestr(isTradingTable.ExitTime(end,:),' yyyy.mm.dd HH:MM')];...
             [datestr(oosTradingTable.EntryTime(1,:),' yyyy.mm.dd HH:MM'),' - ',datestr(oosTradingTable.ExitTime(end,:),' yyyy.mm.dd HH:MM')]};
 
-bestParam = {['x = [',num2str(bestever.x'),'], f = ',num2str(bestever.f),', evals = ',num2str(bestever.evals)];[]};
+bestParam = {['x = [',num2str(bestever.x'),'], f = ',num2str(bestever.f),', Best Fitness in eval: ',num2str(bestever.evals)];[]};
 
 nTrades =   [   size(isTradingTable,1);
                 size(oosTradingTable,1)];
@@ -72,19 +72,19 @@ minDuration =       [   min(isTradingTable.Duration);
 medDuration =       [   median(isTradingTable.Duration);
                         median(oosTradingTable.Duration)]./60;
 
-profFactor =        [   sum(isTradingTable.Return(isTradingTable.Return>0,:))/sum(-isTradingTable.Return(isTradingTable.Return<0,:));
-                        sum(oosTradingTable.Return(oosTradingTable.Return>0,:))/sum(-oosTradingTable.Return(oosTradingTable.Return<0,:))];
+profFactor =        [   sum(isTradingTable.NettoPnLUSD(isTradingTable.NettoPnLUSD>0,:))/sum(-isTradingTable.NettoPnLUSD(isTradingTable.NettoPnLUSD<0,:));
+                        sum(oosTradingTable.NettoPnLUSD(oosTradingTable.NettoPnLUSD>0,:))/sum(-oosTradingTable.NettoPnLUSD(oosTradingTable.NettoPnLUSD<0,:))];
 
-maxDD =             100*[   maxdrawdown(isTradingTable);
+maxDD  =             100*[   maxdrawdown(isTradingTable);
                             maxdrawdown(oosTradingTable)];
 
-PUPRat =            [   morereturnobj(isTradingTable);
-                        morereturnobj(oosTradingTable)];
+%PUPRat =            [   morereturnobj(isTradingTable);
+                        %morereturnobj(oosTradingTable)];
                     
-kumReturnAnn =      cumuRet./nDays*250;
+kumReturnAnn =      7*cumuRet./(5*nDays)*252;
 
-KellyKrit =     [   mean(isTradingTable.Return)/std(isTradingTable.Return)^2;
-                 	mean(oosTradingTable.Return)/std(oosTradingTable.Return)^2];
+HalfKelly =     [  (winRatio(1)/100-(1-winRatio(1)/100)/(mean(isTradingTable.NettoPnLUSD(isTradingTable.NettoPnLUSD>0))/abs(mean(isTradingTable.NettoPnLUSD(isTradingTable.NettoPnLUSD<0)))))/2*100;
+                 	(winRatio(2)/100-(1-winRatio(2)/100)/(mean(oosTradingTable.NettoPnLUSD(oosTradingTable.NettoPnLUSD>0))/abs(mean(oosTradingTable.NettoPnLUSD(oosTradingTable.NettoPnLUSD<0)))))/2*100];
 
 sharpeAnn =         [nan;nan];
 
@@ -94,26 +94,26 @@ sortinoAnn =        [nan;nan];
 RowNames = {    [underlying{1},' ', num2str(timeStep),' min'];
                 'Best Parameter';
                 'Anzahl Trades';
-                'Durchschnittle Trades pro Tag';
+                'durschn. Trades pro Tag';
                 'Anzahl Short';
                 'Anzahl Long';
                 'Mean Return Total [%]';
                 'p-Value Total';
-                'Mean Retrun Long [%]';
+                'Mean Return Long [%]';
                 'p-Value Long';
                 'Mean Short [%]';
-                'p-ValueShort';
-                'Win Ratio';
+                'p-Value Short';
+                'Win Ratio [%]';
                 'Max Duration [min]';
                 'Min Duration [min]';
-                'Median Duration [min]';
+                'Med Duration [min]';
                 'Profit Factor';
                 'Max DD [%]';
-                'PUP-Ratio';
-                'kumulierter Retrun annualisiert';
-                'Kelly Kriterium';
-                'Sharpe annualisiert';
-                'Sortino annualisiert'};
+                %'PUP-Ratio';
+                'Return ann.';
+                'Half-Kelly%';
+                'Sharpe ann.';
+                'Sortino ann.'};
 %% write data in columns       
 InOfSample =      { daten{1};
                     bestParam{1};
@@ -133,9 +133,9 @@ InOfSample =      { daten{1};
                     medDuration(1);
                     profFactor(1);
                     maxDD(1);
-                    PUPRat(1);
+                    %PUPRat(1);
                     kumReturnAnn(1);
-                    KellyKrit(1);
+                    HalfKelly(1);
                     sharpeAnn(1);
                     sortinoAnn(1)};
                     
@@ -157,9 +157,9 @@ OutOfSample =   {   daten{2};
                     medDuration(2);
                     profFactor(2);
                     maxDD(2);
-                    PUPRat(2);
+                    %PUPRat(2);
                     kumReturnAnn(2);
-                    KellyKrit(2);
+                    HalfKelly(2);
                     sharpeAnn(2);
                     sortinoAnn(2)};
 %% set up table

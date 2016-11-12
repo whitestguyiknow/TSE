@@ -34,10 +34,9 @@ setIndicatorStruct();
 
 % generate trades
 tradingTable = buildTradingTable(DSpre,Time,Action*100000,usdkurs,sys_par);
-
+dailyTT = buildDailyTradingTable(tradingTable, sys_par);
 if sys_par.daily_optim 
     % daily optimization
-    dailyTT = buildDailyTradingTable(tradingTable, sys_par);
     obj = -feval(sys_par.obj_func,dailyTT,nDays,sys_par);
 else 
     % intraday optimization

@@ -1,4 +1,4 @@
-function [obj,tradingTable,dailyTT] = optimintradayRSIFix(x,DSpre,DS1,DS2,sys_par)
+function [obj,tradingTable,dailyTT] = optimintradayRSIFixMed(x,DSpre,DS1,DS2,sys_par)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %exit rules: Fix stop loss/take profit
 
@@ -18,8 +18,8 @@ nDays = countDays(DS1.time(1,:), DS1.time(end,:));
 %% SECTION TO INSERT INDICATORS
 % function handles to indicators
 
-fBuyEntry =     @(DS1,i,DS2,k) entryBuyRSInew(DS1,i,nRSI);  %entry long
-fSellEntry =    @(DS1,i,DS2,k) entrySellRSInew(DS1,i,nRSI);	%entry short
+fBuyEntry =     @(DS1,i,DS2,k) entryBuyRSIMed(DS1,i,nRSI);  %entry long
+fSellEntry =    @(DS1,i,DS2,k) entrySellRSIMed(DS1,i,nRSI);	%entry short
 fBuyExit =      @(DS1,i,DS2,k) exitBuyFixTpSl(DS1,i,tp,sl);  	%exit long
 fSellExit =     @(DS1,i,DS2,k) exitSellFixTpSl(DS1,i,tp,sl);  %exit short
 

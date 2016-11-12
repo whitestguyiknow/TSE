@@ -7,16 +7,17 @@ sys_par.fileName = './dat/Stoch_optim.csv';
 
 %% Objective Function
 % Use Daily Optimisation
-sys_par.daily_optim = true;
+sys_par.daily_optim = false;
 % use functions from ./obj/ folder
 % Daily Optimisation
 sys_par.obj_func = 'sharpeRatio'; 
 %sys_par.obj_func = 'sortino';
 % Intraday Optimisation
-sys_par.obj_func_intra = 'morereturnobjvs2'; %Or 'profitfactor', 'maxdrawdown'
+sys_par.obj_func_intra = 'morereturnobjvs2'; %Or 'profitfactor', 'maxdrawdown', kelly
 sys_par.alpha=1.999999; %alpha  preference scalar for own objective function
+sys_par.MAR=1e4; %MAr for threshhold
 % Define which trading system is used
-possibleSelections = {'MAFix', 'MAFlex', 'RSIFix', 'RSIFlex'}; %add further trading systems here
+possibleSelections = {'MAFixCl','MAFixMed', 'MAFlex', 'RSIFixCl', 'RSIFixMed', 'RSIFlex'}; %add further trading systems here
 strSystems = [];
 for ii=1:length(possibleSelections)
     strSystems = [strSystems,' ', possibleSelections{ii}];
@@ -43,34 +44,53 @@ disp(['Trading system ',str,' selected'])
 % initial equity
 sys_par.equityInit = 100000;
 % comission per trade
-sys_par.comission = 0.5*8/100000;
+sys_par.comission = 6;
 % warm up time
 sys_par.tInit = 100;
 
-sys_par.minTradesPerDay = 1;
-sys_par.maxTradesPerDay = 60;
+sys_par.minTradesPerDay = 0.4;
+sys_par.maxTradesPerDay = 10;
 
 %% Parameters to optimize
 switch(sys_par.sysName)
     
-    case 'MAFix'
+    case 'MAFixCl'
         % trading system function
-        sys_par.tradingSystem = 'optimintradayMAFix';
+        sys_par.tradingSystem = 'optimintradayMAFixCl';
         % initial guess parameter vector: [x,y,tp,sl]'
         % x:    length of moving average filter of short filter
         % x+y:  length of moving average filter of long filter
         % tp:   take profit factor
         % sl:   stop loss factor
-        sys_par.xinit = [5 10 0.01 0.01]'; 
+        sys_par.xinit = [9 10 0.001 0.001]'; 
         % number of params to optimize, dims of x
         sys_par.dim = length(sys_par.xinit);
         % lower bounds
-        sys_par.LBounds = [4 3 1e-3 1e-3]';
+        sys_par.LBounds = [7 6 3e-3 3e-3]';
         % upper bounds
-        sys_par.UBounds = [50 50 0.05 0.05]'; 
+        sys_par.UBounds = [50 50 0.1 0.1]'; 
         % integer optimization
         % 0 continuous, x>0 step size (0.2 searches .., -0.2, 0, 0.2, 0.4, ..)
-        sys_par.StairWidths = [1 1 0 0];
+        sys_par.StairWidths = [1 1 0.0001 0.0001];
+        
+    case 'MAFixMed'
+        % trading system function
+        sys_par.tradingSystem = 'optimintradayMAFixMed';
+        % initial guess parameter vector: [x,y,tp,sl]'
+        % x:    length of moving average filter of short filter
+        % x+y:  length of moving average filter of long filter
+        % tp:   take profit factor
+        % sl:   stop loss factor
+        sys_par.xinit = [9 10 0.001 0.001]'; 
+        % number of params to optimize, dims of x
+        sys_par.dim = length(sys_par.xinit);
+        % lower bounds
+        sys_par.LBounds = [7 6 3e-3 3e-3]';
+        % upper bounds
+        sys_par.UBounds = [50 50 0.1 0.1]'; 
+        % integer optimization
+        % 0 continuous, x>0 step size (0.2 searches .., -0.2, 0, 0.2, 0.4, ..)
+        sys_par.StairWidths = [1 1 0.0001 0.0001];
         
     case 'MAFlex'
         % trading system function
@@ -92,23 +112,41 @@ switch(sys_par.sysName)
         % 0 continuous, x>0 step size (0.2 searches .., -0.2, 0, 0.2, 0.4, ..)
         sys_par.StairWidths =   [0 0 1 1 1];
         
-    case 'RSIFix'
+    case 'RSIFixCl'
         % trading system function
-        sys_par.tradingSystem = 'optimintradayRSIFix';
+        sys_par.tradingSystem = 'optimintradayRSIFixCl';
         % initial guess parameter vector: [nRSI,tp,sl]'
         % nRSI: window size RSI is calculated
         % tp:   take profit factor
         % sl:   stop loss factor
-        sys_par.xinit =         [20 0.01 0.01]';
+        sys_par.xinit =         [40 0.001 0.001]';
         % number of params to optimize, dims of x
         sys_par.dim = length(sys_par.xinit);
         % lower bounds
-        sys_par.LBounds =       [1 1e-3 1e-3]';
+        sys_par.LBounds =       [13 7e-3 3e-3]';
         % upper bounds
-        sys_par.UBounds =       [90 0.99 0.05]'; 
+        sys_par.UBounds =       [95 0.1 0.1]'; 
         % integer optimization
         % 0 continuous, x>0 step size (0.2 searches .., -0.2, 0, 0.2, 0.4, ..)
-        sys_par.StairWidths =   [1 0 0];
+        sys_par.StairWidths =   [1 0.0003 0.0003];
+        
+     case 'RSIFixMed'
+        % trading system function
+        sys_par.tradingSystem = 'optimintradayRSIFixMed';
+        % initial guess parameter vector: [nRSI,tp,sl]'
+        % nRSI: window size RSI is calculated
+        % tp:   take profit factor
+        % sl:   stop loss factor
+        sys_par.xinit =         [40 0.001 0.001]';
+        % number of params to optimize, dims of x
+        sys_par.dim = length(sys_par.xinit);
+        % lower bounds
+        sys_par.LBounds =       [13 7e-3 3e-3]';
+        % upper bounds
+        sys_par.UBounds =       [95 0.1 0.1]'; 
+        % integer optimization
+        % 0 continuous, x>0 step size (0.2 searches .., -0.2, 0, 0.2, 0.4, ..)
+        sys_par.StairWidths =   [1 0.0003 0.0003];
         
     case 'RSIFlex'
         % trading system function

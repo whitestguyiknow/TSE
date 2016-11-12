@@ -1,4 +1,4 @@
-function [obj,tradingTable,dailyTT] = optimintradayRSIFix(x,DSpre,DS1,DS2,sys_par)
+function [obj,tradingTable,dailyTT] = optimintradayRSIFixCl(x,DSpre,DS1,DS2,sys_par)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %exit rules: Fix stop loss/take profit
 

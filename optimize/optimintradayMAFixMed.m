@@ -1,12 +1,13 @@
-function [obj,tradingTable,dailyTT] = optimintradayRSIFix(x,DSpre,DS1,DS2,sys_par)
+function [obj,tradingTable,dailyTT] = optimintradayMAFixMed(x,DSpre,DS1,DS2,sys_par)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %exit rules: Fix stop loss/take profit
+%buy rules: exponential moving average crossing system
 
-%buy rules: RSI
 %parameter vector x:
-nRSI = round(x(1)); %window length for RSI)
-tp = x(2);          %take profit, tp >= 0)
-sl = x(3);          %stop loss, sl >= 0)
+xEMA = round(x(1)); %number of samples shorter EMA, x <= tInit, INTEGER
+yEMA = round(x(2)); %number of samples longer EMA, y+x <= tInit, INTEGER)
+tp = x(3);          %take profit, tp >= 0
+sl = x(4);          %stop loss, sl >= 0
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % artificial exchange rate
@@ -15,13 +16,14 @@ usdkurs = ones(length(DSpre.time),1);
 % count trading days
 nDays = countDays(DS1.time(1,:), DS1.time(end,:));
 
+
 %% SECTION TO INSERT INDICATORS
 % function handles to indicators
 
-fBuyEntry =     @(DS1,i,DS2,k) entryBuyRSInew(DS1,i,nRSI);  %entry long
-fSellEntry =    @(DS1,i,DS2,k) entrySellRSInew(DS1,i,nRSI);	%entry short
-fBuyExit =      @(DS1,i,DS2,k) exitBuyFixTpSl(DS1,i,tp,sl);  	%exit long
-fSellExit =     @(DS1,i,DS2,k) exitSellFixTpSl(DS1,i,tp,sl);  %exit short
+fBuyEntry =     @(DS1,i,DS2,k) entryBuyEMAXingMed(DS1,i,xEMA,yEMA);  % entry long position
+fSellEntry =    @(DS1,i,DS2,k) entrySellEMAXingMed(DS1,i,xEMA,yEMA);	% entry short position
+fBuyExit =      @(DS1,i,DS2,k) exitBuyFixTpSl(DS1,i,tp,sl);  	% exit short position, buy 
+fSellExit =     @(DS1,i,DS2,k) exitSellFixTpSl(DS1,i,tp,sl);  % exit long posiition, sell
 
 %% Evaluation
 % initialize global indicator struct
